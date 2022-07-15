@@ -21,10 +21,10 @@ import java.io.IOException;
 public class OpenApiConfig {
 
 
-    @GetMapping(value = "/")
-    public void index(HttpServletResponse response) throws IOException {
-        response.sendRedirect("/swagger-ui/index.html");
-    }
+//    @GetMapping(value = "/")
+//    public void index(HttpServletResponse response) throws IOException {
+//        response.sendRedirect("/swagger-ui/index.html");
+//    }
 
     @Bean
     public OpenAPI springShopOpenAPI() {
