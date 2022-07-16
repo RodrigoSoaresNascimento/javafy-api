@@ -24,8 +24,7 @@ public class DatabaseConnection {
     @Value("${jdbc-schema}")
     private String schema;
 
-    @Bean
-    @RequestScope // sempre cria uma nova instancia
+
     public Connection getConnection() throws SQLException {
         Connection con = DriverManager.getConnection(jdbcString, user, pass);
 

@@ -13,7 +13,7 @@ import java.util.List;
 @NoArgsConstructor
 @EqualsAndHashCode
 @ToString
-public abstract class Usuario {
+public class Usuario {
     @NotNull
     @Size(min = 1, max = 9)
     private Integer idUser;
