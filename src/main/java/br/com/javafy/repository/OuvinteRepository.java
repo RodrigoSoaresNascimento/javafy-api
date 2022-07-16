@@ -3,8 +3,6 @@ package br.com.javafy.repository;
 import br.com.javafy.entity.Ouvinte;
 import org.springframework.stereotype.Repository;
 
-import java.time.LocalDate;
-import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.concurrent.atomic.AtomicInteger;

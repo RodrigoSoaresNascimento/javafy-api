@@ -1,6 +1,5 @@
 package br.com.javafy.controller;
 
-import br.com.javafy.dto.MusicaDTO;
 import br.com.javafy.entity.Musica;
 import br.com.javafy.service.MusicaService;
 import io.swagger.v3.oas.annotations.Operation;
@@ -51,7 +50,7 @@ public class MusicaController {
                     @ApiResponse(responseCode = "500", description = "Erro de Servidor, foi gerada uma Exception."),
             }
     )
-    @GetMapping("/{artista}")
+    @GetMapping("/test/{artista}")
     public List<Musica> musicaPorArtista(@PathVariable("nome") String nome) {
         return musicaService.getMusicaPorNome(nome);
     }

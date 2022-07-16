@@ -2,12 +2,6 @@ package br.com.javafy.entity;
 
 import lombok.*;
 
-import javax.validation.constraints.Email;
-import javax.validation.constraints.NotBlank;
-import javax.validation.constraints.NotNull;
-import javax.validation.constraints.Past;
-import java.time.LocalDate;
-
 @Getter
 @Setter
 @NoArgsConstructor

@@ -1,5 +1,4 @@
 package br.com.javafy.dto;
-import br.com.javafy.entity.Musica;
 import io.swagger.v3.oas.annotations.media.Schema;
 import lombok.Getter;
 import lombok.RequiredArgsConstructor;
