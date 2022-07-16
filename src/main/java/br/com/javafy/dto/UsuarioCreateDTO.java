@@ -1,4 +1,4 @@
-package br.com.javafy.service.dto;
+package br.com.javafy.dto;
 
 import br.com.javafy.enums.TiposdePlano;
 import lombok.*;
@@ -13,10 +13,7 @@ import java.time.LocalDate;
 @ToString
 public class UsuarioCreateDTO {
 
-
-    private Integer idUser;
-
-    @NotBlank(message = "Nome não pode ser nulo")
+    @NotBlank(message = "Nome não pode ser nulo.")
     private String nome;
 
     @NotNull
@@ -29,7 +26,4 @@ public class UsuarioCreateDTO {
     @NotNull
     private TiposdePlano plano;
 
-    @Email
-    @NotBlank(message = "Email é obrigatorio")
-    private String email;
 }

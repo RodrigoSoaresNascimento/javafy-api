@@ -1,10 +1,9 @@
 package br.com.javafy.service;
 
 import br.com.javafy.entity.Usuario;
-import br.com.javafy.exceptions.BancoDeDadosException;
 import br.com.javafy.repository.UsuarioRepository;
-import br.com.javafy.service.dto.UsuarioCreateDTO;
-import br.com.javafy.service.dto.UsuarioDTO;
+import br.com.javafy.dto.UsuarioCreateDTO;
+import br.com.javafy.dto.UsuarioDTO;
 import br.com.javafy.exceptions.PessoaNaoCadastradaException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import lombok.extern.slf4j.Slf4j;
@@ -33,47 +32,43 @@ public class UsuarioService {
         return objectMapper.convertValue(usuario, UsuarioDTO.class);
     }
 
+    public UsuarioDTO findById (Integer id) throws PessoaNaoCadastradaException, SQLException {
+        return converterUsuario(usuarioRepository.getByID(id));
+    }
+
+    public List<UsuarioDTO> list() throws SQLException {
+        return usuarioRepository
+                .list().stream()
+                .map(this::converterUsuario)
+                .toList();
+    }
+
     public UsuarioDTO create (UsuarioCreateDTO usuario){
         Usuario usuarioEntity = converterUsuarioDTO(usuario);
 //        usuarioRepository.create(usuario);
         return converterUsuario(usuarioEntity);
     }
 
-    public List<UsuarioDTO> list() throws SQLException {
-        List<UsuarioDTO> usuarios = usuarioRepository.list().stream()
-                .map(this::converterUsuario)
-                .collect(Collectors.toList());
-        return usuarios;
-    }
+
 
     public UsuarioDTO update (UsuarioCreateDTO usuarioAtualizar, Integer id) throws PessoaNaoCadastradaException, SQLException {
-        Usuario usuarioRecuperado = findById(id);
-        usuarioRecuperado.setNome(usuarioAtualizar.getNome());
-        usuarioRecuperado.setEmail(usuarioAtualizar.getEmail());
-        usuarioRecuperado.setGenero(usuarioAtualizar.getGenero());
-        usuarioRecuperado.setDataNascimento(usuarioAtualizar.getDataNascimento());
-        usuarioRecuperado.setPlano(usuarioAtualizar.getPlano());
-        return converterUsuario(usuarioRecuperado);
+//        Usuario usuarioRecuperado = findById(id);
+//        usuarioRecuperado.setNome(usuarioAtualizar.getNome());
+//        usuarioRecuperado.setGenero(usuarioAtualizar.getGenero());
+//        usuarioRecuperado.setDataNascimento(usuarioAtualizar.getDataNascimento());
+//        usuarioRecuperado.setPlano(usuarioAtualizar.getPlano());
+//        return converterUsuario(usuarioRecuperado);
+        return null;
     }
 
-    public Usuario findById (Integer id) throws PessoaNaoCadastradaException, SQLException {
-        Usuario usuarioRecuperado = usuarioRepository.list().stream()
-                .filter(usuario -> usuario.getIdUsuario().equals(id))
-                .findFirst()
-                .orElseThrow(() -> new PessoaNaoCadastradaException("Pessoa não econtrada"));
-        return usuarioRecuperado;
-    }
+
 
     public void delete (Integer id) throws PessoaNaoCadastradaException, SQLException {
-        Usuario usuarioRecuperado = findById(id);
-        usuarioRepository.list().remove(usuarioRecuperado);
+        //Usuario usuarioRecuperado = findById(id);
+        //usuarioRepository.list().remove(usuarioRecuperado);
+
     }
 
-    public List<UsuarioDTO> listByName (String nome) throws SQLException {
-        return usuarioRepository.list().stream()
-                .filter(usuario -> usuario.getNome().toUpperCase().contains(nome.toUpperCase()))
-                .map(this::converterUsuario)
-                .collect(Collectors.toList());
-    }
+
 
 }

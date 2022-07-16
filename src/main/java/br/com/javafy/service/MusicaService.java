@@ -2,8 +2,8 @@ package br.com.javafy.service;
 
 import br.com.javafy.client.spotify.SpotifyAuthorization;
 import br.com.javafy.client.spotify.SpotifyClient;
-import br.com.javafy.service.dto.spotify.MusicaDTO;
-import br.com.javafy.service.dto.spotify.TokenDTO;
+import br.com.javafy.dto.spotify.MusicaDTO;
+import br.com.javafy.dto.spotify.TokenDTO;
 import br.com.javafy.entity.Musica;
 import br.com.javafy.entity.spotify.Headers;
 import com.fasterxml.jackson.databind.ObjectMapper;

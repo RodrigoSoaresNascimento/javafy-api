@@ -1,7 +1,7 @@
 package br.com.javafy.controller;
 
 import br.com.javafy.documentation.DocumentationMusica;
-import br.com.javafy.service.dto.spotify.MusicaDTO;
+import br.com.javafy.dto.spotify.MusicaDTO;
 import br.com.javafy.service.MusicaService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.validation.annotation.Validated;

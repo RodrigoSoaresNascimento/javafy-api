@@ -3,7 +3,7 @@ package br.com.javafy.controller;
 
 import br.com.javafy.exceptions.BancoDeDadosException;
 import br.com.javafy.service.SeguidoresService;
-import br.com.javafy.service.dto.UsuarioDTO;
+import br.com.javafy.dto.UsuarioDTO;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 

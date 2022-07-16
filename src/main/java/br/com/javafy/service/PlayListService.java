@@ -1,9 +1,8 @@
 package br.com.javafy.service;
 
-import br.com.javafy.service.dto.PlayListDTO;
+import br.com.javafy.dto.PlayListDTO;
 import br.com.javafy.entity.PlayList;
 import br.com.javafy.entity.Usuario;
-import br.com.javafy.exceptions.BancoDeDadosException;
 import br.com.javafy.exceptions.PessoaNaoCadastradaException;
 import br.com.javafy.repository.PlayListRepository;
 import com.fasterxml.jackson.databind.ObjectMapper;

@@ -1,7 +1,7 @@
 package br.com.javafy.client.spotify;
 
 import br.com.javafy.config.FeignConfig;
-import br.com.javafy.service.dto.spotify.TokenDTO;
+import br.com.javafy.dto.spotify.TokenDTO;
 import feign.HeaderMap;
 import feign.Headers;
 import feign.Param;

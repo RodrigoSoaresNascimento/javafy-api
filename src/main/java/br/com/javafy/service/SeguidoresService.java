@@ -4,7 +4,7 @@ package br.com.javafy.service;
 import br.com.javafy.entity.Usuario;
 import br.com.javafy.exceptions.BancoDeDadosException;
 import br.com.javafy.repository.SeguidoresRepository;
-import br.com.javafy.service.dto.UsuarioDTO;
+import br.com.javafy.dto.UsuarioDTO;
 import com.fasterxml.jackson.databind.ObjectMapper;
 
 import org.springframework.beans.factory.annotation.Autowired;
