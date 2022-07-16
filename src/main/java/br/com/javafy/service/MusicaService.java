@@ -41,11 +41,12 @@ public class MusicaService {
     // Retorna uma musica, especifica
     public Musica getMusicaPorId(String id) {
         TokenDTO tokenDTO = getToken();
-        System.out.println(tokenDTO.getAccessToken());
+
+        String autorization = tokenDTO.getTokenType() + " " + tokenDTO.getAccessToken();
         Map<String, String> h = new HashMap<>(Map.of("Authorization", autorization));
         h.put("Content-Type", "application/json");
         System.out.println(h);
-        //potifyClient.getMusica(h, id);
+        //spotifyClient.getMusica(h, id);
 
         return null;
     }
