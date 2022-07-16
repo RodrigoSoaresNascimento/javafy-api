@@ -10,6 +10,7 @@ import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 
 import javax.validation.Valid;
+import java.sql.SQLException;
 
 @RestController
 @RequestMapping("/playlist")
@@ -21,23 +22,23 @@ public class PlaylistController {
 
     @PostMapping(value = "/{idUser}")
     public PlayListDTO create (@Valid @RequestBody PlayListDTO playListDTO,
-                               @PathVariable("idUser") Integer id) throws BancoDeDadosException {
+                               @PathVariable("idUser") Integer id) throws SQLException {
         return service.create(playListDTO);
     }
 
     @PutMapping(value = "/{idPlayList}")
     public PlayListDTO update (@Valid @RequestBody PlayListDTO playListDTO,
-                               @PathVariable("idPlaylist") Integer id ) throws BancoDeDadosException, PessoaNaoCadastradaException {
+                               @PathVariable("idPlaylist") Integer id ) throws SQLException, PessoaNaoCadastradaException {
         return service.update(playListDTO, id);
     }
 
     @DeleteMapping(value = "/{idPlaylist}")
-    public void delete (@PathVariable("idPlaylist") Integer id) throws BancoDeDadosException, PessoaNaoCadastradaException {
+    public void delete (@PathVariable("idPlaylist") Integer id) throws SQLException, PessoaNaoCadastradaException {
         service.delete(id);
     }
 
     @GetMapping("/byname")
-    public PlayListDTO listByName (@Valid @RequestParam(value = "name") String name) throws BancoDeDadosException, PessoaNaoCadastradaException {
+    public PlayListDTO listByName (@Valid @RequestParam(value = "name") String name) throws SQLException, PessoaNaoCadastradaException {
         return service.listByName(name);
     }
 

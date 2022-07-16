@@ -1,5 +1,7 @@
 package br.com.javafy.repository;
 
+import br.com.javafy.config.DatabaseConnection;
+import br.com.javafy.entity.Usuario;
 import br.com.javafy.entity.PlayList;
 import br.com.javafy.entity.Usuario;
 import br.com.javafy.exceptions.BancoDeDadosException;
@@ -14,10 +16,12 @@ import java.util.List;
 public class PlayListRepository {
 
     @Autowired
-    private Connection connection;
+    private DatabaseConnection dbConnection;
 
     public Integer getProximoId(Connection connection) throws BancoDeDadosException {
+
         try {
+            Connection con = connection.createStatement().getConnection();
             String sql = "SELECT seq_id_playlist.nextval mysequence from DUAL";
             Statement stmt = connection.createStatement();
             ResultSet res = stmt.executeQuery(sql);
@@ -31,8 +35,8 @@ public class PlayListRepository {
         }
     }
 
-    public PlayList create (PlayList playList) throws BancoDeDadosException {
-
+    public PlayList create (PlayList playList) throws SQLException {
+        Connection connection = dbConnection.getConnection();
         try {
             String sql = "INSERT INTO PLAYLIST(ID_PLAYLIST, ID_OUVINTE, NOME)" +
                     "VALUES(?, ?, ?)";
@@ -62,11 +66,12 @@ public class PlayListRepository {
         }
     }
 
-    public boolean remove (Integer id) throws BancoDeDadosException {
-        String sql = "DELETE FROM VEM_SER.PLAYLIST p WHERE p.ID_PLAYLIST = " + id;
+    public boolean remove (Integer id) throws SQLException {
         List<PlayList> playlists = new ArrayList<>();
+        Connection connection = dbConnection.getConnection();
         try {
 
+            String sql = "DELETE FROM VEM_SER.PLAYLIST p WHERE p.ID_PLAYLIST = " + id;
             PreparedStatement stmt = connection.prepareStatement(sql);
             int result = stmt.executeUpdate();
             return result > 0;
@@ -83,7 +88,8 @@ public class PlayListRepository {
         }
     }
 
-    public boolean update (Integer idPlaylist, PlayList playlist) throws BancoDeDadosException {
+    public boolean update (Integer idPlaylist, PlayList playlist) throws SQLException {
+        Connection connection = dbConnection.getConnection();
         try {
             String sql = "UPDATE VEM_SER.PLAYLIST " +
                     "SET NOME = ? " +
@@ -111,11 +117,11 @@ public class PlayListRepository {
         }
     }
 
-    public List<PlayList> list(Usuario user) throws BancoDeDadosException {
-        String sql = "SELECT * FROM PLAYLIST p WHERE p.ID_OUVINTE = " + user.getIdUsuario();
-
+    public List<PlayList> list(Usuario user) throws SQLException {
+        Connection connection = dbConnection.getConnection();
         List<PlayList> playlists = new ArrayList<>();
         try {
+            String sql = "SELECT * FROM PLAYLIST p WHERE p.ID_OUVINTE = " + user.getIdUsuario();
             Statement stmt = connection.createStatement();
             ResultSet resultSet = stmt.executeQuery(sql);
 
@@ -141,7 +147,8 @@ public class PlayListRepository {
 
     }
 
-    public PlayList getPlaylistById(Integer id, Usuario user) throws BancoDeDadosException{
+    public PlayList getPlaylistById(Integer id, Usuario user) throws SQLException {
+        Connection connection = dbConnection.getConnection();
         PlayList playlist = null;
         try {
             String sql = "SELECT * FROM VEM_SER.PLAYLIST P " +

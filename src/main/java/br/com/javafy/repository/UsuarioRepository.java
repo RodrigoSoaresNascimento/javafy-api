@@ -1,5 +1,6 @@
 package br.com.javafy.repository;
 
+import br.com.javafy.config.DatabaseConnection;
 import br.com.javafy.entity.PlayList;
 import br.com.javafy.entity.Usuario;
 import br.com.javafy.exceptions.BancoDeDadosException;
@@ -17,7 +18,7 @@ import java.util.concurrent.atomic.AtomicInteger;
 @Repository
 public class UsuarioRepository {
     @Autowired
-    private Connection connection;
+    private DatabaseConnection dbconnection;
 
     public Integer getProximoId(Connection connection) throws BancoDeDadosException {
         try {
@@ -37,11 +38,14 @@ public class UsuarioRepository {
 //    public List<Usuario> list() {
 //        return usuarios;
 //    }
-    public List<Usuario> listar() throws BancoDeDadosException {
+    public List<Usuario> listar() throws SQLException {
+        Connection connection = dbconnection.getConnection();
+
         String sql = "SELECT * FROM USUARIO";
 
         List<Usuario> usuarios = new ArrayList<>();
         try {
+
             Statement stmt = connection.createStatement();
             ResultSet resultSet = stmt.executeQuery(sql);
 

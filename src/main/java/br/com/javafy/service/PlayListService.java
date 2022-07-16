@@ -10,6 +10,7 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.sql.SQLException;
 import java.util.List;
 
 @Service
@@ -29,13 +30,13 @@ public class PlayListService {
         return objectMapper.convertValue(playList,PlayList.class);
     }
 
-    public PlayListDTO create (PlayListDTO playListDTO) throws BancoDeDadosException {
+    public PlayListDTO create (PlayListDTO playListDTO) throws SQLException {
 
         repository.create(converterParaPlaylist(playListDTO));
         return playListDTO;
     }
 
-    public List<PlayListDTO> list (PlayListDTO playlistDTO) throws BancoDeDadosException, PessoaNaoCadastradaException {
+    public List<PlayListDTO> list (PlayListDTO playlistDTO) throws SQLException, PessoaNaoCadastradaException {
         PlayList playList = converterParaPlaylist(playlistDTO);
         Usuario usuario = null;
         repository.list(usuario);
@@ -43,7 +44,7 @@ public class PlayListService {
 
     }
 
-    public PlayListDTO update (PlayListDTO playlistAtualizar, Integer id) throws PessoaNaoCadastradaException, BancoDeDadosException {
+    public PlayListDTO update (PlayListDTO playlistAtualizar, Integer id) throws PessoaNaoCadastradaException, SQLException {
         Usuario userRecuperado = null;
         PlayList playListRecuperada = getPlaylistById(id);
         playListRecuperada.setIdPlaylist(playlistAtualizar.getId());
@@ -51,7 +52,7 @@ public class PlayListService {
         return converterParaPlaylistDTO(playListRecuperada);
     }
 
-    public PlayList getPlaylistById (Integer id) throws PessoaNaoCadastradaException, BancoDeDadosException {
+    public PlayList getPlaylistById (Integer id) throws PessoaNaoCadastradaException, SQLException {
         Usuario user = null;
         PlayList playlistRecuperada = repository.list(user).stream()
                 .filter(playList -> playList.getIdPlaylist().equals(id))
@@ -63,13 +64,13 @@ public class PlayListService {
 
 
 
-    public void delete (Integer id) throws PessoaNaoCadastradaException, BancoDeDadosException {
+    public void delete (Integer id) throws PessoaNaoCadastradaException, SQLException {
         Usuario user = null;
         PlayList playlistRecuperada = getPlaylistById(id);
         repository.list(user).remove(playlistRecuperada);
     }
 
-    public PlayListDTO listByName (String nome) throws BancoDeDadosException, PessoaNaoCadastradaException {
+    public PlayListDTO listByName (String nome) throws SQLException, PessoaNaoCadastradaException {
         Usuario user = null;
         return repository.list(user).stream()
                 .filter(playlist -> playlist.getNome().toUpperCase().contains(nome.toUpperCase()))
