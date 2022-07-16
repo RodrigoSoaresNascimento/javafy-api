@@ -16,8 +16,8 @@ public class Ouvinte extends Usuario{
 
     private Integer idOuvinte;
 
-    public Ouvinte(Integer idUser, @NotBlank(message = "Nome não pode ser nulo") String nome, @NotNull @Past LocalDate dataNascimento, String genero, @NotNull Integer premium, @Email @NotBlank(message = "Email é obrigatorio") String email, Integer idOuvinte) {
-        super(idUser, nome, dataNascimento, genero, premium, email);
-        this.idOuvinte = idOuvinte;
-    }
+//    public Ouvinte(Integer idUser, @NotBlank(message = "Nome não pode ser nulo") String nome, @NotNull @Past LocalDate dataNascimento, String genero, @NotNull Integer premium, @Email @NotBlank(message = "Email é obrigatorio") String email, Integer idOuvinte) {
+//        super(idUser, nome, dataNascimento, genero, premium, email);
+//        this.idOuvinte = idOuvinte;
+//    }
 }

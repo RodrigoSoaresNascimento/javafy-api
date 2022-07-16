@@ -16,10 +16,10 @@ public class OuvinteRepository {
 
     private AtomicInteger COUNTER = new AtomicInteger();
 
-    public OuvinteRepository () {
-        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd/MM/yyyy");
-        ouvintes.add(new Ouvinte(COUNTER.incrementAndGet(), "Rodrigo", LocalDate.parse("24/03/1997", formatter), "M", 1, "rodrigo@gmail.com",1));
-    }
+//    public OuvinteRepository () {
+//        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd/MM/yyyy");
+//        ouvintes.add(new Ouvinte(COUNTER.incrementAndGet(), "Rodrigo", LocalDate.parse("24/03/1997", formatter), "M", 1, "rodrigo@gmail.com",1));
+//    }
 
     public List<Ouvinte> list() {
         return ouvintes;
