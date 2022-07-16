@@ -39,12 +39,11 @@ public class UsuarioService {
         return converterUsuario(usuarioEntity);
     }
 
-    public List<UsuarioDTO> list () {
-        return null;
-//                usuarioRepository.list()
-//                .stream()
-//                .map(this::converterOuvinte)
-//                .collect(Collectors.toList());
+    public List<UsuarioDTO> list() throws SQLException {
+        List<UsuarioDTO> usuarios = usuarioRepository.list().stream()
+                .map(this::converterUsuario)
+                .collect(Collectors.toList());
+        return usuarios;
     }
 
     public UsuarioDTO update (UsuarioCreateDTO usuarioAtualizar, Integer id) throws PessoaNaoCadastradaException, SQLException {
@@ -58,7 +57,7 @@ public class UsuarioService {
     }
 
     public Usuario findById (Integer id) throws PessoaNaoCadastradaException, SQLException {
-        Usuario usuarioRecuperado = usuarioRepository.listar().stream()
+        Usuario usuarioRecuperado = usuarioRepository.list().stream()
                 .filter(usuario -> usuario.getIdUsuario().equals(id))
                 .findFirst()
                 .orElseThrow(() -> new PessoaNaoCadastradaException("Pessoa não econtrada"));
@@ -67,11 +66,11 @@ public class UsuarioService {
 
     public void delete (Integer id) throws PessoaNaoCadastradaException, SQLException {
         Usuario usuarioRecuperado = findById(id);
-        usuarioRepository.listar().remove(usuarioRecuperado);
+        usuarioRepository.list().remove(usuarioRecuperado);
     }
 
     public List<UsuarioDTO> listByName (String nome) throws SQLException {
-        return usuarioRepository.listar().stream()
+        return usuarioRepository.list().stream()
                 .filter(usuario -> usuario.getNome().toUpperCase().contains(nome.toUpperCase()))
                 .map(this::converterUsuario)
                 .collect(Collectors.toList());

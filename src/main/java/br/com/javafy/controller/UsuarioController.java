@@ -7,12 +7,15 @@ import br.com.javafy.service.dto.UsuarioDTO;
 import br.com.javafy.exceptions.PessoaNaoCadastradaException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
+import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 
 import javax.validation.Valid;
 import java.sql.SQLException;
 import java.util.List;
-
+@Validated
+@RestController
+@RequestMapping("/usuario")
 public class UsuarioController {
 
     @Autowired
@@ -25,7 +28,7 @@ public class UsuarioController {
     }
 
     @GetMapping
-    public  ResponseEntity<List<UsuarioDTO>> list () {
+    public  ResponseEntity<List<UsuarioDTO>> list () throws SQLException {
         return ResponseEntity.ok(usuarioService.list());
     }
 

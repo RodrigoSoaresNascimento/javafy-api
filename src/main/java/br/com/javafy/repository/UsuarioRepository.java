@@ -3,7 +3,9 @@ package br.com.javafy.repository;
 import br.com.javafy.config.DatabaseConnection;
 import br.com.javafy.entity.PlayList;
 import br.com.javafy.entity.Usuario;
+import br.com.javafy.enums.TiposdePlano;
 import br.com.javafy.exceptions.BancoDeDadosException;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;
 
@@ -11,11 +13,13 @@ import java.sql.Connection;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
+import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.concurrent.atomic.AtomicInteger;
 
 @Repository
+@Slf4j
 public class UsuarioRepository {
     @Autowired
     private DatabaseConnection dbconnection;
@@ -35,14 +39,12 @@ public class UsuarioRepository {
         }
     }
 
-//    public List<Usuario> list() {
-//        return usuarios;
-//    }
-    public List<Usuario> listar() throws SQLException {
+
+
+    public List<Usuario> list() throws SQLException {
         Connection connection = dbconnection.getConnection();
 
-        String sql = "SELECT * FROM USUARIO";
-
+        String sql = "SELECT * FROM EQUIPE_4.USUARIO";
         List<Usuario> usuarios = new ArrayList<>();
         try {
 
@@ -50,13 +52,14 @@ public class UsuarioRepository {
             ResultSet resultSet = stmt.executeQuery(sql);
 
             while (resultSet.next()) {
+
                 Usuario usuario = new Usuario();
-                usuario.setIdUsuario(usuario.getIdUsuario());
-                usuario.setNome(usuario.getNome());
-                usuario.setEmail(usuario.getEmail());
-                usuario.setPlano(usuario.getPlano());
-                usuario.setGenero(usuario.getGenero());
-                usuario.setPlayLists(usuario.getPlayLists());
+
+                usuario.setIdUsuario(resultSet.getInt("ID_USER"));
+                usuario.setNome(resultSet.getString("NOME"));
+                usuario.setDataNascimento(resultSet.getDate("DATA_NASCIMENTO").toLocalDate());
+                usuario.setGenero(resultSet.getString("GENERO"));
+//                usuario.setPlano(TiposdePlano.ofTipo(resultSet.getInt("PREMIUM")));
 
                 usuarios.add(usuario);
             }
