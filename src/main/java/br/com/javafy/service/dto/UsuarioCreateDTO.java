@@ -1,5 +1,6 @@
-package br.com.javafy.dto;
+package br.com.javafy.service.dto;
 
+import br.com.javafy.enums.TiposdePlano;
 import lombok.*;
 
 import javax.validation.constraints.*;
@@ -10,7 +11,7 @@ import java.time.LocalDate;
 @NoArgsConstructor
 @AllArgsConstructor
 @ToString
-public class OuvinteCreateDTO {
+public class UsuarioCreateDTO {
 
 
     private Integer idUser;
@@ -26,8 +27,7 @@ public class OuvinteCreateDTO {
     private String genero;
 
     @NotNull
-    @Min(1)
-    private Integer premium;
+    private TiposdePlano plano;
 
     @Email
     @NotBlank(message = "Email é obrigatorio")

@@ -3,17 +3,17 @@ package br.com.javafy.enums;
 import java.util.Arrays;
 
 public enum TiposdePlano {
-    PREMIUM(1),
-    FREE(0);
+    PREMIUM("premium"),
+    FREE("free");
 
     private TiposdePlano tipo;
-    TiposdePlano(int i) {
+    TiposdePlano(String i) {
     }
 
     private TiposdePlano getTipo() {
         return this.tipo;
     }
-    public static TiposdePlano ofTipo(Integer tipo){
+    public static TiposdePlano ofTipo(String tipo){
         return Arrays.stream(TiposdePlano.values())
                 .filter(tp -> tp.getTipo().equals(tipo))
                 .findFirst()

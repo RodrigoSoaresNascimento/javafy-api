@@ -1,6 +1,6 @@
 package br.com.javafy.service;
 
-import br.com.javafy.dto.PlayListDTO;
+import br.com.javafy.service.dto.PlayListDTO;
 import br.com.javafy.entity.PlayList;
 import br.com.javafy.entity.Usuario;
 import br.com.javafy.exceptions.BancoDeDadosException;

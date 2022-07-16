@@ -1,4 +1,4 @@
-package br.com.javafy.dto.spotify;
+package br.com.javafy.service.dto.spotify;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
 import lombok.AllArgsConstructor;

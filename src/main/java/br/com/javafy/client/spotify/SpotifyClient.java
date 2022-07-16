@@ -1,16 +1,14 @@
 package br.com.javafy.client.spotify;
 
-import br.com.javafy.dto.spotify.MusicaDTO;
+import br.com.javafy.service.dto.spotify.MusicaDTO;
 import feign.HeaderMap;
 import feign.Headers;
 import feign.Param;
 import feign.RequestLine;
 import org.springframework.cloud.openfeign.FeignClient;
-import org.springframework.web.bind.annotation.RequestParam;
 
 import java.util.List;
 import java.util.Map;
-import java.util.Objects;
 
 @FeignClient(
         name = "spotify-client",

@@ -1,6 +1,8 @@
 package br.com.javafy.entity;
 
+import br.com.javafy.enums.TiposdePlano;
 import lombok.*;
+import org.springframework.boot.context.properties.bind.DefaultValue;
 
 import javax.validation.constraints.*;
 import java.time.LocalDate;
@@ -13,10 +15,10 @@ import java.util.List;
 @NoArgsConstructor
 @EqualsAndHashCode
 @ToString
-public abstract class Usuario {
+public class Usuario {
     @NotNull
     @Size(min = 1, max = 9)
-    private Integer idUser;
+    private Integer idUsuario;
 
     @NotBlank(message = "Nome não pode ser nulo")
     private String nome;
@@ -29,8 +31,7 @@ public abstract class Usuario {
     private String genero;
 
     @NotNull
-    @Size(min = 1, max = 1)
-    private Integer premium;
+    private TiposdePlano plano;
 
     @Email
     @NotBlank(message = "Email é obrigatorio")

@@ -1,6 +1,5 @@
 package br.com.javafy.repository;
 
-import br.com.javafy.entity.Ouvinte;
 import br.com.javafy.entity.PlayList;
 import br.com.javafy.entity.Usuario;
 import br.com.javafy.exceptions.BancoDeDadosException;
@@ -45,7 +44,7 @@ public class PlayListRepository {
             PreparedStatement stmt = connection.prepareStatement(sql);
 
             stmt.setInt(1, playList.getIdPlaylist());
-            stmt.setInt(2, playList.getProprietario().getIdOuvinte());
+            stmt.setInt(2, playList.getProprietario().getIdUsuario());
             stmt.setString(3, playList.getNome());
             int res = stmt.executeUpdate();
             return playList;
@@ -113,7 +112,7 @@ public class PlayListRepository {
     }
 
     public List<PlayList> list(Usuario user) throws BancoDeDadosException {
-        String sql = "SELECT * FROM PLAYLIST p WHERE p.ID_OUVINTE = " + user.getIdUser();
+        String sql = "SELECT * FROM PLAYLIST p WHERE p.ID_OUVINTE = " + user.getIdUsuario();
 
         List<PlayList> playlists = new ArrayList<>();
         try {
@@ -122,7 +121,7 @@ public class PlayListRepository {
 
             while (resultSet.next()) {
                 PlayList playlist = new PlayList();
-                playlist.setProprietario((Ouvinte) user);
+                playlist.setProprietario((Usuario) user);
                 playlist.setIdPlaylist(resultSet.getInt("id_playlist"));
                 playlist.setNome(resultSet.getString("nome"));
                 playlists.add(playlist);
@@ -146,7 +145,7 @@ public class PlayListRepository {
         PlayList playlist = null;
         try {
             String sql = "SELECT * FROM VEM_SER.PLAYLIST P " +
-                    "WHERE P.ID_PLAYLIST = " + id + " AND P.ID_OUVINTE = " + user.getIdUser();
+                    "WHERE P.ID_PLAYLIST = " + id + " AND P.ID_OUVINTE = " + user.getIdUsuario();
 
 
             Statement stmt = connection.createStatement();
@@ -155,7 +154,7 @@ public class PlayListRepository {
             while (resultSet.next()) {
                 playlist = new PlayList();
                 playlist.setIdPlaylist(resultSet.getInt("id_playlist"));
-                playlist.setProprietario((Ouvinte) user);
+                playlist.setProprietario((Usuario) user);
                 playlist.setNome(resultSet.getString("nome"));
             }
             return playlist;

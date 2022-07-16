@@ -1,6 +1,6 @@
 package br.com.javafy.entity;
 
-public class PlayList extends PlayListModel<Ouvinte> {
+public class PlayList extends PlayListModel<Usuario> {
 
     private Integer idPlayList;
     private Integer idUsuario;

@@ -1,7 +1,7 @@
 package br.com.javafy.controller;
 
 
-import br.com.javafy.dto.PlayListDTO;
+import br.com.javafy.service.dto.PlayListDTO;
 import br.com.javafy.exceptions.BancoDeDadosException;
 import br.com.javafy.exceptions.PessoaNaoCadastradaException;
 import br.com.javafy.service.PlayListService;

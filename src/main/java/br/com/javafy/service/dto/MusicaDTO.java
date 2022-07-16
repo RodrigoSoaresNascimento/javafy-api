@@ -1,4 +1,4 @@
-package br.com.javafy.dto;
+package br.com.javafy.service.dto;
 import io.swagger.v3.oas.annotations.media.Schema;
 import lombok.Getter;
 import lombok.RequiredArgsConstructor;
