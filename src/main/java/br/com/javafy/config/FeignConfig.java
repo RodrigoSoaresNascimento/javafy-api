@@ -4,6 +4,7 @@ import feign.Contract;
 import feign.Feign;
 import feign.Logger;
 import feign.codec.ErrorDecoder;
+import feign.form.FormEncoder;
 import feign.jackson.JacksonDecoder;
 import feign.jackson.JacksonEncoder;
 import feign.okhttp.OkHttpClient;
@@ -27,11 +28,13 @@ public class FeignConfig {
     public Feign.Builder feignBuilder() {
         return Feign.builder()
                 .client(new OkHttpClient())
-                .encoder(new JacksonEncoder())
+                .encoder(new FormEncoder(new JacksonEncoder()))
                 .logger(new Slf4jLogger())
                 .logLevel(Logger.Level.FULL)
                 .errorDecoder(new SimpleErrorDecode())
                 .decoder(new JacksonDecoder());
     }
+
+
 
 }

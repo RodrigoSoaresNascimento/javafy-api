@@ -18,13 +18,13 @@ import java.util.Map;
 public class Headers {
 
     @Value("basic " + "${spotify-client}")
-    private String autorization ;
+    private String authorization;
 
     @Value("client_credentials")
     private String grantType;
 
     public Map<String, String> toDados(){
-        return new HashMap<>(Map.of("Authorization", autorization));
+        return new HashMap<>(Map.of("Authorization", authorization));
     }
 
 }

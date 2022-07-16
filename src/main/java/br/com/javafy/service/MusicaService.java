@@ -1,25 +1,25 @@
 package br.com.javafy.service;
 
-import br.com.javafy.client.SpotifyClient;
+import br.com.javafy.client.spotify.SpotifyAuthorization;
+import br.com.javafy.client.spotify.SpotifyClient;
+import br.com.javafy.dto.spotify.MusicaDTO;
 import br.com.javafy.dto.spotify.TokenDTO;
 import br.com.javafy.entity.Musica;
 import br.com.javafy.entity.spotify.Headers;
 import com.fasterxml.jackson.databind.ObjectMapper;
-import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 
 @Service
-@RequiredArgsConstructor
 public class MusicaService {
 
     @Autowired
-    private final SpotifyClient spotifyClient;
+    private SpotifyClient spotifyClient;
+
+    @Autowired
+    private SpotifyAuthorization spotifyAutorization;
 
     @Autowired
     ObjectMapper objectMapper;
@@ -27,34 +27,34 @@ public class MusicaService {
     @Autowired
     private Headers headers;
 
-
     private TokenDTO getToken(){
-        System.out.println("AQUI");
-        return spotifyClient.autorization(headers.toDados(), headers.getGrantType());
+        return spotifyAutorization
+                .authorization(headers.toDados(), headers.getGrantType());
     }
 
-
-    List<Musica> musicas = new ArrayList<>();
-
-//    ************* criar os metodos de conversao de Musica para MusicaDTO e o contrario
-
-    // Retorna uma musica, especifica
-    public Musica getMusicaPorId(String id) {
+    public MusicaDTO musicById(String id) {
         TokenDTO tokenDTO = getToken();
-
-        String autorization = tokenDTO.getTokenType() + " " + tokenDTO.getAccessToken();
-        Map<String, String> h = new HashMap<>(Map.of("Authorization", autorization));
-        h.put("Content-Type", "application/json");
-        System.out.println(h);
-        //spotifyClient.getMusica(h, id);
-
-        return null;
+        return spotifyClient.getTrack(tokenDTO.getAutorization(), id);
     }
 
-    // Retorna uma lista de musicas, filtrando por nome ou trecho
-    public List<Musica> getMusicaPorNome(String nome) {
+    public List<MusicaDTO> getList() {
         TokenDTO tokenDTO = getToken();
-        return null;
+        System.out.println(tokenDTO.getAutorization());
+
+        String ids = "7ouMYWpwJ422jRcDASZB7P,4VqPOruhp5EdPBeR92t6lQ,2takcwOaAZWiXQijPHIx7B";
+        return spotifyClient.getTracks(tokenDTO.getAutorization(), ids).get("tracks");
+    }
+
+    public Map searchMusic() {
+        TokenDTO tokenDTO = getToken();
+
+        var t = spotifyClient.seach(
+                tokenDTO.getAutorization(),
+                "Marisa + Monte",
+                "track"
+        );
+        System.out.println(t);
+        return t;
     }
 
     // Busca uma musica por id

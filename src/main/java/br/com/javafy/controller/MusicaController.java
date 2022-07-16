@@ -1,5 +1,7 @@
 package br.com.javafy.controller;
 
+import br.com.javafy.documentation.DocumentationMusica;
+import br.com.javafy.dto.spotify.MusicaDTO;
 import br.com.javafy.entity.Musica;
 import br.com.javafy.service.MusicaService;
 import io.swagger.v3.oas.annotations.Operation;
@@ -11,47 +13,30 @@ import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
+import java.util.Map;
+import java.util.Objects;
 
+@Validated
 @RestController
 @RequestMapping("/musica")
-@Validated
-@Slf4j
-public class MusicaController {
+public class MusicaController implements DocumentationMusica {
+
     @Autowired
     private MusicaService musicaService;
 
-    @Operation(summary = "Exibir uma musica", description = "Exibir uma musica especificada por Id")
-    @ApiResponses(
-            value = {
-                    @ApiResponse(responseCode = "200", description = "Retorna a musica."),
-                    @ApiResponse(responseCode = "500", description = "Erro de Servidor, foi gerada uma Exception."),
-            }
-    )
     @GetMapping("/{id}")
-    public Musica musicaPorId(@PathVariable("id") String id) {
-        return musicaService.getMusicaPorId(id);
+    public MusicaDTO musicById(@PathVariable("id") String id) {
+        return musicaService.musicById(id);
     }
 
-    @Operation(summary = "Listar musicas por nome", description = "Lista musicas por nome ou trechos de nome")
-    @ApiResponses(
-            value = {
-                    @ApiResponse(responseCode = "200", description = "Retorna as musicas que possuem o nome ou trecho informado."),
-                    @ApiResponse(responseCode = "500", description = "Erro de Servidor, foi gerada uma Exception."),
-            }
-    )
-    @GetMapping("/byname") // /pessoa/byname?nome=musica
-    public List<Musica> musicaPorNome(@RequestParam("nome") String nome) {
-        return musicaService.getMusicaPorNome(nome);
+    @GetMapping("/list")
+    public List<MusicaDTO> getList() {
+        return musicaService.getList();
     }
-    @Operation(summary = "Listar musicas por artista", description = "Lista musicas por artista")
-    @ApiResponses(
-            value = {
-                    @ApiResponse(responseCode = "200", description = "Retorna as musicas que possuem o artista informado."),
-                    @ApiResponse(responseCode = "500", description = "Erro de Servidor, foi gerada uma Exception."),
-            }
-    )
-    @GetMapping("/test/{artista}")
-    public List<Musica> musicaPorArtista(@PathVariable("nome") String nome) {
-        return musicaService.getMusicaPorNome(nome);
+
+    @GetMapping
+    public Map searchMusic() {
+        return musicaService.searchMusic();
     }
+
 }
