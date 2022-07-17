@@ -27,15 +27,15 @@ public class UsuarioService {
     @Autowired
     private EmailService emailService;
 
-    public Usuario converterUsuarioDTO (UsuarioCreateDTO usuarioCreateDTO){
+    public Usuario converterUsuarioDTO(UsuarioCreateDTO usuarioCreateDTO) {
         return objectMapper.convertValue(usuarioCreateDTO, Usuario.class);
     }
 
-    public UsuarioDTO converterUsuario (Usuario usuario){
+    public UsuarioDTO converterUsuario(Usuario usuario) {
         return objectMapper.convertValue(usuario, UsuarioDTO.class);
     }
 
-    public UsuarioDTO findById (Integer id) throws PessoaNaoCadastradaException, SQLException {
+    public UsuarioDTO findById(Integer id) throws PessoaNaoCadastradaException, SQLException {
         return converterUsuario(usuarioRepository.findByID(id));
     }
 
@@ -46,33 +46,36 @@ public class UsuarioService {
                 .toList();
     }
 
-    public UsuarioDTO create (UsuarioCreateDTO usuario){
+    public UsuarioDTO create(UsuarioCreateDTO usuario) throws SQLException {
         Usuario usuarioEntity = converterUsuarioDTO(usuario);
-//        usuarioRepository.create(usuario);
+        usuarioRepository.create(usuarioEntity);
         String tipodeMensagem = TipoDeMensagem.CREATE.getTipoDeMensagem();
         emailService.sendEmail(converterUsuario(usuarioEntity), tipodeMensagem);
         return converterUsuario(usuarioEntity);
     }
 
+    public UsuarioDTO update(UsuarioCreateDTO usuarioDTOAtualizar, Integer idUsuario) throws PessoaNaoCadastradaException, SQLException {
 
+        Usuario usuario = converterUsuarioDTO(usuarioDTOAtualizar);
+        UsuarioDTO atualizado = converterUsuario(usuario);
 
-    public UsuarioDTO update (UsuarioCreateDTO usuarioAtualizar, Integer id) throws PessoaNaoCadastradaException, SQLException {
-//        Usuario usuarioRecuperado = findById(id);
-//        usuarioRecuperado.setNome(usuarioAtualizar.getNome());
-//        usuarioRecuperado.setGenero(usuarioAtualizar.getGenero());
-//        usuarioRecuperado.setDataNascimento(usuarioAtualizar.getDataNascimento());
-//        usuarioRecuperado.setPlano(usuarioAtualizar.getPlano());
-//        return converterUsuario(usuarioRecuperado);
-        return null;
+        usuarioRepository.update(idUsuario, usuario);
+
+        String tipodeMensagem = TipoDeMensagem.UPDATE.getTipoDeMensagem();
+        emailService.sendEmail(converterUsuario(usuario), tipodeMensagem);
+
+        return atualizado;
     }
 
+    public void delete(Integer idUsuario) throws PessoaNaoCadastradaException, SQLException {
+        UsuarioDTO usuarioRecuperado = findById(idUsuario);
+        Usuario usuarioEntity = converterUsuarioDTO(usuarioRecuperado);
 
-    public void delete (Integer id) throws PessoaNaoCadastradaException, SQLException {
-        //Usuario usuarioRecuperado = findById(id);
-        //usuarioRepository.list().remove(usuarioRecuperado);
+        String tipodeMensagem = TipoDeMensagem.DELETE.getTipoDeMensagem();
+        emailService.sendEmail(converterUsuario(usuarioEntity), tipodeMensagem);
 
+        usuarioRepository.delete(idUsuario);
     }
-
 
 
 }

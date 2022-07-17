@@ -22,11 +22,11 @@ public class UsuarioRepository {
 
     public Integer getProximoId(Connection connection) throws BancoDeDadosException {
         try {
-            String sql = "SELECT seq_id_usuario.nextval mysequence from DUAL";
+            String sql = "SELECT seq_id_user.nextval mysequence from DUAL";
             Statement stmt = connection.createStatement();
             ResultSet res = stmt.executeQuery(sql);
 
-            if(res.next()) {
+            if (res.next()) {
                 return res.getInt("mysequence");
             }
             return null;
@@ -37,7 +37,7 @@ public class UsuarioRepository {
 
     private void closeBD(Connection connection) {
         try {
-            if(connection !=null) {
+            if (connection != null) {
                 connection.close();
             }
         } catch (SQLException e) {
@@ -55,8 +55,10 @@ public class UsuarioRepository {
         } else {
             usuario.setPlano(TiposdePlano.FREE);
         }
+        usuario.setEmail(resultSet.getString("EMAIL"));
         System.out.println(usuario);
     }
+
 
     public Usuario findByID(Integer idUser) throws SQLException, PessoaNaoCadastradaException {
         Connection connection = null;
@@ -68,7 +70,7 @@ public class UsuarioRepository {
             stmt.setInt(1, idUser);
             ResultSet resultSet = stmt.executeQuery();
 
-            if(!resultSet.isBeforeFirst()){
+            if (!resultSet.isBeforeFirst()) {
                 throw new PessoaNaoCadastradaException("O ID da pessoa informada não existe.");
             }
 
@@ -81,7 +83,7 @@ public class UsuarioRepository {
             throw new BancoDeDadosException(e.getCause());
         } catch (PessoaNaoCadastradaException e) {
             throw new PessoaNaoCadastradaException(e.getMessage());
-        }finally {
+        } finally {
             closeBD(connection);
         }
     }
@@ -111,19 +113,91 @@ public class UsuarioRepository {
 
     }
 
+    public Usuario create(Usuario usuario) throws SQLException {
+        Connection connection = null;
+        StringBuilder sql = new StringBuilder();
+
+        try {
+            connection = dbconnection.getConnection();
+
+            sql.append("INSERT INTO USUARIO(ID_USER, NOME, DATA_NASCIMENTO, GENERO, PREMIUM, EMAIL)" +
+                    "VALUES(?, ?, ?, ?, ?, ?)");
+
+            PreparedStatement stmt = connection.prepareStatement(sql.toString());
+
+            Integer promixoId = getProximoId(connection);
+
+            stmt.setInt(1, promixoId);
+            stmt.setString(2, usuario.getNome());
+            stmt.setDate(3, Date.valueOf(usuario.getDataNascimento()));
+            stmt.setString(4, usuario.getGenero());
+            if (usuario.getPlano().equals("PREMIUM")) {
+                stmt.setInt(5, 1);
+            } else {
+                stmt.setInt(5, 0);
+            }
+            stmt.setString(6, usuario.getEmail());
 
 
+            ResultSet resultSet = stmt.executeQuery();
+
+            return usuario;
+
+        } catch (SQLException e) {
+            throw new BancoDeDadosException(e.getCause());
+        } finally {
+            closeBD(connection);
+        }
+    }
+
+    public void delete(Integer idUsuario) throws SQLException {
+        Connection connection = dbconnection.getConnection();
+        StringBuilder sql = new StringBuilder();
+        try {
+            sql.append("DELETE FROM USUARIO WHERE ID_USER = ?");
+
+            PreparedStatement stmt = connection.prepareStatement(sql.toString());
+            stmt.setInt(1, idUsuario);
+            ResultSet resultSet = stmt.executeQuery();
+            System.out.println("Usuario id = " + idUsuario + " foi deletado");
+        } catch (SQLException e) {
+            throw new BancoDeDadosException(e.getCause());
+        } finally {
+            closeBD(connection);
+        }
+    }
+
+    public boolean update(Integer idUsuario, Usuario usuario) throws SQLException {
+        Connection connection = dbconnection.getConnection();
+        StringBuilder sql = new StringBuilder();
+
+        try {
+            sql.append("UPDATE USUARIO " +
+                    "SET NOME = ?, DATA_NASCIMENTO = ?, GENERO = ?, PREMIUM = ?, EMAIL = ?" +
+                    "WHERE ID_USER = ?");
+
+            PreparedStatement stmt = connection.prepareStatement(sql.toString());
+
+            stmt.setString(1, usuario.getNome());
+            stmt.setDate(2, Date.valueOf(usuario.getDataNascimento()));
+            stmt.setString(3, usuario.getGenero());
+            //TODO - corrigir enum <- string
+            if (usuario.getPlano().equals("PREMIUM")) {
+                stmt.setInt(4, 1);
+            } else {
+                stmt.setInt(4, 0);
+            }
+            stmt.setString(5, usuario.getEmail());
+            stmt.setInt(6,idUsuario);
 
 
+            int res = stmt.executeUpdate();
+            return res > 0;
 
-//    public Usuario create (Usuario ouvinte){
-//        ouvinte.setIdUsuario(COUNTER.incrementAndGet());
-//        usuarios.add(ouvinte);
-//        return ouvinte;
-//    }
-
-//    public UsuarioRepository () {
-//        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd/MM/yyyy");
-//        usuarios.add(new Usuario(COUNTER.incrementAndGet(), "Rodrigo", LocalDate.parse("24/03/1997", formatter), "M", 1, "rodrigo@gmail.com",1));
-//    }
+        } catch (SQLException e) {
+            throw new BancoDeDadosException(e.getCause());
+        } finally {
+            closeBD(connection);
+        }
+    }
 }
