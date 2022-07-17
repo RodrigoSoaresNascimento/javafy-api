@@ -33,7 +33,8 @@ public class UsuarioController {
     }
 
     @PostMapping
-    public ResponseEntity<UsuarioDTO> create(@Valid @RequestBody UsuarioCreateDTO usuario) throws SQLException {
+    public ResponseEntity<UsuarioDTO> create(@Valid @RequestBody UsuarioCreateDTO usuario)
+            throws SQLException {
         return ResponseEntity.ok(usuarioService.create(usuario));
     }
 

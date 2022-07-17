@@ -50,7 +50,7 @@ public class UsuarioService {
         Usuario usuarioEntity = converterUsuarioDTO(usuario);
         usuarioRepository.create(usuarioEntity);
         String tipodeMensagem = TipoDeMensagem.CREATE.getTipoDeMensagem();
-        emailService.sendEmail(converterUsuario(usuarioEntity), tipodeMensagem);
+        //emailService.sendEmail(converterUsuario(usuarioEntity), tipodeMensagem);
         return converterUsuario(usuarioEntity);
     }
 
@@ -62,7 +62,7 @@ public class UsuarioService {
         usuarioRepository.update(idUsuario, usuario);
 
         String tipodeMensagem = TipoDeMensagem.UPDATE.getTipoDeMensagem();
-        emailService.sendEmail(converterUsuario(usuario), tipodeMensagem);
+        //emailService.sendEmail(converterUsuario(usuario), tipodeMensagem);
 
         return atualizado;
     }
@@ -72,7 +72,7 @@ public class UsuarioService {
         Usuario usuarioEntity = converterUsuarioDTO(usuarioRecuperado);
 
         String tipodeMensagem = TipoDeMensagem.DELETE.getTipoDeMensagem();
-        emailService.sendEmail(converterUsuario(usuarioEntity), tipodeMensagem);
+        //emailService.sendEmail(converterUsuario(usuarioEntity), tipodeMensagem);
 
         usuarioRepository.delete(idUsuario);
     }

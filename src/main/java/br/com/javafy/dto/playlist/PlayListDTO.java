@@ -17,6 +17,6 @@ import java.util.List;
 public class PlayListDTO extends PlayListCreate{
 
     @NotNull
-    private Integer idPlayList;
+    private Integer idPlaylist;
 
 }

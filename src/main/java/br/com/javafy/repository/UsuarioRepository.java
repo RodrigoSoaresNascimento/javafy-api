@@ -138,9 +138,8 @@ public class UsuarioRepository {
             }
             stmt.setString(6, usuario.getEmail());
 
-
+            usuario.setIdUsuario(promixoId);
             ResultSet resultSet = stmt.executeQuery();
-
             return usuario;
 
         } catch (SQLException e) {
@@ -155,11 +154,9 @@ public class UsuarioRepository {
         StringBuilder sql = new StringBuilder();
         try {
             sql.append("DELETE FROM USUARIO WHERE ID_USER = ?");
-
             PreparedStatement stmt = connection.prepareStatement(sql.toString());
             stmt.setInt(1, idUsuario);
             ResultSet resultSet = stmt.executeQuery();
-            System.out.println("Usuario id = " + idUsuario + " foi deletado");
         } catch (SQLException e) {
             throw new BancoDeDadosException(e.getCause());
         } finally {
@@ -189,7 +186,6 @@ public class UsuarioRepository {
             }
             stmt.setString(5, usuario.getEmail());
             stmt.setInt(6,idUsuario);
-
 
             int res = stmt.executeUpdate();
             return res > 0;

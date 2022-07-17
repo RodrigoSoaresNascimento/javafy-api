@@ -1,15 +1,12 @@
 package br.com.javafy.repository;
 
 import br.com.javafy.config.DatabaseConnection;
-import br.com.javafy.entity.Musica;
-import br.com.javafy.entity.PlayList;
 import br.com.javafy.exceptions.BancoDeDadosException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;
 
 import java.sql.Connection;
 import java.sql.PreparedStatement;
-import java.sql.ResultSet;
 import java.sql.SQLException;
 
 @Repository
@@ -24,19 +21,18 @@ public class PlayListMusicaRespository {
         try {
             connection = dbconnection.getConnection();
 
-
-            sql.append("INSERT INTO LISTADEMUSICA(ID_PLAYLIST, ID_MUSICA)" +
-                    "SELECT  ?, ? FROM DUAL " +
-                    "WHERE NOT EXISTS (SELECT NULL  FROM table" +
-                    "                    WHERE name = ?" +
-                    "                  )");
+            sql.append("INSERT INTO EQUIPE_4.LISTADEMUSICAS (ID_PLAYLIST, ID_MUSICA) " +
+                    "SELECT ? , ?  FROM DUAL " +
+                    " WHERE NOT EXISTS (SELECT ID_PLAYLIST " +
+                    "FROM EQUIPE_4.LISTADEMUSICAS " +
+                    "WHERE ID_PLAYLIST = ? AND ID_MUSICA = ?)");
 
             PreparedStatement stmt = connection.prepareStatement(sql.toString());
 
-
             stmt.setInt(1, idPlaylist);
             stmt.setString(2, idMusica);
-            stmt.setString(2, idMusica);
+            stmt.setInt(3, idPlaylist);
+            stmt.setString(4, idMusica);
 
             return stmt.executeUpdate() > 0;
 
