@@ -4,6 +4,7 @@ import br.com.javafy.anotations.MagiaResponse;
 import br.com.javafy.dto.playlist.PlayListCreate;
 import br.com.javafy.dto.playlist.PlayListDTO;
 import br.com.javafy.exceptions.PessoaNaoCadastradaException;
+import br.com.javafy.exceptions.PlayListException;
 import io.swagger.v3.oas.annotations.Operation;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
@@ -22,7 +23,7 @@ public interface DocumentationPlaylist {
     @Operation(summary = "Cria uma playlist.")
     @MagiaResponse
     public PlayListDTO create (@Valid @RequestBody PlayListCreate playListCreate,
-                               @PathVariable Integer idUsuario) throws SQLException, PessoaNaoCadastradaException;
+                               @PathVariable Integer idUsuario) throws SQLException, PessoaNaoCadastradaException, PlayListException;
 
     @Operation(summary = "Atualiza uma playlist.")
     @MagiaResponse

@@ -8,6 +8,7 @@ import br.com.javafy.entity.Musica;
 import br.com.javafy.entity.PlayList;
 import br.com.javafy.enums.TiposdePlano;
 import br.com.javafy.exceptions.PessoaNaoCadastradaException;
+import br.com.javafy.exceptions.PlayListException;
 import br.com.javafy.repository.PlayListMusicaRespository;
 import br.com.javafy.repository.PlayListRepository;
 import com.fasterxml.jackson.databind.ObjectMapper;
@@ -42,22 +43,26 @@ public class PlayListService {
 
     public void validUser(Integer idUsuario) throws SQLException, PessoaNaoCadastradaException {
         UsuarioDTO usuarioDTO = usuarioService.findById(idUsuario);
-        System.out.println(usuarioDTO);
-
-
+        if(usuarioDTO.getPlano().equals(TiposdePlano.FREE)){
+            throw new PessoaNaoCadastradaException("Plano Free. Para criar playlist, mude seu plano.");
+        }
     }
 
     public PlayListDTO create (PlayListCreate playlistCreate,
-                               Integer idUsuario) throws SQLException, PessoaNaoCadastradaException {
+                               Integer idUsuario) throws SQLException, PessoaNaoCadastradaException, PlayListException {
         validUser(idUsuario);
         playlistCreate.setIdUsuario(idUsuario);
         PlayList playList = converterParaPlaylist(playlistCreate);
         playList = playListRepository.create(playList);
 
+        if(playList.getIdUsuario() == null) {
+            throw new PlayListException("Erro ao salvar playlist.");
+        }
+
         if(playlistCreate.getMusicas() != null && !playlistCreate.getMusicas().isEmpty()){
             for(MusicaDTO music: playlistCreate.getMusicas()){
-                playListMusicaRespository.create(playList.getIdPlaylist(),
-                        music.getId());
+                playListMusicaRespository
+                        .create(playList.getIdPlaylist(), music.getId());
             }
         }
 

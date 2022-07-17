@@ -14,8 +14,6 @@ import java.util.List;
 @JsonIgnoreProperties(ignoreUnknown = true)
 public class MusicaFullDTO extends MusicaDTO{
 
-
-
 //    @JsonProperty("popularity")
 //    private Integer popular;
 

@@ -12,5 +12,5 @@ import javax.validation.constraints.Size;
 @EqualsAndHashCode
 @ToString
 public class Musica {
-    private Integer idMusica;
+    private Integer id;
 }
