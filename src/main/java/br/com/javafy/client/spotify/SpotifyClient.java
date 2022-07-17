@@ -1,5 +1,6 @@
 package br.com.javafy.client.spotify;
 
+import br.com.javafy.dto.spotify.ArtistaDTO;
 import br.com.javafy.dto.spotify.MusicaFullDTO;
 import feign.HeaderMap;
 import feign.Headers;
@@ -28,5 +29,15 @@ public interface SpotifyClient {
     @RequestLine("GET /v1/search?q={query}&type={type}&limit=20")
     public Map<String, Map<String, Object>> search(@HeaderMap Map<String, String> headers,
                      @Param String query, @Param String type );
+
+
+    @RequestLine("GET /v1/artists/{id}")
+    public ArtistaDTO getArtist(@HeaderMap Map<String, String> headers,
+                               @Param("id") String id);
+
+    @RequestLine("GET /v1/artists?ids={ids}")
+    public Map<String, List<ArtistaDTO>> getArtists(@HeaderMap Map<String, String> headers,
+                                                      @Param String ids);
+
 
 }
