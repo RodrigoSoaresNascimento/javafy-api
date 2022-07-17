@@ -2,9 +2,7 @@ package br.com.javafy.entity;
 
 import br.com.javafy.enums.TiposdePlano;
 import lombok.*;
-import org.springframework.boot.context.properties.bind.DefaultValue;
 
-import javax.validation.constraints.*;
 import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.List;

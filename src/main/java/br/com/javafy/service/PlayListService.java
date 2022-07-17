@@ -40,7 +40,6 @@ public class PlayListService {
         Usuario usuario = null;
         repository.list(usuario);
         return (List<PlayListDTO>) playlistDTO;
-
     }
 
     public PlayListDTO update (PlayListDTO playlistAtualizar, Integer id) throws PessoaNaoCadastradaException, SQLException {
@@ -59,9 +58,6 @@ public class PlayListService {
                 .orElseThrow(() -> new PessoaNaoCadastradaException("Playlist não econtrada"));
         return playlistRecuperada;
     }
-
-
-
 
     public void delete (Integer id) throws PessoaNaoCadastradaException, SQLException {
         Usuario user = null;

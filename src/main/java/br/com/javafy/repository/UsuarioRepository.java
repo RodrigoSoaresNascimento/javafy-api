@@ -1,7 +1,6 @@
 package br.com.javafy.repository;
 
 import br.com.javafy.config.DatabaseConnection;
-import br.com.javafy.entity.PlayList;
 import br.com.javafy.entity.Usuario;
 import br.com.javafy.enums.TiposdePlano;
 import br.com.javafy.exceptions.BancoDeDadosException;
@@ -10,10 +9,8 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;
 
 import java.sql.*;
-import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.concurrent.atomic.AtomicInteger;
 
 @Repository
 @Slf4j
@@ -64,7 +61,7 @@ public class UsuarioRepository {
         StringBuilder sql = new StringBuilder();
         try {
             connection = dbconnection.getConnection();
-            sql.append("SELECT * FROM EQUIPE_4.USUARIO WHERE ID_USER = ?");
+            sql.append("SELECT * FROM EQUIPE_4.USUARIO WHERE ID_USER = ? ");
             PreparedStatement stmt = connection.prepareStatement(sql.toString());
             stmt.setInt(1, idUser);
             ResultSet resultSet = stmt.executeQuery();

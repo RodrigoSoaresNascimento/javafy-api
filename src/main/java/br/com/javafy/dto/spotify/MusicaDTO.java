@@ -6,20 +6,26 @@ import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
-import java.util.List;
-
 @Data
 @AllArgsConstructor
 @NoArgsConstructor
 @JsonIgnoreProperties(ignoreUnknown = true)
-public class MusicaFullDTO extends MusicaDTO{
+public class MusicaDTO {
 
+    @JsonProperty("id")
+    private String id;
 
+    @JsonProperty("name")
+    private String nome;
 
-//    @JsonProperty("popularity")
-//    private Integer popular;
+    @JsonProperty("disc_number")
+    private Integer duracaoMs;
 
-    @JsonProperty("artists")
-    private List<ArtistaDTO> artistas;
+    @JsonProperty("popularity")
+    private Integer popularidade;
+
+    @JsonProperty("preview_url")
+    private String urlMusica;
 
 }
+
