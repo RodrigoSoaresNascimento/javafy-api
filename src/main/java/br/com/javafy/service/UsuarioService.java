@@ -1,6 +1,7 @@
 package br.com.javafy.service;
 
 import br.com.javafy.entity.Usuario;
+import br.com.javafy.enums.TipoDeMensagem;
 import br.com.javafy.repository.UsuarioRepository;
 import br.com.javafy.dto.UsuarioCreateDTO;
 import br.com.javafy.dto.UsuarioDTO;
@@ -24,6 +25,9 @@ public class UsuarioService {
     @Autowired
     private ObjectMapper objectMapper;
 
+    @Autowired
+    private EmailService emailService;
+
     public Usuario converterUsuarioDTO (UsuarioCreateDTO usuarioCreateDTO){
         return objectMapper.convertValue(usuarioCreateDTO, Usuario.class);
     }
@@ -46,6 +50,8 @@ public class UsuarioService {
     public UsuarioDTO create (UsuarioCreateDTO usuario){
         Usuario usuarioEntity = converterUsuarioDTO(usuario);
 //        usuarioRepository.create(usuario);
+        String tipodeMensagem = TipoDeMensagem.CREATE.getTipoDeMensagem();
+        emailService.sendEmail(converterUsuario(usuarioEntity), tipodeMensagem);
         return converterUsuario(usuarioEntity);
     }
 

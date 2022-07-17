@@ -21,6 +21,7 @@ public class Usuario {
     private LocalDate dataNascimento;
     private String genero;
     private TiposdePlano plano;
+    private String email;
     private List<PlayList> playLists = new ArrayList<>();
 
     //private List<Usuario> seguidores = new ArrayList<>();
