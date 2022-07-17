@@ -1,5 +1,6 @@
 package br.com.javafy.controller;
 
+import br.com.javafy.documentation.DocumentationUsuario;
 import br.com.javafy.service.UsuarioService;
 import br.com.javafy.dto.UsuarioCreateDTO;
 import br.com.javafy.dto.UsuarioDTO;
@@ -16,7 +17,7 @@ import java.util.List;
 @Validated
 @RestController
 @RequestMapping("/usuario")
-public class UsuarioController {
+public class UsuarioController implements DocumentationUsuario {
 
     @Autowired
     UsuarioService usuarioService;

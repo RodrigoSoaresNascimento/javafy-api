@@ -131,7 +131,7 @@ public class UsuarioRepository {
             stmt.setString(2, usuario.getNome());
             stmt.setDate(3, Date.valueOf(usuario.getDataNascimento()));
             stmt.setString(4, usuario.getGenero());
-            if (usuario.getPlano().equals("PREMIUM")) {
+            if (usuario.getPlano().toString().equals("PREMIUM")) {
                 stmt.setInt(5, 1);
             } else {
                 stmt.setInt(5, 0);
@@ -182,7 +182,7 @@ public class UsuarioRepository {
             stmt.setDate(2, Date.valueOf(usuario.getDataNascimento()));
             stmt.setString(3, usuario.getGenero());
             //TODO - corrigir enum <- string
-            if (usuario.getPlano().equals("PREMIUM")) {
+            if (usuario.getPlano().toString().equals("PREMIUM")) {
                 stmt.setInt(4, 1);
             } else {
                 stmt.setInt(4, 0);
