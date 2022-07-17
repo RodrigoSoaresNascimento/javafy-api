@@ -4,6 +4,7 @@ import br.com.javafy.config.DatabaseConnection;
 import br.com.javafy.entity.Usuario;
 import br.com.javafy.enums.TiposdePlano;
 import br.com.javafy.exceptions.BancoDeDadosException;
+import br.com.javafy.exceptions.PessoaNaoCadastradaException;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;
@@ -54,30 +55,33 @@ public class UsuarioRepository {
         } else {
             usuario.setPlano(TiposdePlano.FREE);
         }
+        System.out.println(usuario);
     }
 
-    public Usuario getByID(Integer idUser) throws SQLException {
+    public Usuario findByID(Integer idUser) throws SQLException, PessoaNaoCadastradaException {
         Connection connection = null;
-        StringBuilder sql = new StringBuilder();
         try {
             connection = dbconnection.getConnection();
-            sql.append("SELECT * FROM EQUIPE_4.USUARIO WHERE ID_USER = ? ");
-            PreparedStatement stmt = connection.prepareStatement(sql.toString());
+
+            String sql = "SELECT * FROM EQUIPE_4.USUARIO WHERE ID_USER = ?";
+            PreparedStatement stmt = connection.prepareStatement(sql);
             stmt.setInt(1, idUser);
             ResultSet resultSet = stmt.executeQuery();
-            Usuario usuario = new Usuario();
 
-            if (!resultSet.next() ) {
-                // lançar exceção aqui
+            if(!resultSet.isBeforeFirst()){
+                throw new PessoaNaoCadastradaException("O ID da pessoa informada não existe.");
             }
 
+            Usuario usuario = new Usuario();
             while (resultSet.next()) {
                 resultSetToUsuario(usuario, resultSet);
             }
             return usuario;
         } catch (SQLException e) {
             throw new BancoDeDadosException(e.getCause());
-        } finally {
+        } catch (PessoaNaoCadastradaException e) {
+            throw new PessoaNaoCadastradaException(e.getMessage());
+        }finally {
             closeBD(connection);
         }
     }

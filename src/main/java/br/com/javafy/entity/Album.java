@@ -11,7 +11,7 @@ import javax.validation.constraints.Size;
 @NoArgsConstructor
 @EqualsAndHashCode
 @ToString
-public class Album extends PlayListModel<Artista> {
+public class Album {
     @NotNull
     @Size(min = 1, max = 9)
     private Integer idAlbum;

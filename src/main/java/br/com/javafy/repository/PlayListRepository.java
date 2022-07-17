@@ -15,7 +15,7 @@ import java.util.List;
 public class PlayListRepository {
 
     @Autowired
-    private DatabaseConnection dbConnection;
+    private DatabaseConnection dbconnection;
 
     public Integer getProximoId(Connection connection) throws BancoDeDadosException {
 
@@ -35,21 +35,27 @@ public class PlayListRepository {
     }
 
     public PlayList create (PlayList playList) throws SQLException {
-        Connection connection = dbConnection.getConnection();
-        try {
-            String sql = "INSERT INTO PLAYLIST(ID_PLAYLIST, ID_OUVINTE, NOME)" +
-                    "VALUES(?, ?, ?)";
+        Connection connection = null;
+        StringBuilder sql = new StringBuilder();
 
+        try {
+            connection = dbconnection.getConnection();
+
+            sql.append("INSERT INTO PLAYLIST(ID_PLAYLIST, ID_USUARIO, NOME)" +
+                    "VALUES(?, ?, ?)");
+
+            PreparedStatement stmt = connection.prepareStatement(sql.toString());
 
             Integer promixoId = getProximoId(connection);
+
+            stmt.setInt(1, promixoId);
+            stmt.setInt(2, playList.getIdUsuario());
+            stmt.setString(3, playList.getName());
+
             playList.setIdPlaylist(promixoId);
 
-            PreparedStatement stmt = connection.prepareStatement(sql);
+            ResultSet resultSet = stmt.executeQuery();
 
-            stmt.setInt(1, playList.getIdPlaylist());
-            stmt.setInt(2, playList.getProprietario().getIdUsuario());
-            stmt.setString(3, playList.getNome());
-            int res = stmt.executeUpdate();
             return playList;
 
         } catch (SQLException e) {
@@ -65,116 +71,116 @@ public class PlayListRepository {
         }
     }
 
-    public boolean remove (Integer id) throws SQLException {
-        List<PlayList> playlists = new ArrayList<>();
-        Connection connection = dbConnection.getConnection();
-        try {
-
-            String sql = "DELETE FROM VEM_SER.PLAYLIST p WHERE p.ID_PLAYLIST = " + id;
-            PreparedStatement stmt = connection.prepareStatement(sql);
-            int result = stmt.executeUpdate();
-            return result > 0;
-        } catch (SQLException e) {
-            throw new BancoDeDadosException(e.getCause());
-        } finally {
-            try {
-                if(connection!=null) {
-                    connection.close();
-                }
-            } catch (SQLException e) {
-                e.printStackTrace();
-            }
-        }
-    }
-
-    public boolean update (Integer idPlaylist, PlayList playlist) throws SQLException {
-        Connection connection = dbConnection.getConnection();
-        try {
-            String sql = "UPDATE VEM_SER.PLAYLIST " +
-                    "SET NOME = ? " +
-                    "WHERE ID_PLAYLIST = ?";
-
-
-            PreparedStatement  stmt = connection.prepareStatement(sql);
-
-            stmt.setString(1, playlist.getNome());
-            stmt.setInt(2, idPlaylist);
-
-            int res = stmt.executeUpdate();
-            return  res > 0;
-
-        } catch (SQLException e) {
-            throw new BancoDeDadosException(e.getCause());
-        } finally {
-            try {
-                if(connection!=null) {
-                    connection.close();
-                }
-            } catch (SQLException e) {
-                e.printStackTrace();
-            }
-        }
-    }
-
-    public List<PlayList> list(Usuario user) throws SQLException {
-        Connection connection = dbConnection.getConnection();
-        List<PlayList> playlists = new ArrayList<>();
-        try {
-            String sql = "SELECT * FROM PLAYLIST p WHERE p.ID_OUVINTE = " + user.getIdUsuario();
-            Statement stmt = connection.createStatement();
-            ResultSet resultSet = stmt.executeQuery(sql);
-
-            while (resultSet.next()) {
-                PlayList playlist = new PlayList();
-                playlist.setProprietario((Usuario) user);
-                playlist.setIdPlaylist(resultSet.getInt("id_playlist"));
-                playlist.setNome(resultSet.getString("nome"));
-                playlists.add(playlist);
-            }
-            return playlists;
-        } catch (SQLException e) {
-            throw new BancoDeDadosException(e.getCause());
-        } finally {
-            try {
-                if(connection!=null) {
-                    connection.close();
-                }
-            } catch (SQLException e) {
-                e.printStackTrace();
-            }
-        }
-
-    }
-
-    public PlayList getPlaylistById(Integer id, Usuario user) throws SQLException {
-        Connection connection = dbConnection.getConnection();
-        PlayList playlist = null;
-        try {
-            String sql = "SELECT * FROM VEM_SER.PLAYLIST P " +
-                    "WHERE P.ID_PLAYLIST = " + id + " AND P.ID_OUVINTE = " + user.getIdUsuario();
-
-
-            Statement stmt = connection.createStatement();
-            ResultSet resultSet = stmt.executeQuery(sql);
-
-            while (resultSet.next()) {
-                playlist = new PlayList();
-                playlist.setIdPlaylist(resultSet.getInt("id_playlist"));
-                playlist.setProprietario((Usuario) user);
-                playlist.setNome(resultSet.getString("nome"));
-            }
-            return playlist;
-        } catch (SQLException e) {
-            throw new BancoDeDadosException(e.getCause());
-        } finally {
-            try {
-                if(connection!=null) {
-                    connection.close();
-                }
-            } catch (SQLException e) {
-                e.printStackTrace();
-            }
-        }
-    }
+//    public boolean remove (Integer id) throws SQLException {
+//        List<PlayList> playlists = new ArrayList<>();
+//        Connection connection = dbConnection.getConnection();
+//        try {
+//
+//            String sql = "DELETE FROM VEM_SER.PLAYLIST p WHERE p.ID_PLAYLIST = " + id;
+//            PreparedStatement stmt = connection.prepareStatement(sql);
+//            int result = stmt.executeUpdate();
+//            return result > 0;
+//        } catch (SQLException e) {
+//            throw new BancoDeDadosException(e.getCause());
+//        } finally {
+//            try {
+//                if(connection!=null) {
+//                    connection.close();
+//                }
+//            } catch (SQLException e) {
+//                e.printStackTrace();
+//            }
+//        }
+//    }
+//
+//    public boolean update (Integer idPlaylist, PlayList playlist) throws SQLException {
+//        Connection connection = dbConnection.getConnection();
+//        try {
+//            String sql = "UPDATE VEM_SER.PLAYLIST " +
+//                    "SET NOME = ? " +
+//                    "WHERE ID_PLAYLIST = ?";
+//
+//
+//            PreparedStatement  stmt = connection.prepareStatement(sql);
+//
+//            stmt.setString(1, playlist.getNome());
+//            stmt.setInt(2, idPlaylist);
+//
+//            int res = stmt.executeUpdate();
+//            return  res > 0;
+//
+//        } catch (SQLException e) {
+//            throw new BancoDeDadosException(e.getCause());
+//        } finally {
+//            try {
+//                if(connection!=null) {
+//                    connection.close();
+//                }
+//            } catch (SQLException e) {
+//                e.printStackTrace();
+//            }
+//        }
+//    }
+//
+//    public List<PlayList> list(Usuario user) throws SQLException {
+//        Connection connection = dbConnection.getConnection();
+//        List<PlayList> playlists = new ArrayList<>();
+//        try {
+//            String sql = "SELECT * FROM PLAYLIST p WHERE p.ID_OUVINTE = " + user.getIdUsuario();
+//            Statement stmt = connection.createStatement();
+//            ResultSet resultSet = stmt.executeQuery(sql);
+//
+//            while (resultSet.next()) {
+//                PlayList playlist = new PlayList();
+//                playlist.setProprietario((Usuario) user);
+//                playlist.setIdPlaylist(resultSet.getInt("id_playlist"));
+//                playlist.setNome(resultSet.getString("nome"));
+//                playlists.add(playlist);
+//            }
+//            return playlists;
+//        } catch (SQLException e) {
+//            throw new BancoDeDadosException(e.getCause());
+//        } finally {
+//            try {
+//                if(connection!=null) {
+//                    connection.close();
+//                }
+//            } catch (SQLException e) {
+//                e.printStackTrace();
+//            }
+//        }
+//
+//    }
+//
+//    public PlayList getPlaylistById(Integer id, Usuario user) throws SQLException {
+//        Connection connection = dbConnection.getConnection();
+//        PlayList playlist = null;
+//        try {
+//            String sql = "SELECT * FROM VEM_SER.PLAYLIST P " +
+//                    "WHERE P.ID_PLAYLIST = " + id + " AND P.ID_OUVINTE = " + user.getIdUsuario();
+//
+//
+//            Statement stmt = connection.createStatement();
+//            ResultSet resultSet = stmt.executeQuery(sql);
+//
+//            while (resultSet.next()) {
+//                playlist = new PlayList();
+//                playlist.setIdPlaylist(resultSet.getInt("id_playlist"));
+//                playlist.setProprietario((Usuario) user);
+//                playlist.setNome(resultSet.getString("nome"));
+//            }
+//            return playlist;
+//        } catch (SQLException e) {
+//            throw new BancoDeDadosException(e.getCause());
+//        } finally {
+//            try {
+//                if(connection!=null) {
+//                    connection.close();
+//                }
+//            } catch (SQLException e) {
+//                e.printStackTrace();
+//            }
+//        }
+//    }
 
 }

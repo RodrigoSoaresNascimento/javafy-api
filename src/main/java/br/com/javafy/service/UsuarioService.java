@@ -36,7 +36,7 @@ public class UsuarioService {
     }
 
     public UsuarioDTO findById (Integer id) throws PessoaNaoCadastradaException, SQLException {
-        return converterUsuario(usuarioRepository.getByID(id));
+        return converterUsuario(usuarioRepository.findByID(id));
     }
 
     public List<UsuarioDTO> list() throws SQLException {
@@ -65,7 +65,6 @@ public class UsuarioService {
 //        return converterUsuario(usuarioRecuperado);
         return null;
     }
-
 
 
     public void delete (Integer id) throws PessoaNaoCadastradaException, SQLException {

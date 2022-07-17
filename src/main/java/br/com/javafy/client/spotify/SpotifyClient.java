@@ -25,7 +25,6 @@ public interface SpotifyClient {
     public Map<String, List<MusicaFullDTO>> getTracks(@HeaderMap Map<String, String> headers,
                                                       @Param String ids);
 
-
     @RequestLine("GET /v1/search?q={query}&type={type}&limit=20")
     public Map<String, Map<String, Object>> search(@HeaderMap Map<String, String> headers,
                      @Param String query, @Param String type );

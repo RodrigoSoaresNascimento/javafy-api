@@ -1,22 +1,19 @@
 package br.com.javafy.entity;
 
-public class PlayList extends PlayListModel<Usuario> {
+import lombok.AllArgsConstructor;
+import lombok.Data;
+import lombok.NoArgsConstructor;
 
-    private Integer idPlayList;
+import java.util.List;
+
+@Data
+@AllArgsConstructor
+@NoArgsConstructor
+public class PlayList {
+
+    private Integer idPlaylist;
     private Integer idUsuario;
-    private String nome;
-
-    public boolean validarSeMusicaJaEstaNaPlayList(Integer idMusica) {
-        for (Musica musica : getMusicas()) {
-            if (musica.getIdMusica().equals(idMusica)) {
-                return true;
-            }
-        }
-        return false;
-    }
-
-    public void imprimirPlayList() {
-        System.out.format("%-6s %-1s", "ID: " + getIdPlaylist(), " | Nome: " + getNome() + "\n");
-    }
+    private String name;
+    private List<Musica> musicas;
 
 }
