@@ -1,6 +1,7 @@
 package br.com.javafy.controller;
 
 
+import br.com.javafy.documentation.DocumentationSeguidores;
 import br.com.javafy.exceptions.BancoDeDadosException;
 import br.com.javafy.service.SeguidoresService;
 import br.com.javafy.dto.UsuarioDTO;
@@ -12,14 +13,14 @@ import java.util.List;
 
 @RestController
 @RequestMapping(value = "/seguidores")
-public class SeguidoresController {
+public class SeguidoresController implements DocumentationSeguidores {
 
     @Autowired
     SeguidoresService service;
 
     @GetMapping(value = "/from-user/{idUser}")// meus seuindo quem eu sigo
     public List<UsuarioDTO> fromUser(@PathVariable("idUser") Integer idUser) throws SQLException {
-        return service.getAllSeguidores(idUser);
+        return  service.getAllSeguidores(idUser);
     }
 
     @GetMapping(value = "/to-user/{idUser}") // quem me segue
@@ -28,7 +29,7 @@ public class SeguidoresController {
     }
 
     @PostMapping(value = "/{meuId}/seguir/{idSeguindo}")
-    public boolean seguirUser(@PathVariable("meuId") Integer meuId,
+    public Boolean seguirUser(@PathVariable("meuId") Integer meuId,
             @PathVariable("idSeguindo") Integer idSeguindo) throws BancoDeDadosException {
          return service.seguirUser(meuId,idSeguindo);
     }
@@ -37,5 +38,6 @@ public class SeguidoresController {
     public void deixarDeSeguirUsuario( @PathVariable("idSeguindo") Integer idSeguindo){
 
         service.deixarDeSeguirUsuario(idSeguindo);
+
     }
 }

@@ -19,16 +19,16 @@ public class SeguidoresRepository {
     public List<Usuario> getAllSeguidores(Integer idUsuario) throws SQLException {
 
         List<Usuario> usuarios = new ArrayList<>();
-
+        StringBuilder sql = new StringBuilder();
         Connection connection = dbConnection.getConnection();
         try {
-            String sql = "SELECT u.ID_USER, u.NOME, u.DATA_NASCIMENTO , u.GENERO, u.PREMIUM  " +
+            sql.append("SELECT u.ID_USER, u.NOME, u.DATA_NASCIMENTO , u.GENERO, u.PREMIUM  " +
                     "FROM SEGUIDORES s " +
                     "JOIN USUARIO u ON u.ID_USER = s.ID_USER " +
-                    "WHERE s.ID_USER_SEGUINDO  = " + idUsuario;
+                    "WHERE s.ID_USER_SEGUINDO  = " + idUsuario) ;
 
-            Statement statement = connection.createStatement();
-            ResultSet resultSet = statement.executeQuery(sql);
+            PreparedStatement statement = connection.prepareStatement(sql.toString());
+            ResultSet resultSet = statement.executeQuery(sql.toString());
 
             // Vamos só listar os usuários - Então podemos criar um Ouvinte sem ID
             while (resultSet.next()){
@@ -61,15 +61,15 @@ public class SeguidoresRepository {
 
     public List<Usuario> getAllSeguindo(Integer idUsuario) throws SQLException {
         Connection connection = dbConnection.getConnection();
-
+        StringBuilder sql = new StringBuilder();
         try {
-            String sql = "SELECT u.ID_USER, u.NOME, u.DATA_NASCIMENTO, u.GENERO, u.PREMIUM " +
+            sql.append("SELECT u.ID_USER, u.NOME, u.DATA_NASCIMENTO, u.GENERO, u.PREMIUM " +
                     " FROM SEGUIDORES s " +
                     "JOIN USUARIO u ON u.ID_USER = s.ID_USER_SEGUINDO " +
-                    "WHERE s.ID_USER = " + idUsuario;
+                    "WHERE s.ID_USER = " + idUsuario);
             List<Usuario> usuarios = new ArrayList<>();
-            Statement statement = connection.createStatement();
-            ResultSet resultSet = statement.executeQuery(sql);
+            PreparedStatement statement = connection.prepareStatement(sql.toString());
+            ResultSet resultSet = statement.executeQuery(sql.toString());
 
             // Vamos só listar os usuários - Então podemos criar um Usuario sem ID
             while (resultSet.next()){
