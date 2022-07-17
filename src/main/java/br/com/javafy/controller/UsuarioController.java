@@ -40,7 +40,8 @@ public class UsuarioController {
 
     @PutMapping("/{idUser}")
     public ResponseEntity<UsuarioDTO> update(@PathVariable("idUser") Integer id
-            , @Valid @RequestBody UsuarioCreateDTO usuario) throws PessoaNaoCadastradaException, SQLException {
+            , @Valid @RequestBody UsuarioCreateDTO usuario) throws PessoaNaoCadastradaException,
+            SQLException {
         return ResponseEntity.ok(usuarioService.update(usuario, id));
     }
 

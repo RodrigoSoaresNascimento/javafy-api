@@ -54,17 +54,18 @@ public class UsuarioService {
         return converterUsuario(usuarioEntity);
     }
 
-    public UsuarioDTO update(UsuarioCreateDTO usuarioDTOAtualizar, Integer idUsuario) throws PessoaNaoCadastradaException, SQLException {
+    public UsuarioDTO update(UsuarioCreateDTO usuarioDTOAtualizar, Integer idUsuario)
+            throws PessoaNaoCadastradaException, SQLException {
 
         Usuario usuario = converterUsuarioDTO(usuarioDTOAtualizar);
-        UsuarioDTO atualizado = converterUsuario(usuario);
-
-        usuarioRepository.update(idUsuario, usuario);
-
+        boolean usuarioAtualizado = usuarioRepository.update(idUsuario, usuario);
+        if(usuarioAtualizado){
+            usuario.setIdUsuario(idUsuario);
+        }
         String tipodeMensagem = TipoDeMensagem.UPDATE.getTipoDeMensagem();
         //emailService.sendEmail(converterUsuario(usuario), tipodeMensagem);
 
-        return atualizado;
+        return converterUsuario(usuario);
     }
 
     public void delete(Integer idUsuario) throws PessoaNaoCadastradaException, SQLException {

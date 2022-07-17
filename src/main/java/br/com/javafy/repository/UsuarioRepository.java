@@ -179,7 +179,7 @@ public class UsuarioRepository {
             stmt.setDate(2, Date.valueOf(usuario.getDataNascimento()));
             stmt.setString(3, usuario.getGenero());
             //TODO - corrigir enum <- string
-            if (usuario.getPlano().equals("PREMIUM")) {
+            if (usuario.getPlano() == TiposdePlano.PREMIUM) {
                 stmt.setInt(4, 1);
             } else {
                 stmt.setInt(4, 0);
@@ -187,8 +187,8 @@ public class UsuarioRepository {
             stmt.setString(5, usuario.getEmail());
             stmt.setInt(6,idUsuario);
 
-            int res = stmt.executeUpdate();
-            return res > 0;
+
+            return stmt.executeUpdate() > 0;
 
         } catch (SQLException e) {
             throw new BancoDeDadosException(e.getCause());

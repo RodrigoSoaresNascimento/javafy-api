@@ -18,12 +18,12 @@ public class SeguidoresController implements DocumentationSeguidores {
     @Autowired
     SeguidoresService service;
 
-    @GetMapping(value = "/from-user/{idUser}")// meus seuindo quem eu sigo
+    @GetMapping(value = "/to-user/{idUser}")// meus seuindo quem eu sigo
     public List<UsuarioDTO> fromUser(@PathVariable("idUser") Integer idUser) throws SQLException {
         return  service.getAllSeguidores(idUser);
     }
 
-    @GetMapping(value = "/to-user/{idUser}") // quem me segue
+    @GetMapping(value = "/from-user/{idUser}") // quem me segue
     public List<UsuarioDTO> toUser(@PathVariable("idUser") Integer idUser) throws SQLException {
         return service.getAllSeguindo(idUser);
     }
