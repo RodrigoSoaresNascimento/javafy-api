@@ -11,7 +11,9 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.sql.SQLException;
+import java.util.ArrayList;
 import java.util.List;
+import java.util.stream.Collectors;
 
 @Service
 public class SeguidoresService {
@@ -30,21 +32,23 @@ public class SeguidoresService {
         return objectMapper.convertValue(user, Usuario.class);
     }
 
-    public void getAllSeguidores(Integer idUser)  {
-        try {
-            List<Usuario> usuarios = repository.getAllSeguidores(idUser);
-        } catch (SQLException e) {
-            e.getStackTrace();
-        }
+    public List<UsuarioDTO> getAllSeguidores(Integer idUser) throws SQLException {
+
+
+        List<UsuarioDTO>   seguidores =  repository.getAllSeguidores(idUser).stream()
+                .map(this::converterParaUsuarioDTO)
+                .collect(Collectors.toList());
+        return seguidores;
     }
 
-    public void getAllSeguindo(Integer idUser) {
-        try {
-            List<Usuario> usuarios = repository.getAllSeguindo(idUser);
+    public List<UsuarioDTO> getAllSeguindo(Integer idUser) throws SQLException {
 
-        } catch (SQLException e) {
-            e.getStackTrace();
-        }
+        List<UsuarioDTO>  seguindo = repository.getAllSeguindo(idUser)
+                .stream()
+                .map(this::converterParaUsuarioDTO)
+                .collect(Collectors.toList());
+
+        return seguindo;
     }
 
 //    public void getAllUsers(Usuario usuario) {
@@ -56,22 +60,25 @@ public class SeguidoresService {
 //        }
 //    }
 
-    public UsuarioDTO seguirUser(UsuarioDTO usuarioDTO, Integer idSeguindo) throws BancoDeDadosException {
+    public boolean seguirUser(Integer meuId,Integer idSeguindo) throws BancoDeDadosException {
+        boolean seguir = false;
         try {
 
-            boolean seguir = repository.seguirUsuario(idSeguindo, converterDTOParaUsuario(usuarioDTO));
+             seguir = repository.seguirUsuario(meuId,idSeguindo);
 
         } catch (SQLException e) {
             e.getStackTrace();
         }
-        return usuarioDTO;
+        return seguir;
     }
 
-    public void deixarDeSeguirUsuario(UsuarioDTO usuarioDTO, Integer idSeguindo) {
+    public void deixarDeSeguirUsuario(Integer idSeguindo) {
+        boolean deixouDeSeguir = false;
         try {
-            repository.deixarDeSeguirUsuario(idSeguindo, converterDTOParaUsuario(usuarioDTO));
+            deixouDeSeguir = repository.deixarDeSeguirUsuario(idSeguindo);
         } catch (SQLException e) {
            e.getStackTrace();
         }
+
     }
 }

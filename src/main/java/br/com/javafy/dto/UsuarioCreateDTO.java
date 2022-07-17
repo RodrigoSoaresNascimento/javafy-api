@@ -26,4 +26,7 @@ public class UsuarioCreateDTO {
     @NotNull
     private TiposdePlano plano;
 
+    @NotBlank(message = "Email e obrigatorio")
+    private String email;
+
 }
