@@ -3,7 +3,6 @@ package br.com.javafy.repository;
 import br.com.javafy.config.DatabaseConnection;
 import br.com.javafy.entity.Usuario;
 import br.com.javafy.entity.PlayList;
-import br.com.javafy.entity.Usuario;
 import br.com.javafy.exceptions.BancoDeDadosException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;

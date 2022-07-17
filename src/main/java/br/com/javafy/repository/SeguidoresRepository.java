@@ -36,7 +36,11 @@ public class SeguidoresRepository {
                 usuario.setIdUsuario(resultSet.getInt("ID_USER"));
                 usuario.setNome(resultSet.getString("NOME"));
                 usuario.setGenero(resultSet.getString("GENERO"));
-                usuario.setPlano((TiposdePlano) resultSet.getObject("PREMIUM"));
+                if (resultSet.getInt("PREMIUM") == 1) {
+                    usuario.setPlano(TiposdePlano.PREMIUM);
+                } else {
+                    usuario.setPlano(TiposdePlano.FREE);
+                }
                 usuarios.add(usuario);
             }
 
@@ -60,7 +64,7 @@ public class SeguidoresRepository {
 
         try {
             String sql = "SELECT u.ID_USER, u.NOME, u.DATA_NASCIMENTO, u.GENERO, u.PREMIUM " +
-                    " FROM VEM_SER.SEGUIDORES s " +
+                    " FROM SEGUIDORES s " +
                     "JOIN USUARIO u ON u.ID_USER = s.ID_USER_SEGUINDO " +
                     "WHERE s.ID_USER = " + idUsuario;
             List<Usuario> usuarios = new ArrayList<>();
@@ -73,7 +77,11 @@ public class SeguidoresRepository {
                 usuario.setIdUsuario(resultSet.getInt("ID_USER"));
                 usuario.setNome(resultSet.getString("NOME"));
                 usuario.setGenero(resultSet.getString("GENERO"));
-                usuario.setPlano((TiposdePlano) resultSet.getObject("PREMIUM"));
+                if (resultSet.getInt("PREMIUM") == 1) {
+                    usuario.setPlano(TiposdePlano.PREMIUM);
+                } else {
+                    usuario.setPlano(TiposdePlano.FREE);
+                }
                 usuarios.add(usuario);
             }
 
@@ -93,18 +101,17 @@ public class SeguidoresRepository {
 
     }
 
-    public boolean seguirUsuario(Integer idUsuarioParaSeguir, Usuario usuario) throws SQLException {
+    public boolean seguirUsuario(Integer meuId ,Integer idUsuarioParaSeguir) throws SQLException {
         Connection connection = dbConnection.getConnection();
-        List<Usuario> usuarios = new ArrayList<>();
 
         try {
 
-            String sql = "INSERT INTO SEGUIDORES (ID_USER, ID_USER_SEGUINDO) VALUES (?,?)";
+            String sql = "INSERT INTO SEGUIDORES s (ID_USER, ID_USER_SEGUINDO) VALUES "
+                    +"(?,?)";
             PreparedStatement stmt = connection.prepareStatement(sql);
 
-            stmt.setInt(1, usuario.getIdUsuario());
+            stmt.setInt(1, meuId);
             stmt.setInt(2, idUsuarioParaSeguir);
-
             int res = stmt.executeUpdate();
             return res > 0;
 
@@ -121,18 +128,15 @@ public class SeguidoresRepository {
         }
     }
 
-    public boolean deixarDeSeguirUsuario(Integer idUsuarioSeguindo, Usuario usuario)
+    public boolean deixarDeSeguirUsuario(Integer idUsuarioSeguindo)
             throws SQLException {
         Connection connection = dbConnection.getConnection();
-        List<Usuario> usuarios = new ArrayList<>();
-
         try {
 
-            String sql = "DELETE FROM SEGUIDORES s WHERE s.ID_USER = ? AND s.ID_USER_SEGUINDO = ?";
+            String sql = "DELETE FROM SEGUIDORES s WHERE s.ID_USER = s.ID_USER AND s.ID_USER_SEGUINDO = ?";
             PreparedStatement stmt = connection.prepareStatement(sql);
 
-            stmt.setInt(1, usuario.getIdUsuario());
-            stmt.setInt(2, idUsuarioSeguindo);
+            stmt.setInt(1, idUsuarioSeguindo);
 
             int res = stmt.executeUpdate();
             return res > 0;

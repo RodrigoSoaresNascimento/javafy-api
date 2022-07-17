@@ -7,6 +7,9 @@ import br.com.javafy.dto.UsuarioDTO;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
+import java.sql.SQLException;
+import java.util.List;
+
 @RestController
 @RequestMapping(value = "/seguidores")
 public class SeguidoresController {
@@ -15,25 +18,24 @@ public class SeguidoresController {
     SeguidoresService service;
 
     @GetMapping(value = "/from-user/{idUser}")// meus seuindo quem eu sigo
-    public void fromUser(@PathVariable("idUser") Integer idUser){
-        service.getAllSeguidores(idUser);
+    public List<UsuarioDTO> fromUser(@PathVariable("idUser") Integer idUser) throws SQLException {
+        return service.getAllSeguidores(idUser);
     }
 
     @GetMapping(value = "/to-user/{idUser}") // quem me segue
-    public void toUser(@PathVariable("idUser") Integer idUser){
-        service.getAllSeguindo(idUser);
+    public List<UsuarioDTO> toUser(@PathVariable("idUser") Integer idUser) throws SQLException {
+        return service.getAllSeguindo(idUser);
     }
 
-    @PostMapping(value = "{idSeguindo}")
-    public void seguirUser(@RequestBody UsuarioDTO usuarioDTO,
-                           @PathVariable("idSeguindo") Integer idSeguindo) throws BancoDeDadosException {
-        service.seguirUser(usuarioDTO,idSeguindo);
+    @PostMapping(value = "/{meuId}/seguir/{idSeguindo}")
+    public boolean seguirUser(@PathVariable("meuId") Integer meuId,
+            @PathVariable("idSeguindo") Integer idSeguindo) throws BancoDeDadosException {
+         return service.seguirUser(meuId,idSeguindo);
     }
 
     @DeleteMapping(value = "{idSeguindo}")
-    public void deixarDeSeguirUsuario(@RequestBody UsuarioDTO usuarioDTO,
-                                      @PathVariable("idSeguindo") Integer idSeguindo){
+    public void deixarDeSeguirUsuario( @PathVariable("idSeguindo") Integer idSeguindo){
 
-        service.deixarDeSeguirUsuario(usuarioDTO,idSeguindo);
+        service.deixarDeSeguirUsuario(idSeguindo);
     }
 }
