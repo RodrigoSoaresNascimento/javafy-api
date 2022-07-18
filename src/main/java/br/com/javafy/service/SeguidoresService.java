@@ -57,10 +57,10 @@ public class SeguidoresService {
         return seguir;
     }
 
-    public void deixarDeSeguirUsuario(Integer idSeguindo) {
+    public void deixarDeSeguirUsuario(Integer meuId, Integer idSeguindo) {
         boolean deixouDeSeguir = false;
         try {
-            deixouDeSeguir = repository.deixarDeSeguirUsuario(idSeguindo);
+            deixouDeSeguir = repository.deixarDeSeguirUsuario(meuId, idSeguindo);
         } catch (SQLException e) {
            e.getStackTrace();
         }

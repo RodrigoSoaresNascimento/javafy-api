@@ -34,10 +34,11 @@ public class SeguidoresController implements DocumentationSeguidores {
          return service.seguirUser(meuId,idSeguindo);
     }
 
-    @DeleteMapping(value = "{idSeguindo}")
-    public void deixarDeSeguirUsuario( @PathVariable("idSeguindo") Integer idSeguindo){
+    @DeleteMapping(value = "{meuId}/deixarSeguir/{idSeguindo}")
+    public void deixarDeSeguirUsuario( @PathVariable("meuId") Integer meuId
+            ,@PathVariable("idSeguindo") Integer idSeguindo){
 
-        service.deixarDeSeguirUsuario(idSeguindo);
+        service.deixarDeSeguirUsuario(meuId,idSeguindo);
 
     }
 }

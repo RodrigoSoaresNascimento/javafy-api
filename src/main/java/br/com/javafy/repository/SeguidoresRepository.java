@@ -22,7 +22,7 @@ public class SeguidoresRepository {
         StringBuilder sql = new StringBuilder();
         Connection connection = dbConnection.getConnection();
         try {
-            sql.append("SELECT u.ID_USER, u.NOME, u.DATA_NASCIMENTO , u.GENERO, u.PREMIUM  " +
+            sql.append("SELECT * " +
                     "FROM SEGUIDORES s " +
                     "JOIN USUARIO u ON u.ID_USER = s.ID_USER " +
                     "WHERE s.ID_USER_SEGUINDO  = " + idUsuario) ;
@@ -36,6 +36,8 @@ public class SeguidoresRepository {
                 usuario.setIdUsuario(resultSet.getInt("ID_USER"));
                 usuario.setNome(resultSet.getString("NOME"));
                 usuario.setGenero(resultSet.getString("GENERO"));
+                usuario.setDataNascimento(resultSet.getDate("DATA_NASCIMENTO").toLocalDate());
+                usuario.setEmail(resultSet.getString("EMAIL"));
                 if (resultSet.getInt("PREMIUM") == 1) {
                     usuario.setPlano(TiposdePlano.PREMIUM);
                 } else {
@@ -63,7 +65,7 @@ public class SeguidoresRepository {
         Connection connection = dbConnection.getConnection();
         StringBuilder sql = new StringBuilder();
         try {
-            sql.append("SELECT u.ID_USER, u.NOME, u.DATA_NASCIMENTO, u.GENERO, u.PREMIUM " +
+            sql.append("SELECT * " +
                     " FROM SEGUIDORES s " +
                     "JOIN USUARIO u ON u.ID_USER = s.ID_USER_SEGUINDO " +
                     "WHERE s.ID_USER = " + idUsuario);
@@ -77,6 +79,8 @@ public class SeguidoresRepository {
                 usuario.setIdUsuario(resultSet.getInt("ID_USER"));
                 usuario.setNome(resultSet.getString("NOME"));
                 usuario.setGenero(resultSet.getString("GENERO"));
+                usuario.setDataNascimento(resultSet.getDate("DATA_NASCIMENTO").toLocalDate());
+                usuario.setEmail(resultSet.getString("EMAIL"));
                 if (resultSet.getInt("PREMIUM") == 1) {
                     usuario.setPlano(TiposdePlano.PREMIUM);
                 } else {
@@ -128,15 +132,16 @@ public class SeguidoresRepository {
         }
     }
 
-    public boolean deixarDeSeguirUsuario(Integer idUsuarioSeguindo)
+    public boolean deixarDeSeguirUsuario(Integer meuId, Integer idUsuarioSeguindo)
             throws SQLException {
         Connection connection = dbConnection.getConnection();
         try {
 
-            String sql = "DELETE FROM SEGUIDORES s WHERE s.ID_USER = s.ID_USER AND s.ID_USER_SEGUINDO = ?";
+            String sql = "DELETE FROM SEGUIDORES s WHERE s.ID_USER = ? AND s.ID_USER_SEGUINDO = ?";
             PreparedStatement stmt = connection.prepareStatement(sql);
 
-            stmt.setInt(1, idUsuarioSeguindo);
+            stmt.setInt(1, meuId);
+            stmt.setInt(2, idUsuarioSeguindo);
 
             int res = stmt.executeUpdate();
             return res > 0;

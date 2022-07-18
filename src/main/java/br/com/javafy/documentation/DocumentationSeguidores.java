@@ -31,7 +31,8 @@ public interface DocumentationSeguidores {
 
     @Operation(summary = "Deixa de seguir um usuario")
     @MagiaResponse
-    public void deixarDeSeguirUsuario (@PathVariable Integer idSeguindo) throws SQLException;
+    public void deixarDeSeguirUsuario (@PathVariable Integer meuId,
+            @PathVariable Integer idSeguindo) throws SQLException;
 
 
 }
