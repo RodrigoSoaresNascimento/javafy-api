@@ -3,6 +3,7 @@ package br.com.javafy.documentation;
 import br.com.javafy.anotations.MagiaResponse;
 import br.com.javafy.dto.spotify.MusicaDTO;
 import br.com.javafy.dto.spotify.MusicaFullDTO;
+import br.com.javafy.dto.spotify.QueryDTO;
 import io.swagger.v3.oas.annotations.Operation;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -22,6 +23,6 @@ public interface DocumentationMusica {
 
     @Operation(summary = "Retonar uma lista de musica pesquisada.")
     @MagiaResponse
-    public List<MusicaDTO> searchMusic(@RequestBody String query) throws IOException;
+    public List<MusicaDTO> searchMusic(@RequestBody QueryDTO query) throws IOException;
 
 }

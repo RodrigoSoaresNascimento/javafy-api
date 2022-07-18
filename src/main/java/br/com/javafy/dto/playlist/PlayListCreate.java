@@ -1,6 +1,5 @@
 package br.com.javafy.dto.playlist;
 
-import br.com.javafy.dto.UsuarioDTO;
 import br.com.javafy.dto.spotify.MusicaDTO;
 import lombok.AllArgsConstructor;
 import lombok.Data;

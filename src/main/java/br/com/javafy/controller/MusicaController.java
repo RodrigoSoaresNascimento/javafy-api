@@ -3,6 +3,7 @@ package br.com.javafy.controller;
 import br.com.javafy.documentation.DocumentationMusica;
 import br.com.javafy.dto.spotify.MusicaDTO;
 import br.com.javafy.dto.spotify.MusicaFullDTO;
+import br.com.javafy.dto.spotify.QueryDTO;
 import br.com.javafy.service.MusicaService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.validation.annotation.Validated;
@@ -30,7 +31,8 @@ public class MusicaController implements DocumentationMusica {
     }
 
     @GetMapping("/buscar")
-    public List<MusicaDTO> searchMusic(@RequestBody String query) throws IOException {
+    public List<MusicaDTO> searchMusic(@RequestBody QueryDTO query) throws IOException {
+        System.out.println("QUERY");
         return musicaService.searchMusic(query);
     }
 

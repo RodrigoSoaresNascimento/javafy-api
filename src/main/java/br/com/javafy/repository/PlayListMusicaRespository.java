@@ -1,11 +1,8 @@
 package br.com.javafy.repository;
 
 import br.com.javafy.config.DatabaseConnection;
-import br.com.javafy.dto.spotify.MusicaDTO;
 import br.com.javafy.entity.Musica;
-import br.com.javafy.entity.PlayList;
 import br.com.javafy.exceptions.BancoDeDadosException;
-import br.com.javafy.exceptions.PessoaNaoCadastradaException;
 import br.com.javafy.exceptions.PlayListException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;
