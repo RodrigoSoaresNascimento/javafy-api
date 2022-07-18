@@ -48,18 +48,19 @@ public class ComentariosRepository {
         comentario.setIdUser(resultSet.getInt("ID_USER"));
         comentario.setComentario(resultSet.getString("COMENTARIO"));
         comentario.setIdComentario(resultSet.getInt("ID_COMENTARIO"));
+        comentario.setIdPlaylist(resultSet.getInt("ID_PLAYLIST"));
         System.out.println(comentario);
     }
 
 
-    public Comentario findByID(Integer idUser) throws SQLException, PessoaNaoCadastradaException {
+    public Comentario findByID(Integer idComentario) throws SQLException, PessoaNaoCadastradaException {
         Connection connection = null;
         try {
             connection = dbconnection.getConnection();
 
-            String sql = "SELECT * FROM EQUIPE_4.COMENTARIOS WHERE ID_USER = ?";
+            String sql = "SELECT * FROM COMENTARIOS WHERE ID_COMENTARIO = ?";
             PreparedStatement stmt = connection.prepareStatement(sql);
-            stmt.setInt(1, idUser);
+            stmt.setInt(1, idComentario);
             ResultSet resultSet = stmt.executeQuery();
 
             if (!resultSet.isBeforeFirst()) {
@@ -83,7 +84,7 @@ public class ComentariosRepository {
     public List<Comentario> list() throws SQLException {
         Connection connection = dbconnection.getConnection();
 
-        String sql = "SELECT COMENTARIO FROM EQUIPE_4.COMENTARIOS";
+        String sql = "SELECT * FROM COMENTARIOS";
         List<Comentario> comentarios = new ArrayList<>();
 
         try {
@@ -105,7 +106,7 @@ public class ComentariosRepository {
 
     }
 
-    public Comentario create(Comentario comentario) throws SQLException {
+    public Comentario create(Integer idUser, Integer idPlaylist, Comentario comentario) throws SQLException {
         Connection connection = null;
         StringBuilder sql = new StringBuilder();
 
@@ -119,10 +120,10 @@ public class ComentariosRepository {
 
             Integer promixoId = getProximoId(connection);
 
-            stmt.setInt(1, comentario.getIdUser());
+            stmt.setInt(1, idUser);
             stmt.setString(2, comentario.getComentario());
             stmt.setInt(3, promixoId);
-            stmt.setInt(4, comentario.getIdPlaylist());
+            stmt.setInt(4, idPlaylist);
 
             ResultSet resultSet = stmt.executeQuery();
             return comentario;
@@ -138,7 +139,7 @@ public class ComentariosRepository {
         Connection connection = dbconnection.getConnection();
         StringBuilder sql = new StringBuilder();
         try {
-            sql.append("DELETE FROM COMENTARIOS WHERE ID_USER = ?");
+            sql.append("DELETE FROM COMENTARIOS WHERE ID_COMENTARIO = ?");
             PreparedStatement stmt = connection.prepareStatement(sql.toString());
             stmt.setInt(1, idComentario);
             ResultSet resultSet = stmt.executeQuery();
@@ -155,17 +156,16 @@ public class ComentariosRepository {
 
         try {
             sql.append("UPDATE COMENTARIOS " +
-                    "SET COMENTARIO = ?, ID_USER = ?, ID_COMENTARIO = ? " +
-                    "WHERE ID_PLAYLIST = ?");
+                    "SET COMENTARIO = ?" +
+                    "WHERE ID_COMENTARIO = ?");
 
             PreparedStatement stmt = connection.prepareStatement(sql.toString());
 
             stmt.setString(1, comentario.getComentario());
-            stmt.setInt(2, comentario.getIdUser());
-            stmt.setInt(3, comentario.getIdComentario());
-            stmt.setInt(4,idComentario);
+            stmt.setInt(2, idComentario);
 
             int res = stmt.executeUpdate();
+            System.out.println("res = "+res);
             return res > 0;
 
         } catch (SQLException e) {

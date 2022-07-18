@@ -10,6 +10,7 @@ import org.springframework.stereotype.Service;
 
 import java.sql.SQLException;
 import java.util.List;
+import java.util.stream.Collectors;
 
 @Service
 public class ComentarioService {
@@ -32,19 +33,20 @@ public class ComentarioService {
         return repository
                 .list().stream()
                 .map(this::converterComentario)
-                .toList();
+                .collect(Collectors.toList());
     }
 
-    public ComentarioDTO create(ComentarioDTO comentarioDTO) throws SQLException {
+    public ComentarioDTO create(Integer idUser, Integer idPlaylist, ComentarioDTO comentarioDTO) throws SQLException {
         Comentario comentarioEntity = converterComentarioDTO(comentarioDTO);
-        repository.create(comentarioEntity);
+        repository.create(idUser,idPlaylist,comentarioEntity);
         return converterComentario(comentarioEntity);
     }
 
     public ComentarioDTO update(ComentarioDTO comentarioDTO, Integer idComentario)
             throws PessoaNaoCadastradaException, SQLException {
 
-        Comentario comentario = converterComentarioDTO(comentarioDTO);
+        Comentario comentario = converterComentarioDTO(findById(idComentario));
+        System.out.println("comentario = "+comentario);
         boolean comentarioAtualizado = repository.update(idComentario, comentario);
         if(comentarioAtualizado){
             comentario.setIdComentario(idComentario);
@@ -58,6 +60,7 @@ public class ComentarioService {
     public void delete(Integer idComentario) throws PessoaNaoCadastradaException, SQLException {
         ComentarioDTO comentarioRecuperado = findById(idComentario);
         Comentario comentarioEntity = converterComentarioDTO(comentarioRecuperado);
+        System.out.println("comentarioEntity "+comentarioEntity);
         repository.delete(idComentario);
     }
 

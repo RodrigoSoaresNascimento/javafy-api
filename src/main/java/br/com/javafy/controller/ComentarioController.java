@@ -1,6 +1,7 @@
 package br.com.javafy.controller;
 
 
+import br.com.javafy.documentation.DocumentationComentario;
 import br.com.javafy.dto.ComentarioDTO;
 import br.com.javafy.exceptions.PessoaNaoCadastradaException;
 import br.com.javafy.service.ComentarioService;
@@ -16,7 +17,7 @@ import java.util.List;
 @Validated
 @RestController
 @RequestMapping("/comentario")
-public class ComentarioController {
+public class ComentarioController implements DocumentationComentario {
     @Autowired
     ComentarioService comentarioService;
 
@@ -32,9 +33,9 @@ public class ComentarioController {
     }
 
     @PostMapping("/{idUser}/and/{idPlaylist}")
-    public ResponseEntity<ComentarioDTO> create(@Valid @RequestBody ComentarioDTO comentario)
-            throws SQLException {
-        return ResponseEntity.ok(comentarioService.create(comentario));
+    public ResponseEntity<ComentarioDTO> create(@PathVariable("idUser")Integer idUser, @PathVariable("idPlaylist")Integer idPlaylist,
+                                                @Valid @RequestBody ComentarioDTO comentario)throws SQLException {
+        return ResponseEntity.ok(comentarioService.create(idUser, idPlaylist, comentario));
     }
 
     @PutMapping("/{idComentario}")
