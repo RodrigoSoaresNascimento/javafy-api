@@ -21,9 +21,7 @@
               <div align="left" style="font-size: 24px; color: #555100;padding:12px">
 
                 <label> Olá ${nome},</label>
-                <p>Seu perfil foi atualizado no nosso sistema.
-                  ${endereco}
-                </p>
+                <p>Seu perfil foi atualizado no nosso sistema.</p>
                 <p>Qualquer duvida é só contatar o suporte pelo e-mail ${email} .</p>
                 <p>Att,</p>
                 <p>Sistema.</p>
