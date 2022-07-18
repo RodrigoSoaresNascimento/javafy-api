@@ -1,15 +1,16 @@
+
 package br.com.javafy.controller;
 
 
-import br.com.javafy.documentation.DocumentationSeguidores;
-import br.com.javafy.exceptions.BancoDeDadosException;
-import br.com.javafy.service.SeguidoresService;
-import br.com.javafy.dto.UsuarioDTO;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.web.bind.annotation.*;
+        import br.com.javafy.documentation.DocumentationSeguidores;
+        import br.com.javafy.exceptions.BancoDeDadosException;
+        import br.com.javafy.service.SeguidoresService;
+        import br.com.javafy.dto.UsuarioDTO;
+        import org.springframework.beans.factory.annotation.Autowired;
+        import org.springframework.web.bind.annotation.*;
 
-import java.sql.SQLException;
-import java.util.List;
+        import java.sql.SQLException;
+        import java.util.List;
 
 @RestController
 @RequestMapping(value = "/seguidores")
@@ -30,8 +31,8 @@ public class SeguidoresController implements DocumentationSeguidores {
 
     @PostMapping(value = "/{meuId}/seguir/{idSeguindo}")
     public Boolean seguirUser(@PathVariable("meuId") Integer meuId,
-            @PathVariable("idSeguindo") Integer idSeguindo) throws BancoDeDadosException {
-         return service.seguirUser(meuId,idSeguindo);
+                              @PathVariable("idSeguindo") Integer idSeguindo) throws BancoDeDadosException {
+        return service.seguirUser(meuId,idSeguindo);
     }
 
     @DeleteMapping(value = "{meuId}/deixarSeguir/{idSeguindo}")
