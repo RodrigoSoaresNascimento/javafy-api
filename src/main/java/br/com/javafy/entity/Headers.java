@@ -1,4 +1,4 @@
-package br.com.javafy.entity.spotify;
+package br.com.javafy.entity;
 
 import lombok.AllArgsConstructor;
 import lombok.Data;

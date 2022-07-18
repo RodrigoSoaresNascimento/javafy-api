@@ -5,7 +5,7 @@ import br.com.javafy.client.spotify.SpotifyClient;
 import br.com.javafy.dto.spotify.MusicaDTO;
 import br.com.javafy.dto.spotify.MusicaFullDTO;
 import br.com.javafy.dto.spotify.TokenDTO;
-import br.com.javafy.entity.spotify.Headers;
+import br.com.javafy.entity.Headers;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.DeserializationFeature;
 import com.fasterxml.jackson.databind.ObjectMapper;

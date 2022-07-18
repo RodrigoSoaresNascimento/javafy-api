@@ -9,9 +9,9 @@ import javax.validation.constraints.Size;
 @Setter
 @AllArgsConstructor
 @NoArgsConstructor
-@EqualsAndHashCode
 @ToString
 public class Artista extends Usuario {
+
     @NotNull
     @Size(min = 1, max = 9)
     private Integer idArtista;

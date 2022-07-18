@@ -12,7 +12,7 @@ import java.util.List;
 public class PlayList {
 
     private Integer idPlaylist;
-    private Integer idUsuario;
+    private Usuario usuario;
     private String name;
     private List<Musica> musicas;
 
