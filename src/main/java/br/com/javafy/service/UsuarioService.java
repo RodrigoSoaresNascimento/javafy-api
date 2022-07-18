@@ -35,6 +35,15 @@ public class UsuarioService {
         return objectMapper.convertValue(usuario, UsuarioDTO.class);
     }
 
+    public void validUsuario(Integer idUser) throws SQLException, PessoaNaoCadastradaException {
+        UsuarioDTO usuarioDTO = findById(idUser);
+
+        if(usuarioDTO.getIdUsuario() == null){
+            throw new PessoaNaoCadastradaException("Usuário não cadastrado. ID " + idUser);
+        }
+
+    }
+
     public UsuarioDTO findById(Integer id) throws PessoaNaoCadastradaException, SQLException {
         return converterUsuario(usuarioRepository.findByID(id));
     }
@@ -72,9 +81,7 @@ public class UsuarioService {
     public void delete(Integer idUsuario) throws PessoaNaoCadastradaException, SQLException {
         UsuarioDTO usuarioRecuperado = findById(idUsuario);
         Usuario usuarioEntity = converterUsuarioDTO(usuarioRecuperado);
-
-        String tipodeMensagem = TipoDeMensagem.DELETE.getTipoDeMensagem();
-        emailService.sendEmail(converterUsuario(usuarioEntity), tipodeMensagem);
+        emailService.sendEmail(converterUsuario(usuarioEntity), TipoDeMensagem.DELETE.getTipoDeMensagem());
 
         usuarioRepository.delete(idUsuario);
     }

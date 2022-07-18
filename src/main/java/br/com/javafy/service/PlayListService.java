@@ -51,7 +51,7 @@ public class PlayListService {
     public void validPlaylist(Integer idPlaylist) throws SQLException, PlayListException {
         PlayList playList = playListRepository.getPlaylistById(idPlaylist);
 
-        if(playList.getIdPlaylist() != null){
+        if(playList.getIdPlaylist() == null){
             throw new PlayListException("Id não encontado.");
         }
 
@@ -62,7 +62,7 @@ public class PlayListService {
         PlayList playList = playListRepository.getPlaylistById(idPlayList);
 
         if(playList.getIdPlaylist() == null){
-            throw new PlayListException("Playlist não existe.");
+            throw new PlayListException("Playlist não existe. ID: " + idPlayList);
         }
 
         List<MusicaDTO> musicaDTOS= playListMusicaService
