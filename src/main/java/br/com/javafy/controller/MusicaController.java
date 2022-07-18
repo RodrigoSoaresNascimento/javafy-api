@@ -29,7 +29,7 @@ public class MusicaController implements DocumentationMusica {
         return musicaService.getList();
     }
 
-    @GetMapping
+    @GetMapping("/buscar")
     public List<MusicaDTO> searchMusic(@RequestBody String query) throws IOException {
         return musicaService.searchMusic(query);
     }

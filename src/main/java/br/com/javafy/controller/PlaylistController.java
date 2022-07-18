@@ -8,12 +8,15 @@ import br.com.javafy.exceptions.PessoaNaoCadastradaException;
 import br.com.javafy.exceptions.PlayListException;
 import br.com.javafy.service.PlayListService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 
+import javax.validation.Valid;
 import java.sql.SQLException;
 
 @RestController
 @RequestMapping("/playlist")
+@Validated
 public class PlaylistController implements DocumentationPlaylist{
 
     @Autowired
@@ -25,7 +28,7 @@ public class PlaylistController implements DocumentationPlaylist{
 
     @Override
     @PostMapping("/{idUsuario}")
-    public PlayListDTO create(PlayListCreate playListCreate, Integer idUsuario) throws SQLException,
+    public PlayListDTO create(@Valid  PlayListCreate playListCreate, Integer idUsuario) throws SQLException,
             PessoaNaoCadastradaException, PlayListException {
         return playListService.create(playListCreate, idUsuario);
     }

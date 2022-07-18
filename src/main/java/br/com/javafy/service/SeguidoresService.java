@@ -34,38 +34,23 @@ public class SeguidoresService {
 
     public List<UsuarioDTO> getAllSeguidores(Integer idUser) throws SQLException {
 
-
-        List<UsuarioDTO>   seguidores =  repository.getAllSeguidores(idUser).stream()
+        return repository.getAllSeguidores(idUser).stream()
                 .map(this::converterParaUsuarioDTO)
                 .collect(Collectors.toList());
-        return seguidores;
     }
 
     public List<UsuarioDTO> getAllSeguindo(Integer idUser) throws SQLException {
 
-        List<UsuarioDTO>  seguindo = repository.getAllSeguindo(idUser)
+        return repository.getAllSeguindo(idUser)
                 .stream()
                 .map(this::converterParaUsuarioDTO)
                 .collect(Collectors.toList());
-
-        return seguindo;
     }
-
-//    public void getAllUsers(Usuario usuario) {
-//        try {
-//            List<Usuario> usuarios = usuarioRepositorio.getAllUsers(usuario);
-//
-//        } catch (BancoDeDadosException e) {
-//            e.getStackTrace();
-//        }
-//    }
 
     public boolean seguirUser(Integer meuId,Integer idSeguindo) throws BancoDeDadosException {
         boolean seguir = false;
         try {
-
              seguir = repository.seguirUsuario(meuId,idSeguindo);
-
         } catch (SQLException e) {
             e.getStackTrace();
         }

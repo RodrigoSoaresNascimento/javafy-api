@@ -50,7 +50,7 @@ public class UsuarioService {
         Usuario usuarioEntity = converterUsuarioDTO(usuario);
         usuarioRepository.create(usuarioEntity);
         String tipodeMensagem = TipoDeMensagem.CREATE.getTipoDeMensagem();
-        //emailService.sendEmail(converterUsuario(usuarioEntity), tipodeMensagem);
+        emailService.sendEmail(converterUsuario(usuarioEntity), tipodeMensagem);
         return converterUsuario(usuarioEntity);
     }
 
@@ -61,9 +61,10 @@ public class UsuarioService {
         boolean usuarioAtualizado = usuarioRepository.update(idUsuario, usuario);
         if(usuarioAtualizado){
             usuario.setIdUsuario(idUsuario);
+        } else {
+            throw new PessoaNaoCadastradaException("ID informado é inválido.");
         }
-        String tipodeMensagem = TipoDeMensagem.UPDATE.getTipoDeMensagem();
-        //emailService.sendEmail(converterUsuario(usuario), tipodeMensagem);
+        emailService.sendEmail(converterUsuario(usuario), TipoDeMensagem.UPDATE.getTipoDeMensagem());
 
         return converterUsuario(usuario);
     }
@@ -73,7 +74,7 @@ public class UsuarioService {
         Usuario usuarioEntity = converterUsuarioDTO(usuarioRecuperado);
 
         String tipodeMensagem = TipoDeMensagem.DELETE.getTipoDeMensagem();
-        //emailService.sendEmail(converterUsuario(usuarioEntity), tipodeMensagem);
+        emailService.sendEmail(converterUsuario(usuarioEntity), tipodeMensagem);
 
         usuarioRepository.delete(idUsuario);
     }

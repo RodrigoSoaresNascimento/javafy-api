@@ -22,7 +22,7 @@ public class ArtistController implements DocumentationArtista {
         return service.artistById(id);
     }
 
-    @GetMapping("/list")
+    @GetMapping
     public List<ArtistaDTO> getArtists() {
         return service.getList();
     }
