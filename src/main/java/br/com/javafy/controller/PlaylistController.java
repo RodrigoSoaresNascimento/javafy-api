@@ -38,10 +38,10 @@ public class PlaylistController implements DocumentationPlaylist{
         return playListService.create(playListCreate, idUsuario);
     }
 
-    @PutMapping("/{idUsuario}")
-    public PlayListUpdate update(@Valid PlayListCreate playListCreate, Integer idUsuario) throws SQLException,
+    @PutMapping("/{idPlaylist}")
+    public PlayListUpdate update(@Valid PlayListCreate playListCreate, Integer idPlaylist) throws SQLException,
             PlayListException {
-        return playListService.update(playListCreate, idUsuario);
+        return playListService.update(playListCreate, idPlaylist);
     }
 
     @DeleteMapping("/{idPlayList}")

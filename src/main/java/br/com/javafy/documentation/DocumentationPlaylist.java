@@ -30,7 +30,7 @@ public interface DocumentationPlaylist {
     @Operation(summary = "Atualiza uma playlist.")
     @MagiaResponse
     public PlayListUpdate update (@Valid @RequestBody PlayListCreate playListCreate,
-                                  @PathVariable Integer idUsuario )
+                                  @PathVariable Integer idPlaylist )
             throws SQLException, PlayListException;
 
     @Operation(summary = "Deleta uma playlist.")
