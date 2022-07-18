@@ -19,7 +19,7 @@ public interface DocumentationSeguidores {
     public List<UsuarioDTO> fromUser (@PathVariable Integer idUser)
             throws SQLException;
 
-    @Operation(summary = "Retorna a lista de usuarios de seguem sua conta")
+    @Operation(summary = "Retorna a lista de quem o usuario está seguindo.")
     @MagiaResponse
     public List<UsuarioDTO> toUser (@PathVariable Integer idUser) throws SQLException, PessoaNaoCadastradaException;
 

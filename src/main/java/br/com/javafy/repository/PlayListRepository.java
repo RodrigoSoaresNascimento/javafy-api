@@ -1,6 +1,7 @@
 package br.com.javafy.repository;
 
 import br.com.javafy.config.DatabaseConnection;
+import br.com.javafy.entity.Musica;
 import br.com.javafy.entity.PlayList;
 import br.com.javafy.exceptions.BancoDeDadosException;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -9,6 +10,7 @@ import org.springframework.stereotype.Repository;
 import java.sql.*;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Optional;
 
 @Repository
 public class PlayListRepository {
@@ -24,7 +26,7 @@ public class PlayListRepository {
             Statement stmt = connection.createStatement();
             ResultSet res = stmt.executeQuery(sql);
 
-            if(res.next()) {
+            if (res.next()) {
                 return res.getInt("mysequence");
             }
             return null;
@@ -35,7 +37,7 @@ public class PlayListRepository {
 
     private void closeBd(Connection connection) {
         try {
-            if(connection !=null) {
+            if (connection != null) {
                 connection.close();
             }
         } catch (SQLException e) {
@@ -71,7 +73,7 @@ public class PlayListRepository {
         }
     }
 
-    public PlayList create (PlayList playList) throws SQLException {
+    public PlayList create(PlayList playList) throws SQLException {
         Connection connection = null;
         StringBuilder sql = new StringBuilder();
 
@@ -91,7 +93,18 @@ public class PlayListRepository {
 
             playList.setIdPlaylist(promixoId);
 
-            ResultSet resultSet = stmt.executeQuery();
+            stmt.executeUpdate();
+            if (playList.getMusicas() != null) {
+                for (Musica musica : playList.getMusicas()) {
+                    String sqlMusica = "INSERT INTO LISTADEMUSICAS(ID_PLAYLIST, ID_MUSICA) " +
+                            "VALUES(?, ?)";
+                    PreparedStatement stmtMusica = connection.prepareStatement(sqlMusica);
+                    stmtMusica.setInt(1, promixoId);
+                    stmtMusica.setString(2, musica.getId());
+
+                    stmtMusica.executeUpdate();
+                }
+            }
 
             return playList;
 
@@ -102,7 +115,7 @@ public class PlayListRepository {
         }
     }
 
-    public boolean delete (Integer idPlaylist) throws SQLException {
+    public boolean delete(Integer idPlaylist) throws SQLException {
         Connection connection = null;
         try {
             connection = dbconnection.getConnection();
@@ -117,7 +130,7 @@ public class PlayListRepository {
         }
     }
 
-    public boolean update (Integer idPlaylist, PlayList playlist) throws SQLException {
+    public boolean update(Integer idPlaylist, PlayList playlist) throws SQLException {
         Connection connection = null;
         try {
             connection = dbconnection.getConnection();
@@ -125,12 +138,14 @@ public class PlayListRepository {
                     "SET NOME = ? " +
                     "WHERE ID_PLAYLIST = ?";
 
-            PreparedStatement  stmt = connection.prepareStatement(sql);
+            PreparedStatement stmt = connection.prepareStatement(sql);
+//            Musica musica = playlist.getMusicas().stream().findFirst();
 
             stmt.setString(1, playlist.getName());
+//            stmt.setString(2, musica);
             stmt.setInt(2, idPlaylist);
 
-            return  stmt.executeUpdate() > 0;
+            return stmt.executeUpdate() > 0;
         } catch (SQLException e) {
             throw new BancoDeDadosException(e.getCause());
         } finally {
