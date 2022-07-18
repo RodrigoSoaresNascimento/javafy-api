@@ -122,7 +122,7 @@ public class PlayListRepository {
         try {
             connection = dbconnection.getConnection();
             String sql = "UPDATE EQUIPE_4.PLAYLIST " +
-                    "SET NAME = ? " +
+                    "SET NOME = ? " +
                     "WHERE ID_PLAYLIST = ?";
 
             PreparedStatement  stmt = connection.prepareStatement(sql);
@@ -136,31 +136,6 @@ public class PlayListRepository {
         } finally {
             closeBd(connection);
         }
-    }
-
-    public List<PlayList> list(Integer idUser) throws SQLException {
-        List<PlayList> playlists = new ArrayList<>();
-        Connection connection = null;
-        try {
-            connection = dbconnection.getConnection();
-            String sql = "SELECT * FROM PLAYLIST p WHERE p.ID_OUVINTE = ?";
-            Statement stmt = connection.createStatement();
-            ResultSet resultSet = stmt.executeQuery(sql);
-
-//            while (resultSet.next()) {
-//                PlayList playlist = new PlayList();
-//                playlist.setArtista((Usuario) user);
-//                playlist.setIdPlaylist(resultSet.getInt("id_playlist"));
-//                playlist.setNome(resultSet.getString("nome"));
-//                playlists.add(playlist);
-//            }
-            return playlists;
-        } catch (SQLException e) {
-            throw new BancoDeDadosException(e.getCause());
-        } finally {
-            closeBd(connection);
-        }
-
     }
 
 

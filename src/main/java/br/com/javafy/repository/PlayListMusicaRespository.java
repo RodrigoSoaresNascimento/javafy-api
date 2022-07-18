@@ -2,7 +2,11 @@ package br.com.javafy.repository;
 
 import br.com.javafy.config.DatabaseConnection;
 import br.com.javafy.dto.spotify.MusicaDTO;
+import br.com.javafy.entity.Musica;
+import br.com.javafy.entity.PlayList;
 import br.com.javafy.exceptions.BancoDeDadosException;
+import br.com.javafy.exceptions.PessoaNaoCadastradaException;
+import br.com.javafy.exceptions.PlayListException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;
 
@@ -82,6 +86,38 @@ public class PlayListMusicaRespository {
 
         } catch (SQLException e) {
             throw new BancoDeDadosException(e.getCause());
+        } finally {
+            closeBD(connection);
+        }
+    }
+
+    public Musica getMusicaInPlaylist(Integer idPlaylist, Integer idMusica) throws BancoDeDadosException, PlayListException {
+        Connection connection = null;
+        StringBuilder sql = new StringBuilder();
+
+        Musica musica = new Musica();
+        try {
+            connection = dbconnection.getConnection();
+
+            sql.append("SELECT ID_MUSICA FROM EQUIPE_4.LISTADEMUSICAS LM " +
+                    "WHERE LM.ID_PLAYLIST = ? AND LM.ID_MUSICA = ?");
+
+            PreparedStatement stmt = connection.prepareStatement(sql.toString());
+
+            stmt.setInt(1, idPlaylist);
+            stmt.setInt(1, idMusica);
+            ResultSet resultSet = stmt.executeQuery();
+
+            if (!resultSet.isBeforeFirst()) {
+                throw new PlayListException("O ID da pessoa informada não existe.");
+            }
+
+            musica.setId(resultSet.getString("ID_MUSICA"));
+            return musica;
+        } catch (SQLException e) {
+            throw new BancoDeDadosException(e.getCause());
+        } catch (PlayListException e) {
+            throw new PlayListException("Musica não está na playlist");
         } finally {
             closeBD(connection);
         }

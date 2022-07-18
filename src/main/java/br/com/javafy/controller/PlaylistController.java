@@ -4,6 +4,7 @@ package br.com.javafy.controller;
 import br.com.javafy.documentation.DocumentationPlaylist;
 import br.com.javafy.dto.playlist.PlayListCreate;
 import br.com.javafy.dto.playlist.PlayListDTO;
+import br.com.javafy.dto.playlist.PlayListUpdate;
 import br.com.javafy.exceptions.PessoaNaoCadastradaException;
 import br.com.javafy.exceptions.PlayListException;
 import br.com.javafy.service.PlayListService;
@@ -37,15 +38,18 @@ public class PlaylistController implements DocumentationPlaylist{
         return playListService.create(playListCreate, idUsuario);
     }
 
-    public PlayListDTO update(PlayListDTO playListDTO, Integer id) throws SQLException,
-            PessoaNaoCadastradaException {
-        return null;
+    @PutMapping("/{idUsuario}")
+    public PlayListUpdate update(@Valid PlayListCreate playListCreate, Integer idUsuario) throws SQLException,
+            PlayListException {
+        return playListService.update(playListCreate, idUsuario);
     }
 
-    // TODO
     @DeleteMapping("/{idPlayList}")
     public void delete(Integer idPlayList) throws SQLException, PessoaNaoCadastradaException,
             PlayListException {
         playListService.delete(idPlayList);
     }
+
+
+
 }

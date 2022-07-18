@@ -5,6 +5,7 @@ import br.com.javafy.dto.spotify.MusicaDTO;
 import br.com.javafy.dto.spotify.MusicaFullDTO;
 import br.com.javafy.entity.Musica;
 import br.com.javafy.exceptions.BancoDeDadosException;
+import br.com.javafy.exceptions.PlayListException;
 import br.com.javafy.repository.PlayListMusicaRespository;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -31,6 +32,13 @@ public class PlayListMusicaService {
 
     public boolean validIfPlaylistIsValid(PlayListCreate playlistCreate){
         return playlistCreate.getMusicas() != null && !playlistCreate.getMusicas().isEmpty();
+    }
+
+    public void validIfMusicInPlaylist(Integer idPlaylist, String idMusic) throws PlayListException, BancoDeDadosException {
+        Musica musica = playListMusicaRespository.getMusicaInPlaylist(idPlaylist, idPlaylist);
+        if(musica.getId() == null) {
+            throw new PlayListException("Playlist id " + idPlaylist + " não tem a musica  id" + idMusic );
+        }
     }
 
     public List<MusicaDTO> addMusicaPlaylist(PlayListCreate playlistCreate, Integer idPlaylist) throws SQLException {
@@ -71,5 +79,7 @@ public class PlayListMusicaService {
                         }
                 ).collect(Collectors.toList());
     }
+
+
 
 }

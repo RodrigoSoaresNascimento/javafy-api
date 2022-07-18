@@ -3,6 +3,7 @@ package br.com.javafy.documentation;
 import br.com.javafy.anotations.MagiaResponse;
 import br.com.javafy.dto.playlist.PlayListCreate;
 import br.com.javafy.dto.playlist.PlayListDTO;
+import br.com.javafy.dto.playlist.PlayListUpdate;
 import br.com.javafy.exceptions.PessoaNaoCadastradaException;
 import br.com.javafy.exceptions.PlayListException;
 import io.swagger.v3.oas.annotations.Operation;
@@ -28,9 +29,9 @@ public interface DocumentationPlaylist {
 
     @Operation(summary = "Atualiza uma playlist.")
     @MagiaResponse
-    public PlayListDTO update (@Valid @RequestBody PlayListDTO playListDTO,
-                               @PathVariable Integer id )
-            throws SQLException, PessoaNaoCadastradaException;
+    public PlayListUpdate update (@Valid @RequestBody PlayListCreate playListCreate,
+                                  @PathVariable Integer idUsuario )
+            throws SQLException, PlayListException;
 
     @Operation(summary = "Deleta uma playlist.")
     @MagiaResponse

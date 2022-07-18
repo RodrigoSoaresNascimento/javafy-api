@@ -3,6 +3,7 @@ package br.com.javafy.service;
 import br.com.javafy.dto.UsuarioDTO;
 import br.com.javafy.dto.playlist.PlayListCreate;
 import br.com.javafy.dto.playlist.PlayListDTO;
+import br.com.javafy.dto.playlist.PlayListUpdate;
 import br.com.javafy.dto.spotify.MusicaDTO;
 import br.com.javafy.entity.PlayList;
 import br.com.javafy.entity.Usuario;
@@ -40,6 +41,10 @@ public class PlayListService {
         return objectMapper.convertValue(playList,PlayList.class);
     }
 
+    public PlayListUpdate converterParaPlaylistUpdate (PlayList playList){
+        return objectMapper.convertValue(playList, PlayListUpdate.class);
+    }
+
     public Usuario validUser(Integer idUsuario) throws SQLException, PessoaNaoCadastradaException {
         UsuarioDTO usuarioDTO = usuarioService.findById(idUsuario);
         if(usuarioDTO.getPlano().equals(TiposdePlano.FREE)){
@@ -52,7 +57,7 @@ public class PlayListService {
         PlayList playList = playListRepository.getPlaylistById(idPlaylist);
 
         if(playList.getIdPlaylist() == null){
-            throw new PlayListException("Id não encontado.");
+            throw new PlayListException("Id playlist não encontado. Id " + idPlaylist );
         }
 
     }
@@ -94,15 +99,30 @@ public class PlayListService {
         return playListDTO;
     }
 
+    public PlayListUpdate update(PlayListCreate playListCreate, Integer idPlaylist)
+            throws PlayListException, SQLException {
+        validPlaylist(idPlaylist);
+
+        PlayList playList = converterParaPlaylist(playListCreate);
+        boolean result = playListRepository.update(idPlaylist, playList);
+
+        if(!result){
+            throw new PlayListException("Error ao atualizar playlist. ID " + idPlaylist);
+        }
+
+        playList.setIdPlaylist(idPlaylist);
+
+        return converterParaPlaylistUpdate(playList);
+    }
 
     public void delete (Integer idPlaylist) throws PessoaNaoCadastradaException, SQLException,
             PlayListException {
         validPlaylist(idPlaylist);
-        boolean deleteSucess = playListRepository.delete(idPlaylist);
 
         if(!playListRepository.delete(idPlaylist)){
             throw new PlayListException("Error ao deletar. Verifique o ID.");
         }
     }
+
 
 }
