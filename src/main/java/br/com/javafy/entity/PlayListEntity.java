@@ -26,4 +26,11 @@ public class PlayListEntity {
     @JoinColumn(name = "id_user", referencedColumnName = "id_user")
     private UsuarioEntity usuario;
 
+    @Override
+    public String toString() {
+        return "PlayListEntity{" +
+                "idPlaylist=" + idPlaylist +
+                ", name='" + name + '\'' +
+                '}';
+    }
 }

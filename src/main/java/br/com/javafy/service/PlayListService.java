@@ -15,6 +15,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.sql.SQLException;
+import java.util.Optional;
 
 @Service
 public class PlayListService {
@@ -61,25 +62,12 @@ public class PlayListService {
 
     }
 
-    public PlayListDTO getPlaylistById (Integer idPlayList) throws PessoaNaoCadastradaException,
-            SQLException, PlaylistException {
+    public PlayListDTO getPlaylistById (Integer idPlayList) throws  PlaylistException {
+        Optional optional = playListRepository.findById(idPlayList);
 
         return playListRepository.findById(idPlayList)
                 .map(this::converterParaPlaylistDTO)
                 .orElseThrow(()-> new PlaylistException("Playlist não encontrada"));
-
-//        PlayList playList = playListRepository.getPlaylistById(idPlayList);
-//
-//        if(playList.getIdPlaylist() == null){
-//            throw new PlayListException("Playlist não existe. ID: " + idPlayList);
-//        }
-//
-//        List<MusicaDTO> musicaDTOS= playListMusicaService
-//                .getMusicasPlaylist(playList.getIdPlaylist());
-//
-//        PlayListDTO playListDTO = converterParaPlaylistDTO(playList);
-//        playListDTO.setMusicas(musicaDTOS);
-//        return playListDTO;
     }
 
     public PlayListDTO create (PlayListCreate playlistCreate,

@@ -26,7 +26,8 @@ public class PlaylistController implements DocumentationPlaylist{
     @GetMapping("/{idPlaylist}")
     public ResponseEntity<PlayListDTO> getPlayList(Integer idPlaylist) throws SQLException,
             PessoaNaoCadastradaException {
-        return ResponseEntity.ok(playListService.getPlaylistById(idPlaylist));
+        System.out.println("ID PLAYLIST" + playListService.getPlaylistById(idPlaylist));
+        return null;
     }
 
     @Override
