@@ -4,10 +4,12 @@ package br.com.javafy.controller;
 import br.com.javafy.documentation.DocumentationComentario;
 import br.com.javafy.dto.ComentarioCreateDTO;
 import br.com.javafy.dto.ComentarioDTO;
+import br.com.javafy.dto.PageDTO;
 import br.com.javafy.exceptions.ComentarioNaoCadastradoException;
 import br.com.javafy.exceptions.PessoaNaoCadastradaException;
 import br.com.javafy.service.ComentarioService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
 import org.springframework.http.ResponseEntity;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
@@ -32,6 +34,11 @@ public class ComentarioController implements DocumentationComentario {
     @GetMapping
     public ResponseEntity<List<ComentarioDTO>> list() {
         return ResponseEntity.ok(comentarioService.list());
+    }
+
+    @GetMapping("/comentario-paginado")
+    public PageDTO<ComentarioDTO> listarComentariosPaginado(Integer idComentario, Integer pagina, Integer registro){
+        return comentarioService.listarComentariosPaginado(idComentario, pagina, registro);
     }
 
 
