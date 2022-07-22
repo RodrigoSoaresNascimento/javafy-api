@@ -38,6 +38,12 @@ public class PlayListService {
         return objectMapper.convertValue(playList, PlayListEntity.class);
     }
 
+    public PlayListEntity retornaPlaylistEntityById(Integer id) throws PlaylistException {
+        return playListRepository
+                .findById(id)
+                .orElseThrow(() -> new PlaylistException("Playlist Não Cadastrada"));
+    }
+
     public PlayListUpdate converterParaPlaylistUpdate (PlayListEntity playList){
         return objectMapper.convertValue(playList, PlayListUpdate.class);
     }

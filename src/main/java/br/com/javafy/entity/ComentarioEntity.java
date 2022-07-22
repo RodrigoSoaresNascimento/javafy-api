@@ -7,6 +7,8 @@ import javax.persistence.*;
 
 @AllArgsConstructor
 @NoArgsConstructor
+@Getter
+@Setter
 @Entity(name = "comentario")
 public class ComentarioEntity {
 

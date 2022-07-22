@@ -1,11 +1,15 @@
 package br.com.javafy.repository;
 
+import br.com.javafy.dto.ComentarioDTO;
 import br.com.javafy.entity.ComentarioEntity;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;
 
 @Repository
 public interface ComentariosRepository extends JpaRepository<ComentarioEntity, Integer> {
+    Page<ComentarioEntity> findByIdComentario(Integer idComentario, PageRequest pageRequest);
 
 //    @Autowired
 //    private DatabaseConnection dbconnection;
