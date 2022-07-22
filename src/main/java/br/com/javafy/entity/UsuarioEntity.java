@@ -52,7 +52,16 @@ public class UsuarioEntity {
             joinColumns = @JoinColumn(name="id_user_seguindo"),
             inverseJoinColumns = @JoinColumn(name = "id_user")
     )
+
     private Set<UsuarioEntity> seguindo = new HashSet<>();
+
+
+    @OneToMany(fetch = FetchType.LAZY,
+                mappedBy = "usuario",
+                cascade = CascadeType.ALL,
+                orphanRemoval = true)
+    private Set<PlayListEntity> playlist;
+
 
 
 }

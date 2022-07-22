@@ -61,8 +61,8 @@ public class CustomGlobalExceptionHandler extends ResponseEntityExceptionHandler
         return new ResponseEntity<>(body, HttpStatus.BAD_REQUEST);
     }
 
-    @ExceptionHandler(PlayListException.class)
-    public ResponseEntity<Object> handleException(PlayListException exception,
+    @ExceptionHandler(PlaylistException.class)
+    public ResponseEntity<Object> handleException(PlaylistException exception,
                                                   HttpServletRequest request) {
         Map<String, Object> body = new LinkedHashMap<>();
         body.put("timestamp", new Date());

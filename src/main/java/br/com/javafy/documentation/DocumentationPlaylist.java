@@ -5,7 +5,6 @@ import br.com.javafy.dto.playlist.PlayListCreate;
 import br.com.javafy.dto.playlist.PlayListDTO;
 import br.com.javafy.dto.playlist.PlayListUpdate;
 import br.com.javafy.exceptions.PessoaNaoCadastradaException;
-import br.com.javafy.exceptions.PlayListException;
 import io.swagger.v3.oas.annotations.Operation;
 import org.springframework.http.ResponseEntity;
 import org.springframework.validation.annotation.Validated;
@@ -20,22 +19,23 @@ public interface DocumentationPlaylist {
     @Operation(summary = "Retorna uma playlist.")
     @MagiaResponse
     public ResponseEntity<PlayListDTO> getPlayList (@Valid @PathVariable Integer idPlaylist)
-            throws SQLException, PessoaNaoCadastradaException, PlayListException;
+            throws SQLException, PessoaNaoCadastradaException;
 
     @Operation(summary = "Cria uma playlist.")
     @MagiaResponse
     public PlayListDTO create (@Valid @RequestBody PlayListCreate playListCreate,
-                               @PathVariable Integer idUsuario) throws SQLException, PessoaNaoCadastradaException, PlayListException;
+                               @PathVariable Integer idUsuario) throws SQLException,
+            PessoaNaoCadastradaException;
 
     @Operation(summary = "Atualiza uma playlist.")
     @MagiaResponse
     public PlayListUpdate update (@Valid @RequestBody PlayListCreate playListCreate,
                                   @PathVariable Integer idPlaylist )
-            throws SQLException, PlayListException;
+            throws SQLException;
 
     @Operation(summary = "Deleta uma playlist.")
     @MagiaResponse
     public void delete (@PathVariable Integer idPlayList) throws SQLException,
-            PessoaNaoCadastradaException, PlayListException;
+            PessoaNaoCadastradaException;
 
 }

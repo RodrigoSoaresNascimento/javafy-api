@@ -8,7 +8,7 @@ import br.com.javafy.entity.PlayListEntity;
 import br.com.javafy.entity.UsuarioEntity;
 import br.com.javafy.enums.TiposdePlano;
 import br.com.javafy.exceptions.PessoaNaoCadastradaException;
-import br.com.javafy.exceptions.PlayListException;
+import br.com.javafy.exceptions.PlaylistException;
 import br.com.javafy.repository.PlayListRepository;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -51,7 +51,7 @@ public class PlayListService {
         return objectMapper.convertValue(usuarioDTO, UsuarioEntity.class);
     }
 
-    public void validPlaylist(Integer idPlaylist) throws SQLException, PlayListException {
+    public void validPlaylist(Integer idPlaylist) throws SQLException {
 //        PlayList playList = playListRepository.getPlaylistById(idPlaylist);
 //
 //        if(playList.getIdPlaylist() == null){
@@ -62,7 +62,12 @@ public class PlayListService {
     }
 
     public PlayListDTO getPlaylistById (Integer idPlayList) throws PessoaNaoCadastradaException,
-            SQLException, PlayListException {
+            SQLException, PlaylistException {
+
+        return playListRepository.findById(idPlayList)
+                .map(this::converterParaPlaylistDTO)
+                .orElseThrow(()-> new PlaylistException("Playlist não encontrada"));
+
 //        PlayList playList = playListRepository.getPlaylistById(idPlayList);
 //
 //        if(playList.getIdPlaylist() == null){
@@ -75,12 +80,11 @@ public class PlayListService {
 //        PlayListDTO playListDTO = converterParaPlaylistDTO(playList);
 //        playListDTO.setMusicas(musicaDTOS);
 //        return playListDTO;
-        return null;
     }
 
     public PlayListDTO create (PlayListCreate playlistCreate,
-                               Integer idUsuario) throws SQLException, PessoaNaoCadastradaException,
-            PlayListException {
+                               Integer idUsuario) throws SQLException, PessoaNaoCadastradaException
+             {
 //        Usuario usuario = validUser(idUsuario);
 //
 //        PlayList playList = converterParaPlaylist(playlistCreate);
@@ -101,7 +105,7 @@ public class PlayListService {
     }
 
     public PlayListUpdate update(PlayListCreate playListCreate, Integer idPlaylist)
-            throws PlayListException, SQLException {
+            throws  SQLException {
 //        validPlaylist(idPlaylist);
 //
 //        PlayList playList = converterParaPlaylist(playListCreate);
@@ -117,8 +121,7 @@ public class PlayListService {
         return null;
     }
 
-    public void delete (Integer idPlaylist) throws PessoaNaoCadastradaException, SQLException,
-            PlayListException {
+    public void delete (Integer idPlaylist) throws PessoaNaoCadastradaException, SQLException {
 //        validPlaylist(idPlaylist);
 //
 //        if(!playListRepository.delete(idPlaylist)){
