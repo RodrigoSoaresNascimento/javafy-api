@@ -1,9 +1,10 @@
 package br.com.javafy.repository;
 
+import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;
 
 @Repository
-public class PlayListRepository {
+public interface PlayListRepository extends JpaRepository<PlayListRepository, Integer> {
 
 //    @Autowired
 //    private DatabaseConnection dbconnection;

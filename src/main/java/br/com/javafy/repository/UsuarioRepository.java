@@ -1,11 +1,11 @@
 package br.com.javafy.repository;
 
-import lombok.extern.slf4j.Slf4j;
+import br.com.javafy.entity.UsuarioEntity;
+import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;
 
 @Repository
-@Slf4j
-public class UsuarioRepository {
+public interface UsuarioRepository extends JpaRepository<UsuarioEntity, Integer> {
 
 //    @Autowired
 //    private DatabaseConnection dbconnection;

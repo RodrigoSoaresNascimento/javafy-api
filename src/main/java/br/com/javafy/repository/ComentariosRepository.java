@@ -4,6 +4,7 @@ import br.com.javafy.entity.Comentario;
 import br.com.javafy.exceptions.BancoDeDadosException;
 import br.com.javafy.exceptions.PessoaNaoCadastradaException;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;
 
 import java.sql.*;
@@ -11,7 +12,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 @Repository
-public class ComentariosRepository {
+public interface ComentariosRepository extends JpaRepository<Comentario, Integer> {
 
 //    @Autowired
 //    private DatabaseConnection dbconnection;
