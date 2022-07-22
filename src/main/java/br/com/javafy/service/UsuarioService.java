@@ -45,45 +45,50 @@ public class UsuarioService {
     }
 
     public UsuarioDTO findById(Integer id) throws PessoaNaoCadastradaException, SQLException {
-        return converterUsuario(usuarioRepository.findByID(id));
+//        return converterUsuario(usuarioRepository.findByID(id));
+        return null;
     }
 
     public List<UsuarioDTO> list() throws SQLException {
-        return usuarioRepository
-                .list().stream()
-                .map(this::converterUsuario)
-                .toList();
+//        return usuarioRepository
+//                .list().stream()
+//                .map(this::converterUsuario)
+//                .toList();
+        return null;
     }
 
     public UsuarioDTO create(UsuarioCreateDTO usuario) throws SQLException {
-        Usuario usuarioEntity = converterUsuarioDTO(usuario);
-        usuarioRepository.create(usuarioEntity);
-        String tipodeMensagem = TipoDeMensagem.CREATE.getTipoDeMensagem();
-        emailService.sendEmail(converterUsuario(usuarioEntity), tipodeMensagem);
-        return converterUsuario(usuarioEntity);
+//        Usuario usuarioEntity = converterUsuarioDTO(usuario);
+//        usuarioRepository.create(usuarioEntity);
+//        String tipodeMensagem = TipoDeMensagem.CREATE.getTipoDeMensagem();
+//        emailService.sendEmail(converterUsuario(usuarioEntity), tipodeMensagem);
+//        return converterUsuario(usuarioEntity);
+        return null;
     }
 
     public UsuarioDTO update(UsuarioCreateDTO usuarioDTOAtualizar, Integer idUsuario)
             throws PessoaNaoCadastradaException, SQLException {
 
-        Usuario usuario = converterUsuarioDTO(usuarioDTOAtualizar);
-        boolean usuarioAtualizado = usuarioRepository.update(idUsuario, usuario);
-        if(usuarioAtualizado){
-            usuario.setIdUsuario(idUsuario);
-        } else {
-            throw new PessoaNaoCadastradaException("ID informado é inválido.");
-        }
-        emailService.sendEmail(converterUsuario(usuario), TipoDeMensagem.UPDATE.getTipoDeMensagem());
-
-        return converterUsuario(usuario);
+//        Usuario usuario = converterUsuarioDTO(usuarioDTOAtualizar);
+//        boolean usuarioAtualizado = usuarioRepository.update(idUsuario, usuario);
+//        if(usuarioAtualizado){
+//            usuario.setIdUsuario(idUsuario);
+//        } else {
+//            throw new PessoaNaoCadastradaException("ID informado é inválido.");
+//        }
+//        emailService.sendEmail(converterUsuario(usuario), TipoDeMensagem.UPDATE.getTipoDeMensagem());
+//
+//        return converterUsuario(usuario);
+        return null;
     }
 
     public void delete(Integer idUsuario) throws PessoaNaoCadastradaException, SQLException {
-        UsuarioDTO usuarioRecuperado = findById(idUsuario);
-        Usuario usuarioEntity = converterUsuarioDTO(usuarioRecuperado);
-        emailService.sendEmail(converterUsuario(usuarioEntity), TipoDeMensagem.DELETE.getTipoDeMensagem());
-
-        usuarioRepository.delete(idUsuario);
+//        UsuarioDTO usuarioRecuperado = findById(idUsuario);
+//        Usuario usuarioEntity = converterUsuarioDTO(usuarioRecuperado);
+//        emailService.sendEmail(converterUsuario(usuarioEntity), TipoDeMensagem.DELETE.getTipoDeMensagem());
+//
+//        usuarioRepository.delete(idUsuario);
+        return;
     }
 
 

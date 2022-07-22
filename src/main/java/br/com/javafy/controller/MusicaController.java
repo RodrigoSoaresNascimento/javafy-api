@@ -30,6 +30,7 @@ public class MusicaController implements DocumentationMusica {
         return musicaService.getList();
     }
 
+    //todo -> retirar o requestbody e adicionar uma string
     @GetMapping("/buscar")
     public List<MusicaDTO> searchMusic(@RequestBody QueryDTO query) throws IOException {
         System.out.println("QUERY");

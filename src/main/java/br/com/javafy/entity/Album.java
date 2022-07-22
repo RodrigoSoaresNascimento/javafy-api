@@ -15,7 +15,7 @@ public class Album {
     @NotNull
     @Size(min = 1, max = 9)
     private Integer idAlbum;
-
+    //todo -> se der tempo fazer os endpoints
     private String biografia; // Não está presente no diagrama ER
 
     @Size(min = 1, max = 1)

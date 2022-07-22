@@ -58,6 +58,7 @@ public class ArtistaService {
         TokenDTO tokenDTO = getToken();
         return spotifyClient.getArtist(tokenDTO.getAutorization(), id);
     }
+    //todo -> remover os getList()
 
     public List<ArtistaDTO> getList() {
         TokenDTO tokenDTO = getToken();

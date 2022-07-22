@@ -32,6 +32,8 @@ public class ComentarioController implements DocumentationComentario {
         return ResponseEntity.ok(comentarioService.list());
     }
 
+
+    //TODO -> FAZER A VALIDAÇÃO DOS DADOS, USUARIO E PLAYLIST
     @PostMapping("/{idUser}/and/{idPlaylist}")
     public ResponseEntity<ComentarioDTO> create(@PathVariable("idUser")Integer idUser, @PathVariable("idPlaylist")Integer idPlaylist,
                                                 @Valid @RequestBody ComentarioDTO comentario)throws SQLException {

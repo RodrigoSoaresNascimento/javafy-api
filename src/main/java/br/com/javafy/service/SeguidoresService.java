@@ -34,36 +34,40 @@ public class SeguidoresService {
 
     public List<UsuarioDTO> getAllSeguidores(Integer idUser) throws SQLException {
 
-        return repository.getAllSeguidores(idUser).stream()
-                .map(this::converterParaUsuarioDTO)
-                .collect(Collectors.toList());
+//        return repository.getAllSeguidores(idUser).stream()
+//                .map(this::converterParaUsuarioDTO)
+//                .collect(Collectors.toList());
+        return null;
     }
 
     public List<UsuarioDTO> getAllSeguindo(Integer idUser) throws SQLException {
 
-        return repository.getAllSeguindo(idUser)
-                .stream()
-                .map(this::converterParaUsuarioDTO)
-                .collect(Collectors.toList());
+//        return repository.getAllSeguindo(idUser)
+//                .stream()
+//                .map(this::converterParaUsuarioDTO)
+//                .collect(Collectors.toList());
+        return null;
     }
 
     public boolean seguirUser(Integer meuId,Integer idSeguindo) throws BancoDeDadosException {
-        boolean seguir = false;
-        try {
-             seguir = repository.seguirUsuario(meuId,idSeguindo);
-        } catch (SQLException e) {
-            e.getStackTrace();
-        }
-        return seguir;
+//        boolean seguir = false;
+//        try {
+//             seguir = repository.seguirUsuario(meuId,idSeguindo);
+//        } catch (SQLException e) {
+//            e.getStackTrace();
+//        }
+//        return seguir;
+        return false;
     }
 
     public void deixarDeSeguirUsuario(Integer meuId, Integer idSeguindo) {
-        boolean deixouDeSeguir = false;
-        try {
-            deixouDeSeguir = repository.deixarDeSeguirUsuario(meuId, idSeguindo);
-        } catch (SQLException e) {
-           e.getStackTrace();
-        }
+//        boolean deixouDeSeguir = false;
+//        try {
+//            deixouDeSeguir = repository.deixarDeSeguirUsuario(meuId, idSeguindo);
+//        } catch (SQLException e) {
+//           e.getStackTrace();
+//        }
+        return;
 
     }
 }

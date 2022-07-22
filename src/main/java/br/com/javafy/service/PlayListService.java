@@ -54,74 +54,79 @@ public class PlayListService {
     }
 
     public void validPlaylist(Integer idPlaylist) throws SQLException, PlayListException {
-        PlayList playList = playListRepository.getPlaylistById(idPlaylist);
-
-        if(playList.getIdPlaylist() == null){
-            throw new PlayListException("Id playlist não encontado. Id " + idPlaylist );
-        }
+//        PlayList playList = playListRepository.getPlaylistById(idPlaylist);
+//
+//        if(playList.getIdPlaylist() == null){
+//            throw new PlayListException("Id playlist não encontado. Id " + idPlaylist );
+//        }
+        return;
 
     }
 
     public PlayListDTO getPlaylistById (Integer idPlayList) throws PessoaNaoCadastradaException,
             SQLException, PlayListException {
-        PlayList playList = playListRepository.getPlaylistById(idPlayList);
-
-        if(playList.getIdPlaylist() == null){
-            throw new PlayListException("Playlist não existe. ID: " + idPlayList);
-        }
-
-        List<MusicaDTO> musicaDTOS= playListMusicaService
-                .getMusicasPlaylist(playList.getIdPlaylist());
-
-        PlayListDTO playListDTO = converterParaPlaylistDTO(playList);
-        playListDTO.setMusicas(musicaDTOS);
-        return playListDTO;
+//        PlayList playList = playListRepository.getPlaylistById(idPlayList);
+//
+//        if(playList.getIdPlaylist() == null){
+//            throw new PlayListException("Playlist não existe. ID: " + idPlayList);
+//        }
+//
+//        List<MusicaDTO> musicaDTOS= playListMusicaService
+//                .getMusicasPlaylist(playList.getIdPlaylist());
+//
+//        PlayListDTO playListDTO = converterParaPlaylistDTO(playList);
+//        playListDTO.setMusicas(musicaDTOS);
+//        return playListDTO;
+        return null;
     }
 
     public PlayListDTO create (PlayListCreate playlistCreate,
                                Integer idUsuario) throws SQLException, PessoaNaoCadastradaException,
             PlayListException {
-        Usuario usuario = validUser(idUsuario);
-
-        PlayList playList = converterParaPlaylist(playlistCreate);
-        playList.setUsuario(usuario);
-        playList = playListRepository.create(playList);
-
-        if(playList.getIdPlaylist() == null) {
-            throw new PlayListException("Erro ao salvar playlist.");
-        }
-
-        List<MusicaDTO> musicas =
-                playListMusicaService.addMusicaPlaylist(playlistCreate, playList.getIdPlaylist());
-
-        PlayListDTO playListDTO = converterParaPlaylistDTO(playList);
-        playListDTO.setMusicas(musicas);
-        return playListDTO;
+//        Usuario usuario = validUser(idUsuario);
+//
+//        PlayList playList = converterParaPlaylist(playlistCreate);
+//        playList.setUsuario(usuario);
+//        playList = playListRepository.create(playList);
+//
+//        if(playList.getIdPlaylist() == null) {
+//            throw new PlayListException("Erro ao salvar playlist.");
+//        }
+//
+//        List<MusicaDTO> musicas =
+//                playListMusicaService.addMusicaPlaylist(playlistCreate, playList.getIdPlaylist());
+//
+//        PlayListDTO playListDTO = converterParaPlaylistDTO(playList);
+//        playListDTO.setMusicas(musicas);
+//        return playListDTO;
+        return null;
     }
 
     public PlayListUpdate update(PlayListCreate playListCreate, Integer idPlaylist)
             throws PlayListException, SQLException {
-        validPlaylist(idPlaylist);
-
-        PlayList playList = converterParaPlaylist(playListCreate);
-        boolean result = playListRepository.update(idPlaylist, playList);
-
-        if(!result){
-            throw new PlayListException("Error ao atualizar playlist. ID " + idPlaylist);
-        }
-
-        playList.setIdPlaylist(idPlaylist);
-
-        return converterParaPlaylistUpdate(playList);
+//        validPlaylist(idPlaylist);
+//
+//        PlayList playList = converterParaPlaylist(playListCreate);
+//        boolean result = playListRepository.update(idPlaylist, playList);
+//
+//        if(!result){
+//            throw new PlayListException("Error ao atualizar playlist. ID " + idPlaylist);
+//        }
+//
+//        playList.setIdPlaylist(idPlaylist);
+//
+//        return converterParaPlaylistUpdate(playList);
+        return null;
     }
 
     public void delete (Integer idPlaylist) throws PessoaNaoCadastradaException, SQLException,
             PlayListException {
-        validPlaylist(idPlaylist);
-
-        if(!playListRepository.delete(idPlaylist)){
-            throw new PlayListException("Error ao deletar. Verifique o ID.");
-        }
+//        validPlaylist(idPlaylist);
+//
+//        if(!playListRepository.delete(idPlaylist)){
+//            throw new PlayListException("Error ao deletar. Verifique o ID.");
+//        }
+        return;
     }
 
 

@@ -30,42 +30,47 @@ public class ComentarioService {
     }
 
     public List<ComentarioDTO> list() throws SQLException {
-        return repository
-                .list().stream()
-                .map(this::converterComentario)
-                .collect(Collectors.toList());
+//        return repository
+//                .list().stream()
+//                .map(this::converterComentario)
+//                .collect(Collectors.toList());
+        return null;
     }
 
     public ComentarioDTO create(Integer idUser, Integer idPlaylist, ComentarioDTO comentarioDTO) throws SQLException {
-        Comentario comentarioEntity = converterComentarioDTO(comentarioDTO);
-        repository.create(idUser,idPlaylist,comentarioEntity);
-        return converterComentario(comentarioEntity);
+//        Comentario comentarioEntity = converterComentarioDTO(comentarioDTO);
+//        repository.create(idUser,idPlaylist,comentarioEntity);
+//        return converterComentario(comentarioEntity);
+        return null;
     }
 
     public ComentarioDTO update(ComentarioDTO comentarioDTO, Integer idComentario)
             throws PessoaNaoCadastradaException, SQLException {
 
-        Comentario comentario = converterComentarioDTO(findById(idComentario));
-        System.out.println("comentario = "+comentario);
-        boolean comentarioAtualizado = repository.update(idComentario, comentario);
-        if(comentarioAtualizado){
-            comentario.setIdComentario(idComentario);
-        } else {
-            throw new PessoaNaoCadastradaException("ID informado é inválido.");
-        }
-
-        return converterComentario(comentario);
+//        Comentario comentario = converterComentarioDTO(findById(idComentario));
+//        System.out.println("comentario = "+comentario);
+//        boolean comentarioAtualizado = repository.update(idComentario, comentario);
+//        if(comentarioAtualizado){
+//            comentario.setIdComentario(idComentario);
+//        } else {
+//            throw new PessoaNaoCadastradaException("ID informado é inválido.");
+//        }
+//
+//        return converterComentario(comentario);
+        return null;
     }
 
     public void delete(Integer idComentario) throws PessoaNaoCadastradaException, SQLException {
-        ComentarioDTO comentarioRecuperado = findById(idComentario);
-        Comentario comentarioEntity = converterComentarioDTO(comentarioRecuperado);
-        System.out.println("comentarioEntity "+comentarioEntity);
-        repository.delete(idComentario);
+//        ComentarioDTO comentarioRecuperado = findById(idComentario);
+//        Comentario comentarioEntity = converterComentarioDTO(comentarioRecuperado);
+//        System.out.println("comentarioEntity "+comentarioEntity);
+//        repository.delete(idComentario);
+        return;
     }
 
     public ComentarioDTO findById(Integer id) throws PessoaNaoCadastradaException, SQLException {
-        return converterComentario(repository.findByID(id));
+//        return converterComentario(repository.findByID(id));
+        return null;
     }
 
 }

@@ -19,6 +19,7 @@ public class SeguidoresController implements DocumentationSeguidores {
     @Autowired
     SeguidoresService service;
 
+    //todo -> corrigir o nome no schema no tipo de pesquisa
     @GetMapping(value = "/from-user/{idUser}")//quem eu sigo
     public List<UsuarioDTO> fromUser(@PathVariable("idUser") Integer idUser) throws SQLException {
         return  service.getAllSeguindo(idUser);

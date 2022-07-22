@@ -35,49 +35,52 @@ public class PlayListMusicaService {
     }
 
     public void validIfMusicInPlaylist(Integer idPlaylist, String idMusic) throws PlayListException, BancoDeDadosException {
-        Musica musica = playListMusicaRespository.getMusicaInPlaylist(idPlaylist, idPlaylist);
-        if(musica.getId() == null) {
-            throw new PlayListException("Playlist id " + idPlaylist + " não tem a musica  id" + idMusic );
-        }
+//        Musica musica = playListMusicaRespository.getMusicaInPlaylist(idPlaylist, idPlaylist);
+//        if(musica.getId() == null) {
+//            throw new PlayListException("Playlist id " + idPlaylist + " não tem a musica  id" + idMusic );
+//        }
+        return;
     }
 
     public List<MusicaDTO> addMusicaPlaylist(PlayListCreate playlistCreate, Integer idPlaylist) throws SQLException {
-        List<MusicaDTO> listaMusica = new ArrayList<>();
-        Set<String> musicasAdd = new HashSet<>();
-
-        if(validIfPlaylistIsValid(playlistCreate)){
-
-            for(MusicaDTO music: playlistCreate.getMusicas()){
-                try {
-                    if(musicasAdd.contains(music.getId())){
-                        continue;
-                    }
-
-                    boolean result = playListMusicaRespository
-                            .create(idPlaylist, music.getId());
-
-                    if(result){
-                        MusicaFullDTO musicaFullDTO = musicaService.musicById(music.getId());
-                        listaMusica.add(objectMapper.convertValue(musicaFullDTO, MusicaDTO.class));
-                        musicasAdd.add(music.getId());
-                    }
-
-                }catch (Exception e) {
-
-                }
-            }
-        }
-        return listaMusica;
+//        List<MusicaDTO> listaMusica = new ArrayList<>();
+//        Set<String> musicasAdd = new HashSet<>();
+//
+//        if(validIfPlaylistIsValid(playlistCreate)){
+//
+//            for(MusicaDTO music: playlistCreate.getMusicas()){
+//                try {
+//                    if(musicasAdd.contains(music.getId())){
+//                        continue;
+//                    }
+//
+//                    boolean result = playListMusicaRespository
+//                            .create(idPlaylist, music.getId());
+//
+//                    if(result){
+//                        MusicaFullDTO musicaFullDTO = musicaService.musicById(music.getId());
+//                        listaMusica.add(objectMapper.convertValue(musicaFullDTO, MusicaDTO.class));
+//                        musicasAdd.add(music.getId());
+//                    }
+//
+//                }catch (Exception e) {
+//
+//                }
+//            }
+//        }
+//        return listaMusica;
+        return null;
     }
 
     public List<MusicaDTO> getMusicasPlaylist(Integer idPlaylist) throws BancoDeDadosException {
-        return playListMusicaRespository
-                .getIdMusica(idPlaylist)
-                .stream().map(
-                        s -> {
-                            return musicaService.musicById(s);
-                        }
-                ).collect(Collectors.toList());
+//        return playListMusicaRespository
+//                .getIdMusica(idPlaylist)
+//                .stream().map(
+//                        s -> {
+//                            return musicaService.musicById(s);
+//                        }
+//                ).collect(Collectors.toList());
+        return null;
     }
 
 
