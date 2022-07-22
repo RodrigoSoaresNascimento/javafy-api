@@ -14,6 +14,7 @@ import org.springframework.stereotype.Service;
 import java.sql.SQLException;
 import java.util.List;
 import java.util.Optional;
+import java.util.Set;
 import java.util.stream.Collectors;
 
 @Service
@@ -29,9 +30,6 @@ public class SeguidoresService {
         return objectMapper.convertValue(user, UsuarioDTO.class);
     }
 
-    public UsuarioEntity converterOptionalParaUsuarioEntity (Optional<UsuarioEntity> user){
-        return objectMapper.convertValue(user, UsuarioEntity.class);
-    }
 
     public UsuarioEntity converterDTOParaUsuario (UsuarioDTO user){
         return objectMapper.convertValue(user, UsuarioEntity.class);
@@ -76,16 +74,21 @@ public class SeguidoresService {
 
         Optional<UsuarioEntity> optionalUsuario = repository.findById(meuId);
         Optional<UsuarioEntity> usuarioParaSeguir = repository.findById(idSeguindo);
-        UsuarioEntity usuarioEntity = converterOptionalParaUsuarioEntity(optionalUsuario);
-        return usuarioEntity.getSeguidores().add(converterOptionalParaUsuarioEntity(usuarioParaSeguir));
+        UsuarioEntity usuarioEntity = optionalUsuario.get();
+        usuarioEntity.getSeguidores().add(usuarioParaSeguir.get());
+        repository.save(usuarioEntity);
+        return true;
 
     }
 
     public void deixarDeSeguirUsuario(Integer meuId, Integer idSeguindo) {
+
         Optional<UsuarioEntity> optionalUsuario = repository.findById(meuId);
         Optional<UsuarioEntity> usuarioParaSeguir = repository.findById(idSeguindo);
-        UsuarioEntity usuarioEntity = converterOptionalParaUsuarioEntity(optionalUsuario);
-        usuarioEntity.getSeguidores().remove(converterOptionalParaUsuarioEntity(usuarioParaSeguir));
+        UsuarioEntity usuarioEntity = optionalUsuario.get();
+        usuarioEntity.getSeguidores().remove(usuarioParaSeguir.get());
+        usuarioEntity.setIdUsuario(meuId);
+        repository.save(usuarioEntity);
 
     }
 }

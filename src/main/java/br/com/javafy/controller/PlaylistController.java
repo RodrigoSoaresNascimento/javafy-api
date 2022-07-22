@@ -6,7 +6,6 @@ import br.com.javafy.dto.playlist.PlayListCreate;
 import br.com.javafy.dto.playlist.PlayListDTO;
 import br.com.javafy.dto.playlist.PlayListUpdate;
 import br.com.javafy.exceptions.PessoaNaoCadastradaException;
-import br.com.javafy.exceptions.PlayListException;
 import br.com.javafy.service.PlayListService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
@@ -26,27 +25,28 @@ public class PlaylistController implements DocumentationPlaylist{
 
     @GetMapping("/{idPlaylist}")
     public ResponseEntity<PlayListDTO> getPlayList(Integer idPlaylist) throws SQLException,
-            PessoaNaoCadastradaException, PlayListException {
-        return ResponseEntity.ok(playListService.getPlaylistById(idPlaylist));
+            PessoaNaoCadastradaException {
+//        return ResponseEntity.ok(playListService.getPlaylistById(idPlaylist));
+        return null;
     }
 
     @Override
     @PostMapping("/{idUsuario}")
     public PlayListDTO create(@Valid  PlayListCreate playListCreate, Integer idUsuario)
             throws SQLException,
-            PessoaNaoCadastradaException, PlayListException {
+            PessoaNaoCadastradaException {
         return playListService.create(playListCreate, idUsuario);
     }
 
     @PutMapping("/{idPlaylist}")
-    public PlayListUpdate update(@Valid PlayListCreate playListCreate, Integer idPlaylist) throws SQLException,
-            PlayListException {
+    public PlayListUpdate update(@Valid PlayListCreate playListCreate, Integer idPlaylist)
+            throws SQLException {
         return playListService.update(playListCreate, idPlaylist);
     }
 
     @DeleteMapping("/{idPlayList}")
-    public void delete(Integer idPlayList) throws SQLException, PessoaNaoCadastradaException,
-            PlayListException {
+    public void delete(Integer idPlayList) throws SQLException, PessoaNaoCadastradaException
+             {
         playListService.delete(idPlayList);
     }
 

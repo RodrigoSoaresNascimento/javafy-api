@@ -39,7 +39,7 @@ public class UsuarioEntity {
     private String email;
 
     @JsonIgnore
-    @ManyToMany(fetch = FetchType.LAZY)
+    @ManyToMany(fetch = FetchType.LAZY, cascade = CascadeType.ALL)
     @JoinTable(
             name = "seguidores",
             joinColumns = @JoinColumn(name="id_user"),
@@ -54,7 +54,24 @@ public class UsuarioEntity {
             joinColumns = @JoinColumn(name="id_user_seguindo"),
             inverseJoinColumns = @JoinColumn(name = "id_user")
     )
+
     private Set<UsuarioEntity> seguindo = new HashSet<>();
 
 
+    @OneToMany(fetch = FetchType.LAZY,
+                mappedBy = "usuario",
+                cascade = CascadeType.ALL,
+                orphanRemoval = true)
+    private Set<PlayListEntity> playlist;
+
+    @Override
+    public String toString() {
+        return "UsuarioEntity{" +
+                "idUsuario=" + idUsuario +
+                ", nome='" + nome + '\'' +
+                ", dataNascimento=" + dataNascimento +
+                ", genero='" + genero + '\'' +
+                ", plano=" + plano +
+                ", email='" + email + '\'';
+    }
 }

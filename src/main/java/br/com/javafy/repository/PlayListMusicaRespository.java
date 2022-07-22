@@ -2,7 +2,6 @@ package br.com.javafy.repository;
 
 import br.com.javafy.entity.Musica;
 import br.com.javafy.exceptions.BancoDeDadosException;
-import br.com.javafy.exceptions.PlayListException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;
 

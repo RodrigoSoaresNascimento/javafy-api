@@ -1,5 +1,6 @@
 package br.com.javafy.entity;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import lombok.AllArgsConstructor;
 import lombok.NoArgsConstructor;
 
@@ -20,7 +21,9 @@ public class PlayListEntity {
     @Column(name = "nome")
     private String name;
 
-    @Column(name = "id_user")
-    private Integer idUser;
+    @JsonIgnore
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "id_user", referencedColumnName = "id_user")
+    private UsuarioEntity usuario;
 
 }

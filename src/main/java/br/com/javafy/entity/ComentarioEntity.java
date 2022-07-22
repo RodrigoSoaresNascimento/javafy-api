@@ -16,14 +16,8 @@ public class ComentarioEntity {
     @Column(name = "id_comentario")
     private Integer idComentario;
 
-    @Column(name = "id_user")
-    private Integer idUser;
-
     @Column(name = "comentario")
     private String comentario;
-
-    @Column(name = "id_playlist")
-    private Integer idPlaylist;
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "id_playlist",
@@ -31,7 +25,7 @@ public class ComentarioEntity {
     private PlayListEntity playList;
 
     @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "id_usuario",
-            referencedColumnName = "id_usuario")
+    @JoinColumn(name = "id_user",
+            referencedColumnName = "id_user")
     private UsuarioEntity usuarioEntity;
 }
