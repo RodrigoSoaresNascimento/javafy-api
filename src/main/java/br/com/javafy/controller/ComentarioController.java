@@ -3,6 +3,7 @@ package br.com.javafy.controller;
 
 import br.com.javafy.documentation.DocumentationComentario;
 import br.com.javafy.dto.ComentarioDTO;
+import br.com.javafy.exceptions.ComentarioNaoCadastradoException;
 import br.com.javafy.exceptions.PessoaNaoCadastradaException;
 import br.com.javafy.service.ComentarioService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -23,8 +24,8 @@ public class ComentarioController implements DocumentationComentario {
 
     @GetMapping("/{idUser}")
     public ResponseEntity<ComentarioDTO> findById(@PathVariable("idUser") Integer idUser)
-            throws SQLException, PessoaNaoCadastradaException {
-        return ResponseEntity.ok(comentarioService.findById(idUser));
+            throws SQLException, PessoaNaoCadastradaException, ComentarioNaoCadastradoException {
+        return ResponseEntity.ok(comentarioService.findComentarioDTOById(idUser));
     }
 
     @GetMapping
@@ -48,7 +49,7 @@ public class ComentarioController implements DocumentationComentario {
     }
 
     @DeleteMapping("/{idComentario}")
-    public void delete(@PathVariable("idComentario") Integer id) throws PessoaNaoCadastradaException, SQLException {
+    public void delete(@PathVariable("idComentario") Integer id) {
         comentarioService.delete(id);
     }
 }

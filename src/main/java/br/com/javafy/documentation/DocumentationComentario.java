@@ -4,6 +4,7 @@ import br.com.javafy.anotations.MagiaResponse;
 import br.com.javafy.dto.ComentarioDTO;
 import br.com.javafy.dto.UsuarioCreateDTO;
 import br.com.javafy.dto.UsuarioDTO;
+import br.com.javafy.exceptions.ComentarioNaoCadastradoException;
 import br.com.javafy.exceptions.PessoaNaoCadastradaException;
 import io.swagger.v3.oas.annotations.Operation;
 import org.springframework.http.ResponseEntity;
@@ -20,7 +21,7 @@ public interface DocumentationComentario {
     @Operation(summary = "Procura um comentario pelo seu ID")
     @MagiaResponse
     public ResponseEntity<ComentarioDTO> findById(@PathVariable("idUser") Integer idUser)
-            throws SQLException, PessoaNaoCadastradaException;
+            throws SQLException, PessoaNaoCadastradaException, ComentarioNaoCadastradoException;
 
     @Operation(summary = "Lista todos os comentarios pelo seu ID")
     @MagiaResponse

@@ -1,7 +1,9 @@
 package br.com.javafy.service;
 
+import br.com.javafy.dto.ComentarioCreateDTO;
 import br.com.javafy.dto.ComentarioDTO;
 import br.com.javafy.entity.ComentarioEntity;
+import br.com.javafy.exceptions.ComentarioNaoCadastradoException;
 import br.com.javafy.exceptions.PessoaNaoCadastradaException;
 import br.com.javafy.repository.ComentariosRepository;
 import com.fasterxml.jackson.databind.ObjectMapper;
@@ -16,61 +18,62 @@ import java.util.stream.Collectors;
 public class ComentarioService {
 
     @Autowired
-    ComentariosRepository repository;
+    private ComentariosRepository comentariosRepository;
+
+    @Autowired
+    private UsuarioService usuarioService;
+
+    @Autowired
+    private PlayListService playListService;
 
     @Autowired
     private ObjectMapper objectMapper;
 
-    public ComentarioDTO converterComentario(ComentarioEntity comentario) {
-        return objectMapper.convertValue(comentario, ComentarioDTO.class);
+    public ComentarioDTO converterComentario(ComentarioEntity comentarioEntity) {
+        return objectMapper.convertValue(comentarioEntity, ComentarioDTO.class);
     }
 
     public ComentarioEntity converterComentarioDTO(ComentarioDTO comentarioDTO) {
         return objectMapper.convertValue(comentarioDTO, ComentarioEntity.class);
     }
 
-    public List<ComentarioDTO> list() throws SQLException {
-//        return repository
-//                .list().stream()
-//                .map(this::converterComentario)
-//                .collect(Collectors.toList());
-        return null;
+    public List<ComentarioDTO> list() {
+        return comentariosRepository
+                .findAll().stream()
+                .map(this::converterComentario)
+                .collect(Collectors.toList());
     }
 
-    public ComentarioDTO create(Integer idUser, Integer idPlaylist, ComentarioDTO comentarioDTO) throws SQLException {
-//        Comentario comentarioEntity = converterComentarioDTO(comentarioDTO);
-//        repository.create(idUser,idPlaylist,comentarioEntity);
-//        return converterComentario(comentarioEntity);
-        return null;
+    public ComentarioDTO create(Integer idUser, Integer idPlaylist, ComentarioCreateDTO comentarioCreateDTO) throws SQLException, PessoaNaoCadastradaException {
+        ComentarioEntity comentarioEntity = converterComentarioDTO(new ComentarioDTO());
+        comentarioEntity.setUsuarioEntity(usuarioService.retornaUsuarioEntityById(idUser));
+        comentarioEntity.setPlayList(playListService.retornaPlaylistEntityById(idPlaylist));
+        comentarioEntity.setComentario(comentarioCreateDTO.getComentario());
+        comentariosRepository.save(comentarioEntity);
+        return converterComentario(comentarioEntity);
     }
 
-    public ComentarioDTO update(ComentarioDTO comentarioDTO, Integer idComentario)
-            throws PessoaNaoCadastradaException, SQLException {
-
-//        Comentario comentario = converterComentarioDTO(findById(idComentario));
-//        System.out.println("comentario = "+comentario);
-//        boolean comentarioAtualizado = repository.update(idComentario, comentario);
-//        if(comentarioAtualizado){
-//            comentario.setIdComentario(idComentario);
-//        } else {
-//            throw new PessoaNaoCadastradaException("ID informado é inválido.");
-//        }
-//
-//        return converterComentario(comentario);
-        return null;
+    public ComentarioDTO update(Integer idComentario,
+                                ComentarioCreateDTO comentarioAtualizar)
+            throws ComentarioNaoCadastradoException {
+        ComentarioEntity comentarioEntity = converterComentarioDTO(findComentarioDTOById(idComentario));
+        comentarioEntity.setComentario(comentarioAtualizar.getComentario());
+        comentarioEntity.setPlayList(comentarioAtualizar.getPlayList());
+        comentarioEntity.setUsuarioEntity(comentarioAtualizar.getUsuarioEntity());
+        comentariosRepository.save(comentarioEntity);
+        return converterComentario(comentarioEntity);
     }
 
-    public void delete(Integer idComentario) throws PessoaNaoCadastradaException, SQLException {
-//        ComentarioDTO comentarioRecuperado = findById(idComentario);
-//        Comentario comentarioEntity = converterComentarioDTO(comentarioRecuperado);
-//        System.out.println("comentarioEntity "+comentarioEntity);
-//        repository.delete(idComentario);
-        return;
+    public void delete(Integer idComentario) {
+        comentariosRepository.deleteById(idComentario);
     }
 
-    public ComentarioDTO findById(Integer id) throws PessoaNaoCadastradaException, SQLException {
-//        return converterComentario(repository.findByID(id));
-        return null;
+    public ComentarioEntity findComentarioEntityById(Integer id) throws ComentarioNaoCadastradoException {
+        return comentariosRepository.findById(id)
+                .orElseThrow(() -> new ComentarioNaoCadastradoException("Comentário não encontrado"));
     }
 
+    public ComentarioDTO findComentarioDTOById(Integer id) throws ComentarioNaoCadastradoException {
+        return converterComentario(findComentarioEntityById(id));
+    }
 }
