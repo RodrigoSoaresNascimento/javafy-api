@@ -1,6 +1,7 @@
 package br.com.javafy.controller;
 
 import br.com.javafy.documentation.DocumentationUsuario;
+import br.com.javafy.dto.UsuarioRelatorioDTO;
 import br.com.javafy.service.UsuarioService;
 import br.com.javafy.dto.UsuarioCreateDTO;
 import br.com.javafy.dto.UsuarioDTO;
@@ -49,5 +50,10 @@ public class UsuarioController implements DocumentationUsuario {
     @DeleteMapping("/{idUser}")
     public void delete(@PathVariable("idUser") Integer id) throws PessoaNaoCadastradaException, SQLException {
         usuarioService.delete(id);
+    }
+
+    @GetMapping("/relatorio-playlists")
+    public List<UsuarioRelatorioDTO> relatorioPlayList (@RequestParam(required = false) Integer id){
+        return usuarioService.relatorio(id);
     }
 }

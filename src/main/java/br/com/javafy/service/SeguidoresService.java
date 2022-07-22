@@ -2,7 +2,6 @@ package br.com.javafy.service;
 
 
 import br.com.javafy.entity.UsuarioEntity;
-import br.com.javafy.exceptions.BancoDeDadosException;
 import br.com.javafy.exceptions.PessoaNaoCadastradaException;
 import br.com.javafy.dto.UsuarioDTO;
 import br.com.javafy.repository.UsuarioRepository;
@@ -35,9 +34,9 @@ public class SeguidoresService {
         return objectMapper.convertValue(user, UsuarioEntity.class);
     }
 
-    public List<UsuarioDTO> getAllSeguidores(Integer idUser) throws SQLException, PessoaNaoCadastradaException {
+    public List<UsuarioDTO> getAllSeguidores(Integer idUser) throws PessoaNaoCadastradaException {
 
-        Optional<UsuarioEntity> usuarioOptional = repository.findById(idUser);
+        Optional<UsuarioEntity> usuarioOptional = findById(idUser);
 
         if(usuarioOptional.isEmpty()){
             throw new PessoaNaoCadastradaException("Usuario não encontrado");
@@ -52,9 +51,9 @@ public class SeguidoresService {
                 .collect(Collectors.toList());
     }
 
-    public List<UsuarioDTO> getAllSeguindo(Integer idUser) throws SQLException, PessoaNaoCadastradaException {
+    public List<UsuarioDTO> getAllSeguindo(Integer idUser) throws PessoaNaoCadastradaException {
 
-        Optional<UsuarioEntity> usuarioOptional = repository.findById(idUser);
+        Optional<UsuarioEntity> usuarioOptional = findById(idUser);
 
        if(usuarioOptional.isEmpty()){
            throw new PessoaNaoCadastradaException("Usuario não encontrado");
@@ -70,10 +69,10 @@ public class SeguidoresService {
 
     }
 
-    public boolean seguirUser(Integer meuId,Integer idSeguindo) throws BancoDeDadosException {
+    public boolean seguirUser(Integer meuId,Integer idSeguindo) throws PessoaNaoCadastradaException {
 
-        Optional<UsuarioEntity> optionalUsuario = repository.findById(meuId);
-        Optional<UsuarioEntity> usuarioParaSeguir = repository.findById(idSeguindo);
+        Optional<UsuarioEntity> optionalUsuario = findById(meuId);
+        Optional<UsuarioEntity> usuarioParaSeguir = findById(idSeguindo);
         UsuarioEntity usuarioEntity = optionalUsuario.get();
         usuarioEntity.getSeguidores().add(usuarioParaSeguir.get());
         repository.save(usuarioEntity);
@@ -81,14 +80,19 @@ public class SeguidoresService {
 
     }
 
-    public void deixarDeSeguirUsuario(Integer meuId, Integer idSeguindo) {
+    public void deixarDeSeguirUsuario(Integer meuId, Integer idSeguindo) throws PessoaNaoCadastradaException {
 
-        Optional<UsuarioEntity> optionalUsuario = repository.findById(meuId);
-        Optional<UsuarioEntity> usuarioParaSeguir = repository.findById(idSeguindo);
+        Optional<UsuarioEntity> optionalUsuario = findById(meuId);
+        Optional<UsuarioEntity> usuarioParaSeguir = findById(idSeguindo);
         UsuarioEntity usuarioEntity = optionalUsuario.get();
         usuarioEntity.getSeguidores().remove(usuarioParaSeguir.get());
         usuarioEntity.setIdUsuario(meuId);
         repository.save(usuarioEntity);
 
+    }
+
+    public Optional<UsuarioEntity> findById (Integer idUsuario) throws PessoaNaoCadastradaException {
+       return Optional.ofNullable(repository.findById(idUsuario)
+               .orElseThrow(() -> new PessoaNaoCadastradaException("Pessoa não cadastrada ou não existe")));
     }
 }

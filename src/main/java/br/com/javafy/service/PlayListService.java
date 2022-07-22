@@ -8,6 +8,7 @@ import br.com.javafy.entity.PlayListEntity;
 import br.com.javafy.entity.UsuarioEntity;
 import br.com.javafy.enums.TiposdePlano;
 import br.com.javafy.exceptions.PessoaNaoCadastradaException;
+import br.com.javafy.exceptions.PlaylistException;
 import br.com.javafy.repository.PlayListRepository;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import org.springframework.beans.factory.annotation.Autowired;

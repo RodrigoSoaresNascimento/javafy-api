@@ -2,6 +2,7 @@ package br.com.javafy.service;
 
 import br.com.javafy.dto.UsuarioCreateDTO;
 import br.com.javafy.dto.UsuarioDTO;
+import br.com.javafy.dto.UsuarioRelatorioDTO;
 import br.com.javafy.entity.UsuarioEntity;
 import br.com.javafy.exceptions.PessoaNaoCadastradaException;
 import br.com.javafy.repository.UsuarioRepository;
@@ -93,6 +94,10 @@ public class UsuarioService {
 //
 //        usuarioRepository.delete(idUsuario);
         return;
+    }
+
+    public List<UsuarioRelatorioDTO> relatorio (Integer idUsuario){
+         return usuarioRepository.relatorioPessoa(idUsuario);
     }
 
 

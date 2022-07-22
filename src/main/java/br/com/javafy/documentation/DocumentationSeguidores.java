@@ -27,12 +27,12 @@ public interface DocumentationSeguidores {
     @MagiaResponse
     public Boolean seguirUser (@PathVariable Integer meuId,
                                    @PathVariable Integer idSeguindo)
-            throws SQLException;
+            throws SQLException, PessoaNaoCadastradaException;
 
     @Operation(summary = "Deixa de seguir um usuario")
     @MagiaResponse
     public void deixarDeSeguirUsuario (@PathVariable Integer meuId,
-            @PathVariable Integer idSeguindo) throws SQLException;
+            @PathVariable Integer idSeguindo) throws SQLException, PessoaNaoCadastradaException;
 
 
 }
