@@ -1,10 +1,10 @@
 package br.com.javafy.service;
 
-import br.com.javafy.entity.UsuarioEntity;
-import br.com.javafy.repository.UsuarioRepository;
 import br.com.javafy.dto.UsuarioCreateDTO;
 import br.com.javafy.dto.UsuarioDTO;
+import br.com.javafy.entity.UsuarioEntity;
 import br.com.javafy.exceptions.PessoaNaoCadastradaException;
+import br.com.javafy.repository.UsuarioRepository;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -40,7 +40,12 @@ public class UsuarioService {
         if(usuarioDTO.getIdUsuario() == null){
             throw new PessoaNaoCadastradaException("Usuário não cadastrado. ID " + idUser);
         }
+    }
 
+    public UsuarioEntity retornaUsuarioEntityById(Integer id) throws PessoaNaoCadastradaException {
+        return usuarioRepository
+                .findById(id)
+                .orElseThrow(() -> new PessoaNaoCadastradaException("Usuário não cadastrado"));
     }
 
     public UsuarioDTO findById(Integer id) throws PessoaNaoCadastradaException, SQLException {
