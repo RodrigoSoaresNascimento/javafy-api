@@ -1,7 +1,7 @@
 package br.com.javafy.service;
 
 import br.com.javafy.dto.ComentarioDTO;
-import br.com.javafy.entity.Comentario;
+import br.com.javafy.entity.ComentarioEntity;
 import br.com.javafy.exceptions.PessoaNaoCadastradaException;
 import br.com.javafy.repository.ComentariosRepository;
 import com.fasterxml.jackson.databind.ObjectMapper;
@@ -21,12 +21,12 @@ public class ComentarioService {
     @Autowired
     private ObjectMapper objectMapper;
 
-    public ComentarioDTO converterComentario(Comentario comentario) {
+    public ComentarioDTO converterComentario(ComentarioDTO comentario) {
         return objectMapper.convertValue(comentario, ComentarioDTO.class);
     }
 
-    public Comentario converterComentarioDTO(ComentarioDTO comentarioDTO) {
-        return objectMapper.convertValue(comentarioDTO, Comentario.class);
+    public ComentarioEntity converterComentarioDTO(ComentarioDTO comentarioDTO) {
+        return objectMapper.convertValue(comentarioDTO, ComentarioEntity.class);
     }
 
     public List<ComentarioDTO> list() throws SQLException {

@@ -4,6 +4,7 @@ package br.com.javafy.controller;
 
         import br.com.javafy.documentation.DocumentationSeguidores;
         import br.com.javafy.exceptions.BancoDeDadosException;
+        import br.com.javafy.exceptions.PessoaNaoCadastradaException;
         import br.com.javafy.service.SeguidoresService;
         import br.com.javafy.dto.UsuarioDTO;
         import org.springframework.beans.factory.annotation.Autowired;
@@ -21,12 +22,12 @@ public class SeguidoresController implements DocumentationSeguidores {
 
     //todo -> corrigir o nome no schema no tipo de pesquisa
     @GetMapping(value = "/from-user/{idUser}")//quem eu sigo
-    public List<UsuarioDTO> fromUser(@PathVariable("idUser") Integer idUser) throws SQLException {
+    public List<UsuarioDTO> fromUser(@PathVariable("idUser") Integer idUser) throws SQLException, PessoaNaoCadastradaException {
         return  service.getAllSeguindo(idUser);
     }
 
     @GetMapping(value = "/to-user/{idUser}") // quem estou seguindo
-    public List<UsuarioDTO> toUser(@PathVariable("idUser") Integer idUser) throws SQLException {
+    public List<UsuarioDTO> toUser(@PathVariable("idUser") Integer idUser) throws SQLException, PessoaNaoCadastradaException {
         return service.getAllSeguidores(idUser);
     }
 
