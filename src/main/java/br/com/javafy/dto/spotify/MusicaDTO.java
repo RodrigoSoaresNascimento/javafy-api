@@ -13,7 +13,7 @@ import lombok.NoArgsConstructor;
 public class MusicaDTO {
 
     @JsonProperty("id")
-    private String id;
+    private String idMusica;
 
     @JsonProperty("name")
     private String nome;

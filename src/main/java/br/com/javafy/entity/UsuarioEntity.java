@@ -54,7 +54,6 @@ public class UsuarioEntity {
             joinColumns = @JoinColumn(name="id_user_seguindo"),
             inverseJoinColumns = @JoinColumn(name = "id_user")
     )
-
     private Set<UsuarioEntity> seguindo = new HashSet<>();
 
 

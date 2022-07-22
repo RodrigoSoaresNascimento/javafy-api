@@ -4,6 +4,8 @@ import br.com.javafy.dto.UsuarioDTO;
 import br.com.javafy.dto.playlist.PlayListCreate;
 import br.com.javafy.dto.playlist.PlayListDTO;
 import br.com.javafy.dto.playlist.PlayListUpdate;
+import br.com.javafy.dto.spotify.MusicaDTO;
+import br.com.javafy.entity.MusicaEntity;
 import br.com.javafy.entity.PlayListEntity;
 import br.com.javafy.entity.UsuarioEntity;
 import br.com.javafy.enums.TiposdePlano;
@@ -15,6 +17,8 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.sql.SQLException;
+import java.util.Set;
+import java.util.stream.Collectors;
 
 @Service
 public class PlayListService {
@@ -67,30 +71,31 @@ public class PlayListService {
 
     }
 
-//    public PlayListDTO getPlaylistById (Integer idPlayList) throws PessoaNaoCadastradaException,
-//            SQLException {
-//
-////        return playListRepository.findById(idPlayList)
-////                .map(this::converterParaPlaylistDTO)
-////                .orElseThrow(()-> new PlaylistException("Playlist não encontrada"));
-//
-////        PlayList playList = playListRepository.getPlaylistById(idPlayList);
-////
-////        if(playList.getIdPlaylist() == null){
-////            throw new PlayListException("Playlist não existe. ID: " + idPlayList);
-////        }
-////
-////        List<MusicaDTO> musicaDTOS= playListMusicaService
-////                .getMusicasPlaylist(playList.getIdPlaylist());
-////
-////        PlayListDTO playListDTO = converterParaPlaylistDTO(playList);
-////        playListDTO.setMusicas(musicaDTOS);
-////        return playListDTO;
-//    }
+    public PlayListDTO getPlaylistById (Integer idPlayList) throws  PlaylistException {
+        return converterParaPlaylistDTO(retornaPlaylistEntityById(idPlayList));
+    }
 
-    public PlayListDTO create (PlayListCreate playlistCreate,
-                               Integer idUsuario) throws SQLException, PessoaNaoCadastradaException
-             {
+    public PlayListDTO create (PlayListCreate playlistCreate, Integer idUsuario)
+            throws PessoaNaoCadastradaException, PlaylistException {
+
+        UsuarioEntity usuario = usuarioService.retornaUsuarioEntityById(idUsuario);
+        PlayListEntity playList = converterParaPlaylist(playlistCreate);
+        playList.setUsuario(usuario);
+        if(playlistCreate.getMusicas() != null) {
+            Set<MusicaEntity> setMusicaEntity = playlistCreate.getMusicas()
+                    .stream()
+                    .map(MusicaDTO::getIdMusica)
+                    .collect(Collectors.toSet())
+                    .stream()
+                    .map(idMusica -> new MusicaEntity(idMusica, Set.of()))
+                    .collect(Collectors.toSet());
+            setMusicaEntity.forEach(System.out::println);
+            playList.setMusicas(setMusicaEntity);
+        }
+        playList = playListRepository.save(playList);
+
+        return converterParaPlaylistDTO(playList);
+
 //        Usuario usuario = validUser(idUsuario);
 //
 //        PlayList playList = converterParaPlaylist(playlistCreate);
@@ -107,12 +112,15 @@ public class PlayListService {
 //        PlayListDTO playListDTO = converterParaPlaylistDTO(playList);
 //        playListDTO.setMusicas(musicas);
 //        return playListDTO;
-        return null;
     }
 
     public PlayListUpdate update(PlayListCreate playListCreate, Integer idPlaylist)
             throws  SQLException {
-//        validPlaylist(idPlaylist);
+
+          PlayListEntity playList  = retornaPlaylistEntityById(idPlaylist);
+
+
+
 //
 //        PlayList playList = converterParaPlaylist(playListCreate);
 //        boolean result = playListRepository.update(idPlaylist, playList);
