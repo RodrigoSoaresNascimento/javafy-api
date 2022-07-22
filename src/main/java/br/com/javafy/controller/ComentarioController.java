@@ -2,6 +2,7 @@ package br.com.javafy.controller;
 
 
 import br.com.javafy.documentation.DocumentationComentario;
+import br.com.javafy.dto.ComentarioCreateDTO;
 import br.com.javafy.dto.ComentarioDTO;
 import br.com.javafy.exceptions.ComentarioNaoCadastradoException;
 import br.com.javafy.exceptions.PessoaNaoCadastradaException;
@@ -37,15 +38,14 @@ public class ComentarioController implements DocumentationComentario {
     //TODO -> FAZER A VALIDAÇÃO DOS DADOS, USUARIO E PLAYLIST
     @PostMapping("/{idUser}/and/{idPlaylist}")
     public ResponseEntity<ComentarioDTO> create(@PathVariable("idUser")Integer idUser, @PathVariable("idPlaylist")Integer idPlaylist,
-                                                @Valid @RequestBody ComentarioDTO comentario)throws SQLException {
-        return ResponseEntity.ok(comentarioService.create(idUser, idPlaylist, comentario));
+                                                @Valid @RequestBody ComentarioCreateDTO comentarioCreateDTO) throws PessoaNaoCadastradaException, SQLException {
+        return ResponseEntity.ok(comentarioService.create(idUser, idPlaylist, comentarioCreateDTO));
     }
 
     @PutMapping("/{idComentario}")
-    public ResponseEntity<ComentarioDTO> update(@PathVariable("idComentario") Integer id
-            , @Valid @RequestBody ComentarioDTO comentario) throws PessoaNaoCadastradaException,
-            SQLException {
-        return ResponseEntity.ok(comentarioService.update(comentario, id));
+    public ResponseEntity<ComentarioDTO> update(@PathVariable("idComentario") Integer idComentario
+            , @Valid @RequestBody ComentarioCreateDTO comentarioAtualizar) throws ComentarioNaoCadastradoException {
+        return ResponseEntity.ok(comentarioService.update(idComentario, comentarioAtualizar));
     }
 
     @DeleteMapping("/{idComentario}")

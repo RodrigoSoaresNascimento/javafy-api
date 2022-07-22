@@ -1,9 +1,8 @@
 package br.com.javafy.documentation;
 
 import br.com.javafy.anotations.MagiaResponse;
+import br.com.javafy.dto.ComentarioCreateDTO;
 import br.com.javafy.dto.ComentarioDTO;
-import br.com.javafy.dto.UsuarioCreateDTO;
-import br.com.javafy.dto.UsuarioDTO;
 import br.com.javafy.exceptions.ComentarioNaoCadastradoException;
 import br.com.javafy.exceptions.PessoaNaoCadastradaException;
 import io.swagger.v3.oas.annotations.Operation;
@@ -30,13 +29,12 @@ public interface DocumentationComentario {
     @Operation(summary = "Cria um perfil de comentario")
     @MagiaResponse
     public ResponseEntity<ComentarioDTO> create(@PathVariable("idUser")Integer idUser, @PathVariable("idPlaylist")Integer idPlaylist,
-                                                @Valid @RequestBody ComentarioDTO comentario)throws SQLException;
+                                                @Valid @RequestBody ComentarioCreateDTO comentarioCreateDTO) throws SQLException, PessoaNaoCadastradaException;
 
     @Operation(summary = "Atualiza um comentario pelo seu ID")
     @MagiaResponse
-    public ResponseEntity<ComentarioDTO> update(@PathVariable("idComentario") Integer id
-            , @Valid @RequestBody ComentarioDTO comentario) throws PessoaNaoCadastradaException,
-            SQLException;
+    public ResponseEntity<ComentarioDTO> update(@PathVariable("idComentario") Integer idComentario
+            , @Valid @RequestBody ComentarioCreateDTO comentarioAtualizar) throws ComentarioNaoCadastradoException;
 
     @Operation(summary = "Apaga comentario pelo seu ID")
     @MagiaResponse

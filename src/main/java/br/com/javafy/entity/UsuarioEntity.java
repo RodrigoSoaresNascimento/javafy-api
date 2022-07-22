@@ -11,6 +11,8 @@ import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
 
+@Getter
+@Setter
 @AllArgsConstructor
 @NoArgsConstructor
 @Entity(name = "usuario")
@@ -37,7 +39,7 @@ public class UsuarioEntity {
     private String email;
 
     @JsonIgnore
-    @ManyToMany(fetch = FetchType.LAZY)
+    @ManyToMany(fetch = FetchType.LAZY, cascade = CascadeType.ALL)
     @JoinTable(
             name = "seguidores",
             joinColumns = @JoinColumn(name="id_user"),
@@ -52,7 +54,6 @@ public class UsuarioEntity {
             joinColumns = @JoinColumn(name="id_user_seguindo"),
             inverseJoinColumns = @JoinColumn(name = "id_user")
     )
-
     private Set<UsuarioEntity> seguindo = new HashSet<>();
 
 
@@ -62,6 +63,14 @@ public class UsuarioEntity {
                 orphanRemoval = true)
     private Set<PlayListEntity> playlist;
 
-
-
+    @Override
+    public String toString() {
+        return "UsuarioEntity{" +
+                "idUsuario=" + idUsuario +
+                ", nome='" + nome + '\'' +
+                ", dataNascimento=" + dataNascimento +
+                ", genero='" + genero + '\'' +
+                ", plano=" + plano +
+                ", email='" + email + '\'';
+    }
 }

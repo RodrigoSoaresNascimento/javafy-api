@@ -2,26 +2,19 @@ package br.com.javafy.service;
 
 import br.com.javafy.dto.playlist.PlayListCreate;
 import br.com.javafy.dto.spotify.MusicaDTO;
-import br.com.javafy.dto.spotify.MusicaFullDTO;
-import br.com.javafy.entity.Musica;
 import br.com.javafy.exceptions.BancoDeDadosException;
-import br.com.javafy.repository.PlayListMusicaRespository;
+import br.com.javafy.repository.MusicaRepository;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import java.sql.SQLException;
-import java.util.ArrayList;
-import java.util.HashSet;
 import java.util.List;
-import java.util.Set;
-import java.util.stream.Collectors;
 
 @Service
 public class PlayListMusicaService {
 
     @Autowired
-    private PlayListMusicaRespository playListMusicaRespository;
+    private MusicaRepository playListMusicaRespository;
 
     @Autowired
     private MusicaService musicaService;
@@ -33,7 +26,7 @@ public class PlayListMusicaService {
         return playlistCreate.getMusicas() != null && !playlistCreate.getMusicas().isEmpty();
     }
 
-    public void validIfMusicInPlaylist(Integer idPlaylist, String idMusic) throws  BancoDeDadosException {
+    public void validIfMusicInPlaylist(PlayListCreate playListCreate) throws  BancoDeDadosException {
 //        Musica musica = playListMusicaRespository.getMusicaInPlaylist(idPlaylist, idPlaylist);
 //        if(musica.getId() == null) {
 //            throw new PlayListException("Playlist id " + idPlaylist + " não tem a musica  id" + idMusic );
@@ -41,9 +34,23 @@ public class PlayListMusicaService {
         return;
     }
 
-    public List<MusicaDTO> addMusicaPlaylist(PlayListCreate playlistCreate, Integer idPlaylist) throws SQLException {
+//    public Set<ListaDeMusicaEntity> addMusicaPlaylist(PlayListCreate playlistCreate, Integer idPlaylist)
+//            throws SQLException {
+//
+//        if(playlistCreate.getMusicas() == null){
+//            return null;
+//        };
+//
+//        return playlistCreate.getMusicas().stream()
+//                .map(m-> new ListaDeMusicaEntity(new ListaDeMusicaPK(idPlaylist, m.getId())))
+//                .collect(Collectors.toSet());
+////
+////
 //        List<MusicaDTO> listaMusica = new ArrayList<>();
 //        Set<String> musicasAdd = new HashSet<>();
+//
+//
+//
 //
 //        if(validIfPlaylistIsValid(playlistCreate)){
 //
@@ -53,8 +60,9 @@ public class PlayListMusicaService {
 //                        continue;
 //                    }
 //
-//                    boolean result = playListMusicaRespository
-//                            .create(idPlaylist, music.getId());
+//                    boolean result = false;
+////                            playListMusicaRespository
+////                            .create(idPlaylist, music.getId());
 //
 //                    if(result){
 //                        MusicaFullDTO musicaFullDTO = musicaService.musicById(music.getId());
@@ -68,8 +76,7 @@ public class PlayListMusicaService {
 //            }
 //        }
 //        return listaMusica;
-        return null;
-    }
+    //}
 
     public List<MusicaDTO> getMusicasPlaylist(Integer idPlaylist) throws BancoDeDadosException {
 //        return playListMusicaRespository

@@ -17,7 +17,7 @@ public interface DocumentationSeguidores {
     @Operation(summary = "Retorna a lista de seguidores do usuario.")
     @MagiaResponse
     public List<UsuarioDTO> fromUser (@PathVariable Integer idUser)
-            throws SQLException;
+            throws SQLException, PessoaNaoCadastradaException;
 
     @Operation(summary = "Retorna a lista de quem o usuario está seguindo.")
     @MagiaResponse
