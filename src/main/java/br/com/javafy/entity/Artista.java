@@ -10,7 +10,7 @@ import javax.validation.constraints.Size;
 @AllArgsConstructor
 @NoArgsConstructor
 @ToString
-public class Artista extends Usuario {
+public class Artista extends UsuarioEntity {
 
     @NotNull
     @Size(min = 1, max = 9)

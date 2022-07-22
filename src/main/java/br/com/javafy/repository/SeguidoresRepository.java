@@ -1,14 +1,6 @@
 package br.com.javafy.repository;
 
-import br.com.javafy.entity.Usuario;
-import br.com.javafy.enums.TiposdePlano;
-import br.com.javafy.exceptions.BancoDeDadosException;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;
-
-import java.sql.*;
-import java.util.ArrayList;
-import java.util.List;
 
 @Repository
 public class SeguidoresRepository {

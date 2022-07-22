@@ -4,9 +4,8 @@ import br.com.javafy.dto.UsuarioDTO;
 import br.com.javafy.dto.playlist.PlayListCreate;
 import br.com.javafy.dto.playlist.PlayListDTO;
 import br.com.javafy.dto.playlist.PlayListUpdate;
-import br.com.javafy.dto.spotify.MusicaDTO;
-import br.com.javafy.entity.PlayList;
-import br.com.javafy.entity.Usuario;
+import br.com.javafy.entity.PlayListEntity;
+import br.com.javafy.entity.UsuarioEntity;
 import br.com.javafy.enums.TiposdePlano;
 import br.com.javafy.exceptions.PessoaNaoCadastradaException;
 import br.com.javafy.exceptions.PlayListException;
@@ -16,7 +15,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.sql.SQLException;
-import java.util.List;
 
 @Service
 public class PlayListService {
@@ -33,24 +31,24 @@ public class PlayListService {
     @Autowired
     private UsuarioService usuarioService;
 
-    public PlayListDTO converterParaPlaylistDTO (PlayList playList){
+    public PlayListDTO converterParaPlaylistDTO (PlayListEntity playList){
         return objectMapper.convertValue(playList,PlayListDTO.class);
     }
 
-    public PlayList converterParaPlaylist (PlayListCreate playList){
-        return objectMapper.convertValue(playList,PlayList.class);
+    public PlayListEntity converterParaPlaylist (PlayListCreate playList){
+        return objectMapper.convertValue(playList, PlayListEntity.class);
     }
 
-    public PlayListUpdate converterParaPlaylistUpdate (PlayList playList){
+    public PlayListUpdate converterParaPlaylistUpdate (PlayListEntity playList){
         return objectMapper.convertValue(playList, PlayListUpdate.class);
     }
 
-    public Usuario validUser(Integer idUsuario) throws SQLException, PessoaNaoCadastradaException {
+    public UsuarioEntity validUser(Integer idUsuario) throws SQLException, PessoaNaoCadastradaException {
         UsuarioDTO usuarioDTO = usuarioService.findById(idUsuario);
         if(usuarioDTO.getPlano().equals(TiposdePlano.FREE)){
             throw new PessoaNaoCadastradaException("Plano Free. Para criar playlist, mude seu plano.");
         }
-        return objectMapper.convertValue(usuarioDTO, Usuario.class);
+        return objectMapper.convertValue(usuarioDTO, UsuarioEntity.class);
     }
 
     public void validPlaylist(Integer idPlaylist) throws SQLException, PlayListException {

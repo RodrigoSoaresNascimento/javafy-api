@@ -1,7 +1,7 @@
 package br.com.javafy.service;
 
 
-import br.com.javafy.entity.Usuario;
+import br.com.javafy.entity.UsuarioEntity;
 import br.com.javafy.exceptions.BancoDeDadosException;
 import br.com.javafy.repository.SeguidoresRepository;
 import br.com.javafy.dto.UsuarioDTO;
@@ -11,9 +11,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.sql.SQLException;
-import java.util.ArrayList;
 import java.util.List;
-import java.util.stream.Collectors;
 
 @Service
 public class SeguidoresService {
@@ -24,12 +22,12 @@ public class SeguidoresService {
     @Autowired
     private ObjectMapper objectMapper;
 
-    public UsuarioDTO converterParaUsuarioDTO (Usuario user){
+    public UsuarioDTO converterParaUsuarioDTO (UsuarioEntity user){
         return objectMapper.convertValue(user, UsuarioDTO.class);
     }
 
-    public Usuario converterDTOParaUsuario (UsuarioDTO user){
-        return objectMapper.convertValue(user, Usuario.class);
+    public UsuarioEntity converterDTOParaUsuario (UsuarioDTO user){
+        return objectMapper.convertValue(user, UsuarioEntity.class);
     }
 
     public List<UsuarioDTO> getAllSeguidores(Integer idUser) throws SQLException {

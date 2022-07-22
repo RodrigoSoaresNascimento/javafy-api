@@ -1,16 +1,7 @@
 package br.com.javafy.repository;
 
-import br.com.javafy.entity.Usuario;
-import br.com.javafy.enums.TiposdePlano;
-import br.com.javafy.exceptions.BancoDeDadosException;
-import br.com.javafy.exceptions.PessoaNaoCadastradaException;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;
-
-import java.sql.*;
-import java.util.ArrayList;
-import java.util.List;
 
 @Repository
 @Slf4j

@@ -1,12 +1,6 @@
 package br.com.javafy.repository;
 
-import br.com.javafy.entity.Musica;
-import br.com.javafy.entity.PlayList;
-import br.com.javafy.exceptions.BancoDeDadosException;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;
-
-import java.sql.*;
 
 @Repository
 public class PlayListRepository {
