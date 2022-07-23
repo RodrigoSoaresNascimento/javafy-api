@@ -23,6 +23,6 @@ public interface DocumentationMusica {
 
     @Operation(summary = "Retonar uma lista de musica pesquisada.")
     @MagiaResponse
-    public List<MusicaDTO> searchMusic(@RequestBody QueryDTO query) throws IOException;
+    public List<MusicaDTO> searchMusic(String query) throws IOException;
 
 }

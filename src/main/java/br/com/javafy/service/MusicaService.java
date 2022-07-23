@@ -65,11 +65,12 @@ public class MusicaService {
         return spotifyClient.getTracks(tokenDTO.getAutorization(), ids).get("tracks");
     }
 
-    public List<MusicaDTO> searchMusic(QueryDTO query) throws JsonProcessingException {
+    public List<MusicaDTO> searchMusic(String query) throws JsonProcessingException {
+        System.out.println("QUery " + query);
         TokenDTO tokenDTO = getToken();
         var t = spotifyClient.search(
                 tokenDTO.getAutorization(),
-                query.getQuery().replace(" ", "+"),
+                query.replace(" ", "+"),
                 "track"
         ).get("tracks");
         return convertJsonToMusicaDTO(t);
