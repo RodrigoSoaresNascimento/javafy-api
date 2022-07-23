@@ -23,10 +23,10 @@ public class ComentarioController implements DocumentationComentario {
     @Autowired
     ComentarioService comentarioService;
 
-    @GetMapping("/{idUser}")
-    public ResponseEntity<ComentarioDTO> findById(@PathVariable("idUser") Integer idUser)
+    @GetMapping("/{idComentario}")
+    public ResponseEntity<ComentarioDTO> findById(@PathVariable("idComentario") Integer idComentario)
             throws SQLException, PessoaNaoCadastradaException, ComentarioNaoCadastradoException {
-        return ResponseEntity.ok(comentarioService.findComentarioDTOById(idUser));
+        return ResponseEntity.ok(comentarioService.findComentarioDTOById(idComentario));
     }
 
     @GetMapping
