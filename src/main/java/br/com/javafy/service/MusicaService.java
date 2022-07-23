@@ -2,11 +2,13 @@ package br.com.javafy.service;
 
 import br.com.javafy.client.spotify.SpotifyAuthorization;
 import br.com.javafy.client.spotify.SpotifyClient;
-import br.com.javafy.dto.spotify.MusicaDTO;
-import br.com.javafy.dto.spotify.MusicaFullDTO;
-import br.com.javafy.dto.spotify.QueryDTO;
+import br.com.javafy.dto.playlist.PlayListCreate;
+import br.com.javafy.dto.spotify.musica.MusicaCreateDTO;
+import br.com.javafy.dto.spotify.musica.MusicaDTO;
+import br.com.javafy.dto.spotify.musica.MusicaFullDTO;
 import br.com.javafy.dto.spotify.TokenDTO;
 import br.com.javafy.entity.Headers;
+import br.com.javafy.exceptions.SpotifyException;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.DeserializationFeature;
 import com.fasterxml.jackson.databind.ObjectMapper;
@@ -14,6 +16,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.util.*;
+import java.util.stream.Collectors;
 
 @Service
 public class MusicaService {
@@ -30,9 +33,13 @@ public class MusicaService {
     @Autowired
     private Headers headers;
 
-    private TokenDTO getToken(){
-        return spotifyAutorization
-                .authorization(headers.toDados(), headers.getGrantType());
+    private TokenDTO getToken() throws SpotifyException {
+        try {
+            return spotifyAutorization
+                    .authorization(headers.toDados(), headers.getGrantType());
+        } catch (Exception e) {
+            throw new SpotifyException("Error na api de musica");
+        }
     }
 
     private List<MusicaDTO> convertJsonToMusicaDTO(Map<String, Object> tracks)
@@ -54,18 +61,17 @@ public class MusicaService {
                 }).toList();
     }
 
-    public MusicaFullDTO musicById(String id) {
+    public MusicaFullDTO musicById(String id) throws SpotifyException {
         TokenDTO tokenDTO = getToken();
         return spotifyClient.getTrack(tokenDTO.getAutorization(), id);
     }
 
-    public List<MusicaFullDTO> getList() {
+    public List<MusicaFullDTO> getListMusicaPorIds(String ids) throws SpotifyException {
         TokenDTO tokenDTO = getToken();
-        String ids = "7ouMYWpwJ422jRcDASZB7P,4VqPOruhp5EdPBeR92t6lQ,2takcwOaAZWiXQijPHIx7B";
         return spotifyClient.getTracks(tokenDTO.getAutorization(), ids).get("tracks");
     }
 
-    public List<MusicaDTO> searchMusic(String query) throws JsonProcessingException {
+    public List<MusicaDTO> searchMusic(String query) throws JsonProcessingException, SpotifyException {
         System.out.println("QUery " + query);
         TokenDTO tokenDTO = getToken();
         var t = spotifyClient.search(
@@ -75,6 +81,21 @@ public class MusicaService {
         ).get("tracks");
         return convertJsonToMusicaDTO(t);
     }
+
+    public List<MusicaFullDTO> getMusicasValidas(List<MusicaCreateDTO> musicas) throws SpotifyException {
+        String ids = String.join(",", musicas
+                .stream()
+                .map(MusicaCreateDTO::getIdMusica)
+                .collect(Collectors.toSet()));
+
+        List<MusicaFullDTO> musicaFullDTOS = getListMusicaPorIds(ids);
+        musicaFullDTOS.removeIf(Objects::isNull);
+
+        return musicaFullDTOS;
+    }
+
+
+
 
 }
 

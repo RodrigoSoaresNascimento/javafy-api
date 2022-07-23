@@ -5,6 +5,9 @@ import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
+import org.hibernate.annotations.Cascade;
+import org.hibernate.annotations.OnDelete;
+import org.hibernate.annotations.OnDeleteAction;
 
 import javax.persistence.*;
 import java.util.Set;
@@ -32,12 +35,10 @@ public class PlayListEntity {
     private UsuarioEntity usuario;
 
     @JsonIgnore
-    @ManyToMany(fetch = FetchType.LAZY, cascade = CascadeType.MERGE)
-    @JoinTable(name = "listademusicas",
-            joinColumns = @JoinColumn(name = "id_playlist"),
-            inverseJoinColumns = @JoinColumn(name = "id_musica")
-    )
-    private Set<MusicaEntity> musicas;
+    @OneToMany(fetch = FetchType.LAZY, cascade = CascadeType.ALL, orphanRemoval = true)
+    @JoinColumn(name = "id_playlist", referencedColumnName = "id_playlist")
+    private Set<PlaylistMusicaEntity> listaMusica;
+
 
     @Override
     public String toString() {
@@ -46,4 +47,5 @@ public class PlayListEntity {
                 ", name='" + name + '\'' +
                 '}';
     }
+
 }

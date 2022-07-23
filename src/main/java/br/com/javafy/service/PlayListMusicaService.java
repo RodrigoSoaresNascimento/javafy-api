@@ -1,9 +1,8 @@
 package br.com.javafy.service;
 
 import br.com.javafy.dto.playlist.PlayListCreate;
-import br.com.javafy.dto.spotify.MusicaDTO;
+import br.com.javafy.dto.spotify.musica.MusicaDTO;
 import br.com.javafy.exceptions.BancoDeDadosException;
-import br.com.javafy.repository.MusicaRepository;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -12,9 +11,6 @@ import java.util.List;
 
 @Service
 public class PlayListMusicaService {
-
-    @Autowired
-    private MusicaRepository playListMusicaRespository;
 
     @Autowired
     private MusicaService musicaService;

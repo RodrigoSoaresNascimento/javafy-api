@@ -1,7 +1,7 @@
 package br.com.javafy.client.spotify;
 
-import br.com.javafy.dto.spotify.ArtistaDTO;
-import br.com.javafy.dto.spotify.MusicaFullDTO;
+import br.com.javafy.dto.spotify.artista.ArtistaDTO;
+import br.com.javafy.dto.spotify.musica.MusicaFullDTO;
 import feign.HeaderMap;
 import feign.Headers;
 import feign.Param;

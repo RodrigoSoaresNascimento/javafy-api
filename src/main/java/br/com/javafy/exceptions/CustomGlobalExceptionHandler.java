@@ -70,4 +70,14 @@ public class CustomGlobalExceptionHandler extends ResponseEntityExceptionHandler
         body.put("message", exception.getMessage());
         return new ResponseEntity<>(body, HttpStatus.BAD_REQUEST);
     }
+
+    @ExceptionHandler(SpotifyException.class)
+    public ResponseEntity<Object> handleException(SpotifyException exception,
+                                                  HttpServletRequest request) {
+        Map<String, Object> body = new LinkedHashMap<>();
+        body.put("timestamp", new Date());
+        body.put("status", HttpStatus.BAD_REQUEST.value());
+        body.put("message", exception.getMessage());
+        return new ResponseEntity<>(body, HttpStatus.BAD_REQUEST);
+    }
 }

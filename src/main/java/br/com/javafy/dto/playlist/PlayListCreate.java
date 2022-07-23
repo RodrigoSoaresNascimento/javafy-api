@@ -1,6 +1,7 @@
 package br.com.javafy.dto.playlist;
 
-import br.com.javafy.dto.spotify.MusicaDTO;
+import br.com.javafy.dto.spotify.musica.MusicaCreateDTO;
+import io.swagger.v3.oas.annotations.media.Schema;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
@@ -13,8 +14,9 @@ import java.util.List;
 @NoArgsConstructor
 public class PlayListCreate {
 
+    @Schema(example = "Bota modão")
     @NotEmpty
     private String name;
 
-    List<MusicaDTO> musicas;
+    List<MusicaCreateDTO> musicas;
 }
