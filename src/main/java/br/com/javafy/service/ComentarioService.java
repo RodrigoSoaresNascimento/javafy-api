@@ -1,8 +1,6 @@
 package br.com.javafy.service;
 
-import br.com.javafy.dto.ComentarioCreateDTO;
-import br.com.javafy.dto.ComentarioDTO;
-import br.com.javafy.dto.PageDTO;
+import br.com.javafy.dto.*;
 import br.com.javafy.entity.ComentarioEntity;
 import br.com.javafy.exceptions.ComentarioNaoCadastradoException;
 import br.com.javafy.exceptions.PessoaNaoCadastradaException;
@@ -87,5 +85,9 @@ public class ComentarioService {
 
     public ComentarioDTO findComentarioDTOById(Integer id) throws ComentarioNaoCadastradoException {
         return converterComentario(findComentarioEntityById(id));
+    }
+
+    public List<ComentarioPlaylistRelatorioDTO> relatorioComentarioPlaylist (Integer idUsuario){
+        return comentariosRepository.relatorioComentarios(idUsuario);
     }
 }

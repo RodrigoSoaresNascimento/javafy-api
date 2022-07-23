@@ -1,5 +1,6 @@
 package br.com.javafy.repository;
 
+import br.com.javafy.dto.ComentarioPlaylistRelatorioDTO;
 import br.com.javafy.dto.UsuarioRelatorioDTO;
 import br.com.javafy.entity.UsuarioEntity;
 import org.springframework.data.jpa.repository.JpaRepository;

@@ -1,12 +1,9 @@
 package br.com.javafy.repository;
 
-import br.com.javafy.dto.spotify.musica.MusicaDTO;
 import br.com.javafy.entity.PlayListEntity;
 import org.springframework.data.jpa.repository.JpaRepository;
-import org.springframework.data.jpa.repository.Query;
+
 import org.springframework.stereotype.Repository;
-import br.com.javafy.dto.spotify.musica.MusicaCreateDTO;
-import java.util.List;
 
 @Repository
 public interface PlayListRepository extends JpaRepository<PlayListEntity, Integer> {
