@@ -10,13 +10,13 @@ import javax.validation.constraints.Size;
 @Data
 public class ComentarioCreateDTO {
 
-    @Schema(hidden = false)
+    @Schema(hidden = true)
     private Integer idPlaylist;
 
-    @Schema(hidden = false)
+    @Schema(hidden = true)
     private Integer idUser;
 
-    @Schema(description = "Comentario sobre a playlist")
+    @Schema(example = "Musica muito elétrica")
     @Size(max = 255)
     private String comentario;
 

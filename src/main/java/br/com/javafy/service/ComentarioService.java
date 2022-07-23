@@ -66,10 +66,12 @@ public class ComentarioService {
     public ComentarioDTO update(Integer idComentario,
                                 ComentarioCreateDTO comentarioAtualizar)
             throws ComentarioNaoCadastradoException {
-        ComentarioEntity comentarioEntity = converterComentarioDTO(findComentarioDTOById(idComentario));
+
+        ComentarioEntity comentarioEntity = findComentarioEntityById(idComentario);
+
         comentarioEntity.setComentario(comentarioAtualizar.getComentario());
-        comentarioEntity.setPlayList(comentarioAtualizar.getPlayList());
-        comentarioEntity.setUsuarioEntity(comentarioAtualizar.getUsuarioEntity());
+        comentarioEntity.setUsuarioEntity(comentarioEntity.getUsuarioEntity());
+        comentarioEntity.setPlayList(comentarioEntity.getPlayList());
         comentariosRepository.save(comentarioEntity);
         return converterComentario(comentarioEntity);
     }
