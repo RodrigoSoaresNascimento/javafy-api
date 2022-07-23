@@ -39,6 +39,11 @@ public class PlayListEntity {
     )
     private Set<MusicaEntity> musicas;
 
+    @JsonIgnore
+    @OneToMany(mappedBy = "playList",fetch = FetchType.LAZY, cascade = CascadeType.MERGE)
+    private Set<ComentarioEntity> comentarios;
+
+
     @Override
     public String toString() {
         return "PlayListEntity{" +

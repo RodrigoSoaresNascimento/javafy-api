@@ -21,7 +21,7 @@ public class UsuarioEntity {
     @Id
     @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "SEQ_USER")
     @SequenceGenerator(name = "SEQ_USER", sequenceName = "seq_id_user", allocationSize = 1)
-    @Column(name = "id_user")
+    @Column(name = "id_user", insertable = false, updatable = false)
     private Integer idUsuario;
 
     @Column(name = "nome")
