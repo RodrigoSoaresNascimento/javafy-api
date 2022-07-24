@@ -1,5 +1,6 @@
 package br.com.javafy.exceptions;
 
+import org.jetbrains.annotations.NotNull;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -41,53 +42,43 @@ public class CustomGlobalExceptionHandler extends ResponseEntityExceptionHandler
         return new ResponseEntity<>(body, headers, status);
     }
 
-    @ExceptionHandler(PessoaNaoCadastradaException.class)
-    public ResponseEntity<Object> handleException(PessoaNaoCadastradaException exception,
-                                                  HttpServletRequest request) {
+    @NotNull
+    private ResponseEntity<Object> returnError(String exception) {
         Map<String, Object> body = new LinkedHashMap<>();
         body.put("timestamp", new Date());
         body.put("status", HttpStatus.BAD_REQUEST.value());
-        body.put("message", exception.getMessage());
+        body.put("message", exception);
         return new ResponseEntity<>(body, HttpStatus.BAD_REQUEST);
     }
+
+    @ExceptionHandler(PessoaNaoCadastradaException.class)
+    public ResponseEntity<Object> handleException(PessoaNaoCadastradaException exception,
+                                                  HttpServletRequest request) {
+        return returnError(exception.getMessage());
+    }
+
 
     @ExceptionHandler(ConstraintViolationException.class)
     public ResponseEntity<Object> handleException(ConstraintViolationException exception,
                                                   HttpServletRequest request) {
-        Map<String, Object> body = new LinkedHashMap<>();
-        body.put("timestamp", new Date());
-        body.put("status", HttpStatus.BAD_REQUEST.value());
-        body.put("message", exception.getMessage());
-        return new ResponseEntity<>(body, HttpStatus.BAD_REQUEST);
+        return returnError(exception.getMessage());
     }
 
     @ExceptionHandler(PlaylistException.class)
     public ResponseEntity<Object> handleException(PlaylistException exception,
                                                   HttpServletRequest request) {
-        Map<String, Object> body = new LinkedHashMap<>();
-        body.put("timestamp", new Date());
-        body.put("status", HttpStatus.BAD_REQUEST.value());
-        body.put("message", exception.getMessage());
-        return new ResponseEntity<>(body, HttpStatus.BAD_REQUEST);
+        return returnError(exception.getMessage());
     }
 
     @ExceptionHandler(SpotifyException.class)
     public ResponseEntity<Object> handleException(SpotifyException exception,
                                                   HttpServletRequest request) {
-        Map<String, Object> body = new LinkedHashMap<>();
-        body.put("timestamp", new Date());
-        body.put("status", HttpStatus.BAD_REQUEST.value());
-        body.put("message", exception.getMessage());
-        return new ResponseEntity<>(body, HttpStatus.BAD_REQUEST);
+        return returnError(exception.getMessage());
     }
 
     @ExceptionHandler(SeguidoresException.class)
     public ResponseEntity<Object> handleException(SeguidoresException exception,
                                                   HttpServletRequest request) {
-        Map<String, Object> body = new LinkedHashMap<>();
-        body.put("timestamp", new Date());
-        body.put("status", HttpStatus.BAD_REQUEST.value());
-        body.put("message", exception.getMessage());
-        return new ResponseEntity<>(body, HttpStatus.BAD_REQUEST);
+        return returnError(exception.getMessage());
     }
 }
