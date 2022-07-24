@@ -14,23 +14,23 @@ import java.time.LocalDate;
 @ToString
 public class UsuarioCreateDTO {
 
-    @Schema(example = "Juliana")
+    @Schema(example = "Juliana", description = "nome do usuario")
     @NotBlank(message = "Nome não pode ser nulo.")
     private String nome;
 
-    @Schema(example = "2000-10-10")
+    @Schema(example = "2000-10-10", description = "data de nascimento do usuario")
     @NotNull
     @Past
     private LocalDate dataNascimento;
 
-    @Schema(example = "F")
+    @Schema(example = "F", description = "genero do usuario")
     @Size(min = 1, max = 20)
     private String genero;
 
     @NotNull
     private TiposdePlano plano;
 
-    @Schema(example = "faker@faker.com")
+    @Schema(example = "faker@faker.com", description = "email do usuario")
     @NotBlank(message = "Email e obrigatorio")
     private String email;
 
