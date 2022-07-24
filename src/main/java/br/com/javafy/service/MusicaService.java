@@ -3,11 +3,13 @@ package br.com.javafy.service;
 import br.com.javafy.client.spotify.SpotifyAuthorization;
 import br.com.javafy.client.spotify.SpotifyClient;
 import br.com.javafy.dto.spotify.TokenDTO;
+import br.com.javafy.dto.spotify.genero.GeneroDTO;
 import br.com.javafy.dto.spotify.musica.MusicaDTO;
 import br.com.javafy.dto.spotify.musica.MusicaFullDTO;
 import br.com.javafy.entity.Headers;
 import br.com.javafy.entity.MusicaEntity;
 import br.com.javafy.exceptions.PlaylistException;
+import br.com.javafy.exceptions.SpotifyException;
 import br.com.javafy.repository.MusicaRepository;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.DeserializationFeature;
@@ -88,5 +90,10 @@ public class MusicaService {
         musicaRepository.saveAll(musicaEntities);
     }
 
+
+    public GeneroDTO listarGenero() throws SpotifyException, PlaylistException {
+        TokenDTO token = getToken();
+        return spotifyClient.getGenre(token.getAutorization());
+    }
 }
 

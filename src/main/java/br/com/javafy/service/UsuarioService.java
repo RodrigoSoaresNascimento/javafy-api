@@ -1,14 +1,14 @@
 package br.com.javafy.service;
 
-import br.com.javafy.dto.UsuarioCreateDTO;
-import br.com.javafy.dto.UsuarioDTO;
-import br.com.javafy.dto.UsuarioRelatorioDTO;
+import br.com.javafy.dto.*;
 import br.com.javafy.entity.UsuarioEntity;
 import br.com.javafy.exceptions.PessoaNaoCadastradaException;
 import br.com.javafy.repository.UsuarioRepository;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
 import org.springframework.stereotype.Service;
 
 import java.sql.SQLException;
@@ -52,6 +52,15 @@ public class UsuarioService {
     public UsuarioDTO findById(Integer id) throws PessoaNaoCadastradaException, SQLException {
 //        return converterUsuario(usuarioRepository.findByID(id));
         return null;
+    }
+
+    public PageDTO<UsuarioDTO> listarUsuariosPorNomePaginado(String nome, Integer pagina, Integer registro){
+        PageRequest pageRequest = PageRequest.of(pagina, registro);
+        Page<UsuarioEntity> page = usuarioRepository.findUsuarioEntitiesByNome(nome, pageRequest);
+        List<UsuarioDTO> usuarioDTOS = page.getContent().stream()
+                .map(usuarioEntity -> objectMapper.convertValue(usuarioEntity, UsuarioDTO.class))
+                .toList();
+        return new PageDTO<>(page.getTotalElements(), page.getTotalPages(), pagina, registro, usuarioDTOS);
     }
 
     public List<UsuarioDTO> list() throws SQLException {
