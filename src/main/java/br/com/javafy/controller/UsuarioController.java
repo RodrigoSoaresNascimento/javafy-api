@@ -1,6 +1,7 @@
 package br.com.javafy.controller;
 
 import br.com.javafy.documentation.DocumentationUsuario;
+import br.com.javafy.dto.PageDTO;
 import br.com.javafy.dto.UsuarioRelatorioDTO;
 import br.com.javafy.service.UsuarioService;
 import br.com.javafy.dto.UsuarioCreateDTO;
@@ -21,7 +22,8 @@ import java.util.List;
 public class UsuarioController implements DocumentationUsuario {
 
     @Autowired
-    UsuarioService usuarioService;
+    private UsuarioService usuarioService;
+
 
     @GetMapping("/{idUser}")
     public ResponseEntity<UsuarioDTO> findById(@PathVariable("idUser") Integer idUser)
@@ -32,6 +34,11 @@ public class UsuarioController implements DocumentationUsuario {
     @GetMapping
     public ResponseEntity<List<UsuarioDTO>> list() throws SQLException {
         return ResponseEntity.ok(usuarioService.list());
+    }
+
+    @GetMapping("usuario-paginado")
+    public PageDTO<UsuarioDTO> listarUsuariosPaginados(String nome, Integer pagina, Integer registro){
+        return usuarioService.listarUsuariosPorNomePaginado(nome, pagina, registro);
     }
 
     @PostMapping
