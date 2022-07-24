@@ -24,20 +24,24 @@ public interface DocumentationComentario {
 
     @Operation(summary = "Lista todos os comentarios pelo seu ID")
     @MagiaResponse
-    public ResponseEntity<List<ComentarioDTO>> list() throws SQLException;
+    public ResponseEntity<List<ComentarioDTO>> list();
 
     @Operation(summary = "Cria um perfil de comentario")
     @MagiaResponse
-    public ResponseEntity<ComentarioDTO> create(@PathVariable("idUser")Integer idUser, @PathVariable("idPlaylist")Integer idPlaylist,
-                                                @Valid @RequestBody ComentarioCreateDTO comentarioCreateDTO) throws SQLException, PessoaNaoCadastradaException;
+    public ResponseEntity<ComentarioDTO> create(@PathVariable("idUser")Integer idUser,
+                                                @PathVariable("idPlaylist")Integer idPlaylist,
+                                                @Valid @RequestBody ComentarioCreateDTO comentarioCreateDTO)
+            throws ComentarioNaoCadastradoException;
 
     @Operation(summary = "Atualiza um comentario pelo seu ID")
     @MagiaResponse
     public ResponseEntity<ComentarioDTO> update(@PathVariable("idComentario") Integer idComentario
-            , @Valid @RequestBody ComentarioCreateDTO comentarioAtualizar) throws ComentarioNaoCadastradoException;
+            , @Valid @RequestBody ComentarioCreateDTO comentarioAtualizar)
+            throws ComentarioNaoCadastradoException;
 
     @Operation(summary = "Apaga comentario pelo seu ID")
     @MagiaResponse
-    public void delete(@PathVariable("idComentario") Integer id) throws PessoaNaoCadastradaException, SQLException;
+    public void delete(@PathVariable("idComentario") Integer id)
+            throws PessoaNaoCadastradaException, SQLException;
 
 }

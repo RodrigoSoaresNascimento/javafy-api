@@ -14,7 +14,7 @@ import java.util.List;
 @NoArgsConstructor
 public class PlayListCreate {
 
-    @Schema(example = "Bota modão")
+    @Schema(example = "Academia musicas")
     @NotEmpty
     private String name;
 

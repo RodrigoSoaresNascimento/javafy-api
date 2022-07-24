@@ -13,4 +13,5 @@ public class ComentarioPlaylistRelatorioDTO {
     private String nomePlaylist;
     private String nomeUsuario;
     private String email;
+
 }

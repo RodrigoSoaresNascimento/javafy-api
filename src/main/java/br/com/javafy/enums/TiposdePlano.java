@@ -3,8 +3,8 @@ package br.com.javafy.enums;
 import java.util.Arrays;
 
 public enum TiposdePlano {
-    PREMIUM(1),
-    FREE(0);
+    PREMIUM(0),
+    FREE(1);
 
     private Integer tipo;
     TiposdePlano(Integer i) {

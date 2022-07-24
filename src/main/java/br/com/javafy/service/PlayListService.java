@@ -7,6 +7,7 @@ import br.com.javafy.dto.playlist.PlaylistAddMusicaDTO;
 import br.com.javafy.entity.MusicaEntity;
 import br.com.javafy.entity.PlayListEntity;
 import br.com.javafy.entity.UsuarioEntity;
+import br.com.javafy.enums.TiposdePlano;
 import br.com.javafy.exceptions.PessoaNaoCadastradaException;
 import br.com.javafy.exceptions.PlaylistException;
 import br.com.javafy.exceptions.SpotifyException;
@@ -51,14 +52,14 @@ public class PlayListService {
                 .orElseThrow(() -> new PlaylistException("Playlist Não Cadastrada"));
     }
 
-    public PlayListDTO getPlaylistWithIdWithMusics (Integer idPlaylist) throws PlaylistException {
-        PlayListEntity playList = retornaPlaylistEntityById(idPlaylist);
-        return getMusicaForPlaylist(playList);
+    public PlayListDTO getPlaylistWithIdWithMusics (Integer idPlaylist)
+            throws PlaylistException {
+        return getMusicaForPlaylist(retornaPlaylistEntityById(idPlaylist));
     }
 
-    public PlayListDTO getPlaylistWithIdWithNotMusics (Integer idPlaylist) throws PlaylistException {
-        PlayListEntity playList = retornaPlaylistEntityById(idPlaylist);
-        return converterParaPlaylistDTO(playList);
+    public PlayListDTO getPlaylistWithIdWithNotMusics (Integer idPlaylist)
+            throws PlaylistException {
+        return converterParaPlaylistDTO(retornaPlaylistEntityById(idPlaylist));
     }
 
     public PageDTO<PlayListDTO> getListPlayList (Integer pagina, Integer registro)  {
@@ -83,6 +84,11 @@ public class PlayListService {
             throws PessoaNaoCadastradaException, PlaylistException, SpotifyException {
 
         UsuarioEntity usuario = usuarioService.retornaUsuarioEntityById(idUsuario);
+
+        if(usuario.getPlano() == TiposdePlano.FREE){
+            throw new PlaylistException("Plano Free, mude seu plano para premium");
+        }
+
         PlayListEntity playList = converterParaPlaylist(playlistCreate);
 
         playList.setUsuario(usuario);
@@ -91,17 +97,13 @@ public class PlayListService {
         return converterParaPlaylistDTO(playList);
     }
 
-    public PlayListDTO update(Integer idPlaylist, PlaylistAddMusicaDTO playlistCreate) throws PlaylistException, SpotifyException {
+    public PlayListDTO update(Integer idPlaylist, PlaylistAddMusicaDTO playlistCreate)
+            throws PlaylistException, SpotifyException {
 
         PlayListEntity playList  = retornaPlaylistEntityById(idPlaylist);
 
-
         if(playlistCreate.getName() != null){
             playList.setName(playlistCreate.getName());
-            System.out.println("MUDANDO " + playList.getName());
-        } else {
-            //playList.setName(playList.getName());
-            System.out.println("Não MUDANDO " + playList.getName());
         }
 
         if(playlistCreate.getMusicas() != null){
@@ -119,23 +121,16 @@ public class PlayListService {
         }
 
         playList = playListRepository.save(playList);
-
-
-
-        //PlayListDTO playListDTO = converterParaPlaylistDTO(playList);
-        //String ids = getIdsForListMusic(playList);
-        //playListDTO.setMusicas(musicaService.getListMusicaPorIds(ids));
-
-        //return playListDTO;
-        return null;
+        return getMusicaForPlaylist(playList);
     }
 
-    public void delete (Integer idPlaylist) throws PessoaNaoCadastradaException, PlaylistException {
-        PlayListEntity playList = retornaPlaylistEntityById(idPlaylist);
-        playListRepository.delete(playList);
+    public void delete (Integer idPlaylist)
+            throws PessoaNaoCadastradaException, PlaylistException {
+        playListRepository.delete(retornaPlaylistEntityById(idPlaylist));
     }
 
-    public void removerMusica (Integer idPlaylist, String idMusica) throws PlaylistException {
+    public void removerMusica (Integer idPlaylist, String idMusica)
+            throws PlaylistException {
 
         PlayListEntity playList = retornaPlaylistEntityById(idPlaylist);
         Set<MusicaEntity> musicaEntities = playList.getMusicas();
@@ -144,7 +139,8 @@ public class PlayListService {
         playListRepository.save(playList);
     }
 
-    private PlayListDTO getMusicaForPlaylist(PlayListEntity playList) throws PlaylistException {
+    private PlayListDTO getMusicaForPlaylist(PlayListEntity playList)
+            throws PlaylistException {
 
         PlayListDTO playListDTO = converterParaPlaylistDTO(playList);
         String ids = playList.getMusicas()

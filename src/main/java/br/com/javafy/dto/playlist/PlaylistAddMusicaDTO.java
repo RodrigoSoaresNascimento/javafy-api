@@ -16,7 +16,7 @@ import java.util.List;
 @ToString
 public class PlaylistAddMusicaDTO {
 
-    @Schema(example = "Bota modão", required = false)
+    @Schema(example = "Musicas para ouvir dormindo", required = false)
     private String name;
 
     @Schema(required = true)

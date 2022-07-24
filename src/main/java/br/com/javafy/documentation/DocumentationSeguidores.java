@@ -2,7 +2,6 @@ package br.com.javafy.documentation;
 
 import br.com.javafy.anotations.MagiaResponse;
 import br.com.javafy.dto.UsuarioDTO;
-import br.com.javafy.dto.playlist.PlayListDTO;
 import br.com.javafy.exceptions.PessoaNaoCadastradaException;
 import io.swagger.v3.oas.annotations.Operation;
 import org.springframework.validation.annotation.Validated;
@@ -14,25 +13,27 @@ import java.util.List;
 @Validated
 public interface DocumentationSeguidores {
 
-    @Operation(summary = "Retorna a lista de seguidores do usuario.")
+    @Operation(summary = "Retorna a lista de quem segue o usuario.")
     @MagiaResponse
     public List<UsuarioDTO> fromUser (@PathVariable Integer idUser)
             throws SQLException, PessoaNaoCadastradaException;
 
     @Operation(summary = "Retorna a lista de quem o usuario está seguindo.")
     @MagiaResponse
-    public List<UsuarioDTO> toUser (@PathVariable Integer idUser) throws SQLException, PessoaNaoCadastradaException;
+    public List<UsuarioDTO> toUser (@PathVariable Integer idUser)
+            throws SQLException, PessoaNaoCadastradaException;
 
-    @Operation(summary = "Segue uma conta de usuario")
+    @Operation(summary = "Seguir usuário.")
     @MagiaResponse
     public Boolean seguirUser (@PathVariable Integer meuId,
                                    @PathVariable Integer idSeguindo)
             throws SQLException, PessoaNaoCadastradaException;
 
-    @Operation(summary = "Deixa de seguir um usuario")
+    @Operation(summary = "Deixa de seguir um usuario.")
     @MagiaResponse
     public void deixarDeSeguirUsuario (@PathVariable Integer meuId,
-            @PathVariable Integer idSeguindo) throws SQLException, PessoaNaoCadastradaException;
+            @PathVariable Integer idSeguindo)
+            throws SQLException, PessoaNaoCadastradaException;
 
 
 }

@@ -28,7 +28,6 @@ public class EmailService {
     @Value("${spring.mail.username}")
     private String from;
 
-
     public void sendEmail(UsuarioDTO usuarioDTO, String tipoMensagem) {
         MimeMessage mimeMessage = emailSender.createMimeMessage();
         try {
@@ -59,6 +58,7 @@ public class EmailService {
         dados.put("id", usuarioDTO.getIdUsuario());
         dados.put("email", from);
         Template template;
+
         if(tipoMensagem.equals(TipoDeMensagem.CREATE.getTipoDeMensagem())){
             template = fmConfiguration.getTemplate("email_boas_vindas-template.ftl");
         }else if (tipoMensagem.equals(TipoDeMensagem.UPDATE.getTipoDeMensagem())){
@@ -67,8 +67,7 @@ public class EmailService {
             template = fmConfiguration.getTemplate("email_deletar_endereco-template.ftl");
         }
 
-        String html = FreeMarkerTemplateUtils.processTemplateIntoString(template, dados);
-        return html;
+        return FreeMarkerTemplateUtils.processTemplateIntoString(template, dados);
     }
 
 }

@@ -1,6 +1,7 @@
 package br.com.javafy.dto.playlist;
 
 import br.com.javafy.dto.spotify.musica.MusicaFullDTO;
+import io.swagger.v3.oas.annotations.media.Schema;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
@@ -20,9 +21,9 @@ public class PlayListDTO {
     private Integer idPlaylist;
 
     @NotEmpty
+    @Schema(example = "Para ouvir pedalando")
     private String name;
 
     List<MusicaFullDTO> musicas;
-
 
 }
