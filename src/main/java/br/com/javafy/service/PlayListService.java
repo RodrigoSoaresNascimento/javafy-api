@@ -96,10 +96,12 @@ public class PlayListService {
         PlayListEntity playList  = retornaPlaylistEntityById(idPlaylist);
 
 
-        if(playlistCreate.getName() == null){
+        if(playlistCreate.getName() != null){
             playList.setName(playlistCreate.getName());
+            System.out.println("MUDANDO " + playList.getName());
         } else {
-            playList.setName(playList.getName());
+            //playList.setName(playList.getName());
+            System.out.println("Não MUDANDO " + playList.getName());
         }
 
         if(playlistCreate.getMusicas() != null){
