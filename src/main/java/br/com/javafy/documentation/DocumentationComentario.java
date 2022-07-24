@@ -19,7 +19,7 @@ import java.util.List;
 public interface DocumentationComentario {
     @Operation(summary = "Procura um comentario pelo seu ID")
     @MagiaResponse
-    public ResponseEntity<ComentarioDTO> findById(@PathVariable("idUser") Integer idUser)
+    public ResponseEntity<ComentarioDTO> findById(@PathVariable("idComentario") Integer idUser)
             throws SQLException, PessoaNaoCadastradaException, ComentarioNaoCadastradoException;
 
     @Operation(summary = "Lista todos os comentarios pelo seu ID")

@@ -3,10 +3,9 @@ package br.com.javafy.service;
 
 import br.com.javafy.client.spotify.SpotifyAuthorization;
 import br.com.javafy.client.spotify.SpotifyClient;
-import br.com.javafy.dto.spotify.ArtistaDTO;
-import br.com.javafy.dto.spotify.MusicaDTO;
-import br.com.javafy.dto.spotify.MusicaFullDTO;
+import br.com.javafy.dto.spotify.artista.ArtistaDTO;
 import br.com.javafy.dto.spotify.TokenDTO;
+import br.com.javafy.dto.spotify.musica.MusicaDTO;
 import br.com.javafy.entity.Headers;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.DeserializationFeature;

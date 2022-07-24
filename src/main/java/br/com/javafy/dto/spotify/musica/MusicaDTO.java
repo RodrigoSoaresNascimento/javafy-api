@@ -1,4 +1,4 @@
-package br.com.javafy.dto.spotify;
+package br.com.javafy.dto.spotify.musica;
 
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.fasterxml.jackson.annotation.JsonProperty;

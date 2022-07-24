@@ -1,7 +1,7 @@
 package br.com.javafy.documentation;
 
 import br.com.javafy.anotations.MagiaResponse;
-import br.com.javafy.dto.spotify.ArtistaDTO;
+import br.com.javafy.dto.spotify.artista.ArtistaDTO;
 import io.swagger.v3.oas.annotations.Operation;
 import org.springframework.web.bind.annotation.PathVariable;
 

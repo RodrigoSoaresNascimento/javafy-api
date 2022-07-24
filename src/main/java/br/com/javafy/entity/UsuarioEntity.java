@@ -63,6 +63,14 @@ public class UsuarioEntity {
                 orphanRemoval = true)
     private Set<PlayListEntity> playlist;
 
+    @JsonIgnore
+    @OneToMany(fetch = FetchType.LAZY,
+            cascade = CascadeType.ALL,
+            mappedBy = "usuarioEntity",
+            orphanRemoval = true
+    )
+    private Set<ComentarioEntity> comentarios;
+
     @Override
     public String toString() {
         return "UsuarioEntity{" +

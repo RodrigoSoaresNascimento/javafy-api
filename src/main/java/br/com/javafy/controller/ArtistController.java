@@ -1,9 +1,9 @@
 package br.com.javafy.controller;
 
 import br.com.javafy.documentation.DocumentationArtista;
-import br.com.javafy.dto.spotify.ArtistaDTO;
-import br.com.javafy.dto.spotify.MusicaDTO;
-import br.com.javafy.dto.spotify.MusicaFullDTO;
+
+import br.com.javafy.dto.spotify.artista.ArtistaDTO;
+import br.com.javafy.dto.spotify.musica.MusicaDTO;
 import br.com.javafy.service.ArtistaService;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -30,7 +30,7 @@ public class ArtistController implements DocumentationArtista {
         return service.getList();
     }
 
-    @GetMapping("/{id}/top-tracks/{market}")
+    @GetMapping("/{id}/{market}")
     public List<MusicaDTO> getTopTracksArtists(@PathVariable("id") String id, @PathVariable("market") String pais) throws JsonProcessingException {
         return service.searchArtist(id,pais);
     }

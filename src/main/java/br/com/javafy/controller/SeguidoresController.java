@@ -17,13 +17,12 @@ public class SeguidoresController implements DocumentationSeguidores {
     @Autowired
     SeguidoresService service;
 
-    //todo -> corrigir o nome no schema no tipo de pesquisa
-    @GetMapping(value = "/from-user/{idUser}")//quem eu sigo
+    @GetMapping(value = "/to-user/{idUser}")
     public List<UsuarioDTO> fromUser(@PathVariable("idUser") Integer idUser) throws PessoaNaoCadastradaException {
         return  service.getAllSeguindo(idUser);
     }
 
-    @GetMapping(value = "/to-user/{idUser}") // quem estou seguindo
+    @GetMapping(value = "/from-user/{idUser}")
     public List<UsuarioDTO> toUser(@PathVariable("idUser") Integer idUser) throws PessoaNaoCadastradaException {
         return service.getAllSeguidores(idUser);
     }

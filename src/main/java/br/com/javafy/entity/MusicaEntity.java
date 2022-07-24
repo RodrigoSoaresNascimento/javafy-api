@@ -7,29 +7,40 @@ import lombok.NoArgsConstructor;
 import lombok.Setter;
 
 import javax.persistence.*;
-import java.util.HashSet;
+import java.util.Objects;
 import java.util.Set;
 
 @Getter
 @Setter
 @AllArgsConstructor
 @NoArgsConstructor
-@Entity(name = "musicas")
+@Entity(name = "musica")
 public class MusicaEntity {
 
     @Id
     @Column(name = "id_musica")
     private String idMusica;
 
-
     @JsonIgnore
-    @ManyToMany(fetch = FetchType.LAZY, cascade = CascadeType.MERGE)
-    @JoinTable(name = "listademusicas",
-            joinColumns = @JoinColumn(name = "id_musica"),
-            inverseJoinColumns = @JoinColumn(name = "id_playlist")
+    @ManyToMany(fetch = FetchType.LAZY, mappedBy = "musicas")
+//    @JoinTable(name = "playlist_musica",
+//            joinColumns = @JoinColumn(name="id_musica"),
+//            inverseJoinColumns = @JoinColumn(name="id_playlist")
+//    )
+    private Set<PlayListEntity> playLists;
 
-    )
-    private Set<MusicaEntity> musicas;
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+        MusicaEntity that = (MusicaEntity) o;
+        return Objects.equals(idMusica, that.idMusica);
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(idMusica);
+    }
 
     @Override
     public String toString() {

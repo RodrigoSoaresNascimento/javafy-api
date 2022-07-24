@@ -5,6 +5,7 @@ import io.swagger.v3.oas.annotations.media.Schema;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
+import lombok.ToString;
 
 import javax.validation.constraints.NotEmpty;
 import java.util.List;
@@ -12,10 +13,12 @@ import java.util.List;
 @Data
 @AllArgsConstructor
 @NoArgsConstructor
-public class PlayListCreate {
+@ToString
+public class PlaylistAddMusicaDTO {
 
-    @Schema(example = "Bota modão")
-    @NotEmpty
+    @Schema(example = "Bota modão", required = false)
     private String name;
 
+    @Schema(required = true)
+    List<MusicaCreateDTO> musicas;
 }

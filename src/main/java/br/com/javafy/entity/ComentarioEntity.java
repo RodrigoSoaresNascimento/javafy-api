@@ -30,4 +30,5 @@ public class ComentarioEntity {
     @JoinColumn(name = "id_user",
             referencedColumnName = "id_user")
     private UsuarioEntity usuarioEntity;
+
 }

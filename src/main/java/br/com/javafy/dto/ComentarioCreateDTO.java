@@ -10,17 +10,19 @@ import javax.validation.constraints.Size;
 @Data
 public class ComentarioCreateDTO {
 
-    @Schema(description = "Identificador unico da playlist")
+    @Schema(hidden = true)
     private Integer idPlaylist;
 
-    @Schema(description = "Identificador unico do usuario")
+    @Schema(hidden = true)
     private Integer idUser;
 
-    @Schema(description = "Comentario sobre a playlist")
+    @Schema(example = "Musica muito elétrica")
     @Size(max = 255)
     private String comentario;
 
+    @Schema(hidden = true)
     private PlayListEntity playList;
 
+    @Schema(hidden = true)
     private UsuarioEntity usuarioEntity;
 }
