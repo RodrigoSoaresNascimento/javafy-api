@@ -4,6 +4,8 @@ package br.com.javafy.service;
 import br.com.javafy.client.spotify.SpotifyAuthorization;
 import br.com.javafy.client.spotify.SpotifyClient;
 import br.com.javafy.dto.spotify.ArtistaDTO;
+import br.com.javafy.dto.spotify.MusicaDTO;
+import br.com.javafy.dto.spotify.MusicaFullDTO;
 import br.com.javafy.dto.spotify.TokenDTO;
 import br.com.javafy.entity.Headers;
 import com.fasterxml.jackson.core.JsonProcessingException;
@@ -66,14 +68,9 @@ public class ArtistaService {
         return spotifyClient.getArtists(tokenDTO.getAutorization(), ids).get("artists");
     }
 
-    public List<ArtistaDTO> searchArtist(String query) throws JsonProcessingException {
+    public List<MusicaDTO> searchArtist(String id, String pais) throws JsonProcessingException {
         TokenDTO tokenDTO = getToken();
-        var t = spotifyClient.search(
-                tokenDTO.getAutorization(),
-                query.replace(" ", "+"),
-                "artists"
-        ).get("artists");
-        return convertJsonToArtistaDTO(t);
+       return spotifyClient.getArtistTopTracks(tokenDTO.getAutorization(), id, pais).get("artists");
     }
 
 }
