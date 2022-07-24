@@ -1,6 +1,7 @@
 package br.com.javafy.controller;
 
 import br.com.javafy.documentation.DocumentationMusica;
+import br.com.javafy.dto.spotify.genero.GeneroDTO;
 import br.com.javafy.dto.spotify.musica.MusicaDTO;
 import br.com.javafy.dto.spotify.musica.MusicaFullDTO;
 import br.com.javafy.exceptions.SpotifyException;
@@ -20,6 +21,7 @@ public class MusicaController implements DocumentationMusica {
     @Autowired
     private MusicaService musicaService;
 
+
     @GetMapping("/{id}")
     public MusicaFullDTO musicById(@PathVariable("id") String id) throws SpotifyException {
         return musicaService.musicById(id);
@@ -32,4 +34,8 @@ public class MusicaController implements DocumentationMusica {
         return musicaService.searchMusic(query);
     }
 
+    @GetMapping("/genero")
+    public GeneroDTO listaGenero() throws SpotifyException {
+        return musicaService.listarGenero();
+    }
 }

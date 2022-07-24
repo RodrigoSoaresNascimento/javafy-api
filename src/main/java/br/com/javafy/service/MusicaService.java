@@ -3,6 +3,7 @@ package br.com.javafy.service;
 import br.com.javafy.client.spotify.SpotifyAuthorization;
 import br.com.javafy.client.spotify.SpotifyClient;
 import br.com.javafy.dto.playlist.PlayListCreate;
+import br.com.javafy.dto.spotify.genero.GeneroDTO;
 import br.com.javafy.dto.spotify.musica.MusicaCreateDTO;
 import br.com.javafy.dto.spotify.musica.MusicaDTO;
 import br.com.javafy.dto.spotify.musica.MusicaFullDTO;
@@ -94,8 +95,9 @@ public class MusicaService {
         return musicaFullDTOS;
     }
 
-
-
-
+    public GeneroDTO listarGenero() throws SpotifyException {
+        TokenDTO token = getToken();
+        return spotifyClient.getGenre(token.getAutorization());
+    }
 }
 
