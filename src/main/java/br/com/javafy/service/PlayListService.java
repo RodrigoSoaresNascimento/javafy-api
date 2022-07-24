@@ -1,25 +1,26 @@
 package br.com.javafy.service;
 
+import br.com.javafy.dto.PageDTO;
 import br.com.javafy.dto.playlist.PlayListCreate;
 import br.com.javafy.dto.playlist.PlayListDTO;
-import br.com.javafy.dto.playlist.PlayListUpdate;
-import br.com.javafy.dto.spotify.musica.MusicaFullDTO;
+import br.com.javafy.dto.playlist.PlaylistAddMusicaDTO;
+import br.com.javafy.entity.MusicaEntity;
 import br.com.javafy.entity.PlayListEntity;
-import br.com.javafy.entity.PlaylistMusicaEntity;
 import br.com.javafy.entity.UsuarioEntity;
-import br.com.javafy.entity.pk.PlaylistMusicaPK;
 import br.com.javafy.exceptions.PessoaNaoCadastradaException;
 import br.com.javafy.exceptions.PlaylistException;
 import br.com.javafy.exceptions.SpotifyException;
 import br.com.javafy.repository.PlayListRepository;
-import br.com.javafy.repository.PlaylistMusicaRepository;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
 import org.springframework.stereotype.Service;
 
-import java.sql.SQLException;
-import java.util.*;
+import java.util.List;
+import java.util.Set;
 import java.util.stream.Collectors;
+
 
 @Service
 public class PlayListService {
@@ -29,12 +30,6 @@ public class PlayListService {
 
     @Autowired
     private PlayListRepository playListRepository;
-
-    @Autowired
-    private PlaylistMusicaRepository playlistMusicaRepository;
-
-    @Autowired
-    private PlayListMusicaService playListMusicaService;
 
     @Autowired
     private MusicaService musicaService;
@@ -56,84 +51,72 @@ public class PlayListService {
                 .orElseThrow(() -> new PlaylistException("Playlist Não Cadastrada"));
     }
 
-    public PlayListDTO getPlaylistWithIdWithMusics (Integer idPlayList) throws PlaylistException, SpotifyException {
-        return null;
-//        return retornarPlaylistComMusicas(
-//                retornaPlaylistEntityById(idPlayList),
-//                "buscar por id"
-//        );
+    public PlayListDTO getPlaylistWithIdWithMusics (Integer idPlaylist) throws PlaylistException {
+        PlayListEntity playList = retornaPlaylistEntityById(idPlaylist);
+        return getMusicaForPlaylist(playList);
     }
 
-    public PlayListDTO getPlaylistWithIdWithNotMusics (Integer idPlayList) throws PlaylistException {
-        return converterParaPlaylistDTO(retornaPlaylistEntityById(idPlayList));
+    public PlayListDTO getPlaylistWithIdWithNotMusics (Integer idPlaylist) throws PlaylistException {
+        PlayListEntity playList = retornaPlaylistEntityById(idPlaylist);
+        return converterParaPlaylistDTO(playList);
     }
 
-    public List<PlayListDTO> getListPlayList () throws PlaylistException {
-        return playListRepository.findAll()
+    public PageDTO<PlayListDTO> getListPlayList (Integer pagina, Integer registro)  {
+        PageRequest pageRequest = PageRequest.of(pagina, registro);
+        Page<PlayListEntity> page=  playListRepository.findAll(pageRequest);
+        List<PlayListDTO> playlistsDTOs = page.getContent()
                 .stream()
-                .map(this::converterParaPlaylistDTO)
+                .map(p-> {
+                    try {
+                        return getMusicaForPlaylist(p);
+                    } catch (PlaylistException e) {
+                        e.printStackTrace();
+                    }
+                    return null;
+                })
                 .toList();
+        return new PageDTO<>(page.getTotalElements(),
+                page.getTotalPages(), pagina, registro, playlistsDTOs);
     }
-
 
     public PlayListDTO create (PlayListCreate playlistCreate, Integer idUsuario)
             throws PessoaNaoCadastradaException, PlaylistException, SpotifyException {
+
         UsuarioEntity usuario = usuarioService.retornaUsuarioEntityById(idUsuario);
         PlayListEntity playList = converterParaPlaylist(playlistCreate);
-        playList.setUsuario(usuario);
 
+        playList.setUsuario(usuario);
         playList = playListRepository.save(playList);
 
-        List<MusicaFullDTO> musicaDTOList = new ArrayList<>();
-        Set<PlaylistMusicaEntity> listMusicas = new HashSet<>();
-
-        if(playlistCreate.getMusicas() != null) {
-            PlayListEntity finalPlayList = playList;
-            musicaDTOList = musicaService.getMusicasValidas(playlistCreate.getMusicas());
-
-            listMusicas = musicaService
-                    .getMusicasValidas(playlistCreate.getMusicas())
-                    .stream()
-                    .map(m -> new
-                            PlaylistMusicaEntity(new PlaylistMusicaPK(m.getIdMusica(), finalPlayList))
-                    )
-                    .collect(Collectors.toSet());
-        }
-
-        playList.setListaMusica(listMusicas);
-        playListRepository.save(playList);
-
-        PlayListDTO playListDTO = converterParaPlaylistDTO(playList);
-        playListDTO.setMusicas(musicaDTOList);
-        return playListDTO;
-
+        return converterParaPlaylistDTO(playList);
     }
 
-    public PlayListDTO update(PlayListCreate playListCreate, Integer idPlaylist) throws PlaylistException, SpotifyException {
+    public PlayListDTO update(Integer idPlaylist, PlaylistAddMusicaDTO playlistCreate) throws PlaylistException, SpotifyException {
 
         PlayListEntity playList  = retornaPlaylistEntityById(idPlaylist);
-        playList.setName(playListCreate.getName());
 
+        System.out.println(playList.getIdPlaylist());
 
-        List<MusicaFullDTO> musicaDTOList = new ArrayList<>();
-        Set<PlaylistMusicaEntity> listMusicas = new HashSet<>();
-        playList = playListRepository.save(playList);
-
-        if(playListCreate.getMusicas() != null) {
-            PlayListEntity finalPlayList = playList;
-            musicaDTOList = musicaService.getMusicasValidas(playListCreate.getMusicas());
-
-            listMusicas =
-                    musicaDTOList
-                    .stream()
-                    .map(m -> new
-                            PlaylistMusicaEntity(new PlaylistMusicaPK(m.getIdMusica(), finalPlayList))
-                    )
-                    .collect(Collectors.toSet());
+        if(playlistCreate.getName() == null){
+            playList.setName(playlistCreate.getName());
         }
 
-        listMusicas.addAll(playList.getListaMusica());
-        playlistMusicaRepository.saveAll(listMusicas);
+        if(playlistCreate.getMusicas() != null){
+            PlayListEntity finalPlayList = playList;
+
+            Set<MusicaEntity> playlistMusicaEntities = playlistCreate.getMusicas()
+                    .stream()
+                    .map(m-> new MusicaEntity(m.getIdMusica(), Set.of(finalPlayList)))
+                    .collect(Collectors.toSet());
+
+            musicaService.saveMusicaRepository(playlistMusicaEntities);
+            Set<MusicaEntity> pla = playList.getMusicas();
+            pla.addAll(playlistMusicaEntities);
+            playList.setMusicas(pla);
+        }
+
+        playList = playListRepository.save(playList);
+
 
 
         //PlayListDTO playListDTO = converterParaPlaylistDTO(playList);
@@ -144,82 +127,32 @@ public class PlayListService {
         return null;
     }
 
-    public PlayListDTO updateAddMusica(Integer idPlaylist, PlayListUpdate playListUpdate) throws PlaylistException, SpotifyException {
+    public void delete (Integer idPlaylist) throws PessoaNaoCadastradaException, PlaylistException {
         PlayListEntity playList = retornaPlaylistEntityById(idPlaylist);
-
-
-        List<MusicaFullDTO> musicaDTOList = new ArrayList<>();
-        Set<PlaylistMusicaEntity> listMusicas = new HashSet<>();
-
-        if(playListUpdate.getMusicas() != null) {
-            PlayListEntity finalPlayList = playList;
-            musicaDTOList = musicaService.getMusicasValidas(playListUpdate.getMusicas());
-
-            listMusicas =
-                    musicaDTOList
-                            .stream()
-                            .map(m -> new
-                                    PlaylistMusicaEntity(new PlaylistMusicaPK(m.getIdMusica(), finalPlayList))
-                            )
-                            .collect(Collectors.toSet());
-        }
-
-        playlistMusicaRepository.saveAll(listMusicas);
-
-        return null;
+        playListRepository.delete(playList);
     }
 
     public void removerMusica (Integer idPlaylist, String idMusica) throws PlaylistException {
 
         PlayListEntity playList = retornaPlaylistEntityById(idPlaylist);
-
-        Optional<PlaylistMusicaEntity> playlistOption =
-            playlistMusicaRepository.findById(new PlaylistMusicaPK(idMusica, playList));
-
-        playlistMusicaRepository.delete(playlistOption.orElseThrow(()-> new PlaylistException("Error ao remover musica")));
-
+        Set<MusicaEntity> musicaEntities = playList.getMusicas();
+        musicaEntities.removeIf(m-> idMusica.equals(m.getIdMusica()));
+        playList.setMusicas(musicaEntities);
+        playListRepository.save(playList);
     }
 
-    public void delete (Integer idPlaylist) throws PessoaNaoCadastradaException, SQLException {
-        PlayListEntity playList = retornaPlaylistEntityById(idPlaylist);
-        playlistMusicaRepository.deleteAll(playList.getListaMusica());
-        playListRepository.delete(playList);
+    private PlayListDTO getMusicaForPlaylist(PlayListEntity playList) throws PlaylistException {
+
+        PlayListDTO playListDTO = converterParaPlaylistDTO(playList);
+        String ids = playList.getMusicas()
+                .stream().map(MusicaEntity::getIdMusica)
+                .collect(Collectors.joining(","));
+
+        if(!ids.isEmpty()){
+            playListDTO.setMusicas(musicaService.getList(ids));
+        }
+        return playListDTO;
 
     }
-
-
-
-//    private void addMusicaInPlaylist(List<MusicaCreateDTO> playListCreate, PlayListEntity playList) throws SpotifyException {
-//        Set<MusicaEntity> musicasEntity;
-//        musicasEntity= musicaService
-//                .getMusicasValidas(playListCreate)
-//                .stream()
-//                .map(m -> new MusicaEntity(m.getIdMusica(), Set.of()))
-//                .collect(Collectors.toSet());
-//        musicasEntity.addAll(playList.getMusicas());
-//        playList.setMusicas(musicasEntity);
-//    }
-//
-//    private PlayListDTO retornarPlaylistComMusicas(PlayListEntity playList, String tipoDeServico) throws PlaylistException, SpotifyException {
-//
-//        try {
-//            playList = playListRepository.save(playList);
-//        } catch (Exception e){
-//            throw new PlaylistException("Error ao " + tipoDeServico + " a playlist.");
-//        }
-//
-//        PlayListDTO playListDTO = converterParaPlaylistDTO(playList);
-//        //String ids = getIdsForListMusic(playList);
-//        //playListDTO.setMusicas(musicaService.getListMusicaPorIds(ids));
-//
-//        return playListDTO;
-//    }
-//
-//    private String getIdsForListMusic(PlayListEntity playList) {
-//        return playList.getMusicas()
-//                .stream()
-//                .map(MusicaEntity::getIdMusica)
-//                .collect(Collectors.joining(","));
-//    }
 
 }

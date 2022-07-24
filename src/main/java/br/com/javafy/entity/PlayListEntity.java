@@ -35,13 +35,19 @@ public class PlayListEntity {
     private UsuarioEntity usuario;
 
     @JsonIgnore
-    @OneToMany(fetch = FetchType.LAZY, cascade = CascadeType.ALL, orphanRemoval = true)
-    @JoinColumn(name = "id_playlist", referencedColumnName = "id_playlist")
-    private Set<PlaylistMusicaEntity> listaMusica;
-
+    @ManyToMany(fetch = FetchType.LAZY)
+    @JoinTable(name = "playlist_musica",
+            joinColumns = @JoinColumn(name="id_playlist"),
+            inverseJoinColumns = @JoinColumn(name="id_musica")
+    )
+    private Set<MusicaEntity> musicas;
 
     @JsonIgnore
-    @OneToMany(mappedBy = "playList",fetch = FetchType.LAZY, cascade = CascadeType.MERGE)
+    @OneToMany(
+            mappedBy = "playList",
+            fetch = FetchType.LAZY,
+            cascade = CascadeType.ALL,
+            orphanRemoval = true)
     private Set<ComentarioEntity> comentarios;
 
     @Override

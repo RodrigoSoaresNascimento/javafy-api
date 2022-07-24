@@ -1,8 +1,10 @@
 package br.com.javafy.documentation;
 
 import br.com.javafy.anotations.MagiaResponse;
+import br.com.javafy.dto.PageDTO;
 import br.com.javafy.dto.playlist.PlayListCreate;
 import br.com.javafy.dto.playlist.PlayListDTO;
+import br.com.javafy.dto.playlist.PlaylistAddMusicaDTO;
 import br.com.javafy.exceptions.PessoaNaoCadastradaException;
 import br.com.javafy.exceptions.PlaylistException;
 import br.com.javafy.exceptions.SpotifyException;
@@ -30,9 +32,9 @@ public interface DocumentationPlaylist {
             Integer idPlaylist) throws PlaylistException;
 
 
-    @Operation(summary = "Retorna uma lista de playlist.")
+    @Operation(summary = "Retorna uma lista de playlist paginada.")
     @MagiaResponse
-    public ResponseEntity<List<PlayListDTO>> getListPlayList()
+    public PageDTO<PlayListDTO> getListPlayList(Integer pagina, Integer qtRegistro)
             throws PlaylistException;
 
 
@@ -44,9 +46,9 @@ public interface DocumentationPlaylist {
 
     @Operation(summary = "Atualiza uma playlist.")
     @MagiaResponse
-    public ResponseEntity<PlayListDTO> update (@Valid @RequestBody PlayListCreate playListCreate,
-                               @PathVariable Integer idPlaylist )
-            throws SQLException;
+    public ResponseEntity<PlayListDTO> update (@PathVariable Integer idPlaylist,
+                                               @Valid @RequestBody PlaylistAddMusicaDTO playlist)
+            throws PlaylistException, SpotifyException;
 
 
     @Operation(summary = "Deleta uma playlist.")

@@ -2,9 +2,11 @@ package br.com.javafy.controller;
 
 
 import br.com.javafy.documentation.DocumentationPlaylist;
+import br.com.javafy.dto.PageDTO;
 import br.com.javafy.dto.playlist.PlayListCreate;
 import br.com.javafy.dto.playlist.PlayListDTO;
 import br.com.javafy.dto.playlist.PlayListUpdate;
+import br.com.javafy.dto.playlist.PlaylistAddMusicaDTO;
 import br.com.javafy.exceptions.PessoaNaoCadastradaException;
 import br.com.javafy.exceptions.PlaylistException;
 import br.com.javafy.exceptions.SpotifyException;
@@ -35,13 +37,14 @@ public class PlaylistController implements DocumentationPlaylist{
     @GetMapping("/filtrada-por-id-sem-musicas/{idPlaylist}")
     public ResponseEntity<PlayListDTO> getPlaylistWithIdWithNotMusics(@PathVariable Integer idPlaylist)
             throws PlaylistException {
+
         return ResponseEntity.ok(playListService.getPlaylistWithIdWithNotMusics(idPlaylist));
     }
 
     @GetMapping("/list")
-    public ResponseEntity<List<PlayListDTO>> getListPlayList()
+    public PageDTO<PlayListDTO> getListPlayList(Integer pagina, Integer qtRegistro)
             throws PlaylistException {
-        return ResponseEntity.ok(playListService.getListPlayList());
+        return playListService.getListPlayList(pagina, qtRegistro);
     }
 
     @Override
@@ -51,17 +54,13 @@ public class PlaylistController implements DocumentationPlaylist{
         return playListService.create(playListCreate, idUsuario);
     }
 
+    @Override
     @PutMapping("/{idPlaylist}")
-    public ResponseEntity<PlayListDTO> update(@Valid PlayListCreate playListCreate, Integer idPlaylist)
-            throws SQLException {
-        return ResponseEntity.ok(playListService.update(playListCreate, idPlaylist));
-    }
+    public ResponseEntity<PlayListDTO> update(
+            @PathVariable Integer idPlaylist,
+            @Valid @RequestBody PlaylistAddMusicaDTO playlist) throws PlaylistException, SpotifyException {
 
-    @PutMapping("/{idPlaylist}/adicionar-musica")
-    public ResponseEntity<PlayListDTO> updateAddMusica(@PathVariable Integer idPlaylist,
-                                                       @Valid @RequestBody PlayListUpdate playListUpdate)
-            throws SQLException {
-        return ResponseEntity.ok(playListService.updateAddMusica(idPlaylist, playListUpdate));
+        return ResponseEntity.ok(playListService.update(idPlaylist, playlist));
     }
 
     @DeleteMapping("/{idPlayList}")
@@ -72,8 +71,7 @@ public class PlaylistController implements DocumentationPlaylist{
 
     @DeleteMapping("/{idPlayList}/musica/{idMusica}")
     public void removeMusica(@PathVariable Integer idPlayList,@PathVariable String idMusica)
-            throws SQLException, PessoaNaoCadastradaException
-    {
+            throws PlaylistException {
         playListService.removerMusica(idPlayList, idMusica);
     }
 
