@@ -15,26 +15,29 @@ import java.sql.SQLException;
 import java.util.List;
 @Validated
 public interface DocumentationUsuario {
+
     @Operation(summary = "Procura um usuario pelo seu ID")
     @MagiaResponse
     public ResponseEntity<UsuarioDTO> findById(@PathVariable("idUser") Integer idUser)
-            throws SQLException, PessoaNaoCadastradaException;
+            throws PessoaNaoCadastradaException;
 
-    @Operation(summary = "Lista todos os usuarios pelo seu ID")
+    @Operation(summary = "Lista todos os usuarios")
     @MagiaResponse
-    public ResponseEntity<List<UsuarioDTO>> list() throws SQLException;
+    public ResponseEntity<List<UsuarioDTO>> list();
 
     @Operation(summary = "Cria um perfil de usuario")
     @MagiaResponse
-    public ResponseEntity<UsuarioDTO> create(@Valid @RequestBody UsuarioCreateDTO usuario) throws SQLException;
+    public ResponseEntity<UsuarioDTO> create(@Valid @RequestBody UsuarioCreateDTO usuario);
 
     @Operation(summary = "Atualiza um perfil de usuario pelo seu ID")
     @MagiaResponse
-    public ResponseEntity<UsuarioDTO> update(@PathVariable("idUser") Integer id
-            , @Valid @RequestBody UsuarioCreateDTO usuario) throws PessoaNaoCadastradaException, SQLException;
+    public ResponseEntity<UsuarioDTO> update(@PathVariable("idUser") Integer id,
+            @Valid @RequestBody UsuarioCreateDTO usuario)
+            throws PessoaNaoCadastradaException;
 
     @Operation(summary = "Apaga um perfil de usuario pelo seu ID")
     @MagiaResponse
-    public void delete(@PathVariable("idUser") Integer id) throws PessoaNaoCadastradaException, SQLException;
+    public void delete(@PathVariable("idUser") Integer id)
+            throws PessoaNaoCadastradaException;
 
     }

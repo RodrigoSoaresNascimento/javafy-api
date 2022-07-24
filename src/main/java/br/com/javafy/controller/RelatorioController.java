@@ -1,7 +1,9 @@
 package br.com.javafy.controller;
 
 import br.com.javafy.dto.ComentarioPlaylistRelatorioDTO;
+import br.com.javafy.dto.UsuarioRelatorioDTO;
 import br.com.javafy.service.ComentarioService;
+import br.com.javafy.service.UsuarioService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -17,11 +19,21 @@ import java.util.List;
 public class RelatorioController {
 
     @Autowired
-    ComentarioService service;
+    private ComentarioService comentarioService;
+
+    @Autowired
+    private UsuarioService usuarioService;
 
     @GetMapping("/comentarios-playlist")
-    public List<ComentarioPlaylistRelatorioDTO> relatorioComentarioPlaylist(@RequestParam(required = false) Integer idUsuario){
-        return service.relatorioComentarioPlaylist(idUsuario);
+    public List<ComentarioPlaylistRelatorioDTO>
+    relatorioComentarioPlaylist(@RequestParam(required = false) Integer idUsuario){
+        return comentarioService.relatorioComentarioPlaylist(idUsuario);
+    }
+
+    @GetMapping("/relatorio-playlists")
+    public List<UsuarioRelatorioDTO> relatorioPlayList
+            (@RequestParam(required = false) Integer id){
+        return usuarioService.relatorio(id);
     }
 
 }

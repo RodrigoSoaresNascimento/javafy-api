@@ -1,11 +1,11 @@
 package br.com.javafy.service;
 
-
 import br.com.javafy.client.spotify.SpotifyAuthorization;
 import br.com.javafy.client.spotify.SpotifyClient;
 import br.com.javafy.dto.spotify.artista.ArtistaDTO;
 import br.com.javafy.dto.spotify.TokenDTO;
 import br.com.javafy.entity.Headers;
+import br.com.javafy.exceptions.SpotifyException;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.DeserializationFeature;
 import com.fasterxml.jackson.databind.ObjectMapper;
@@ -25,18 +25,21 @@ public class ArtistaService {
     private SpotifyAuthorization spotifyAutorization;
 
     @Autowired
-    ObjectMapper objectMapper;
+    private ObjectMapper objectMapper;
 
     @Autowired
     private Headers headers;
 
-    private TokenDTO getToken(){
-        return spotifyAutorization
-                .authorization(headers.toDados(), headers.getGrantType());
+    private TokenDTO getToken() throws SpotifyException {
+        try {
+            return spotifyAutorization
+                    .authorization(headers.toDados(), headers.getGrantType());
+        } catch (Exception e){
+            throw new SpotifyException("Erro na autenticação do spotify");
+        }
     }
 
-    private List<ArtistaDTO> convertJsonToArtistaDTO(Map<String, Object> artists)
-            throws JsonProcessingException {
+    private List<ArtistaDTO> convertJsonToArtistaDTO(Map<String, Object> artists){
         ObjectMapper mapper = new ObjectMapper();
         mapper.configure(DeserializationFeature.FAIL_ON_UNKNOWN_PROPERTIES, false);
         List<Map<String, Object>> items = (List<Map<String, Object>>) artists.get("items");
@@ -54,24 +57,15 @@ public class ArtistaService {
                 }).toList();
     }
 
-    public ArtistaDTO artistById(String id) {
-        TokenDTO tokenDTO = getToken();
-        return spotifyClient.getArtist(tokenDTO.getAutorization(), id);
-    }
-    //todo -> remover os getList()
-
-    public List<ArtistaDTO> getList() {
-        TokenDTO tokenDTO = getToken();
-        String ids = "2CIMQHirSU0MQqyYHq0eOx,57dN52uHvrHOxijzpIgu3E,1vCWHaC5f2uS3yhpwWbIA6";
-        return spotifyClient.getArtists(tokenDTO.getAutorization(), ids).get("artists");
+    public ArtistaDTO artistById(String id) throws SpotifyException {
+        return spotifyClient.getArtist(getToken().getAutorization(), id);
     }
 
-    public List<ArtistaDTO> searchArtist(String query) throws JsonProcessingException {
-        TokenDTO tokenDTO = getToken();
+    public List<ArtistaDTO> searchArtist(String query) throws SpotifyException {
         var t = spotifyClient.search(
-                tokenDTO.getAutorization(),
+                getToken().getAutorization(),
                 query.replace(" ", "+"),
-                "artists"
+                "artist"
         ).get("artists");
         return convertJsonToArtistaDTO(t);
     }

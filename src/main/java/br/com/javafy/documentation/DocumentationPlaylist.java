@@ -15,7 +15,6 @@ import org.springframework.web.bind.annotation.*;
 
 import javax.validation.Valid;
 import java.sql.SQLException;
-import java.util.List;
 
 @Validated
 public interface DocumentationPlaylist {

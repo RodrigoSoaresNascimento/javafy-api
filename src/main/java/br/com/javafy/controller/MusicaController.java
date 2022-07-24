@@ -5,13 +5,11 @@ import br.com.javafy.dto.spotify.genero.GeneroDTO;
 import br.com.javafy.dto.spotify.musica.MusicaDTO;
 import br.com.javafy.dto.spotify.musica.MusicaFullDTO;
 import br.com.javafy.exceptions.PlaylistException;
-import br.com.javafy.exceptions.SpotifyException;
 import br.com.javafy.service.MusicaService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 
-import java.io.IOException;
 import java.util.List;
 
 @Validated
@@ -23,20 +21,18 @@ public class MusicaController implements DocumentationMusica {
     private MusicaService musicaService;
 
 
-    @GetMapping("/{id}")
-    public MusicaFullDTO musicById(@PathVariable("id") String id) throws SpotifyException, PlaylistException {
+    @GetMapping("/id-do-artista/{id}")
+    public MusicaFullDTO musicById(@PathVariable("id") String id) throws  PlaylistException {
         return musicaService.musicById(id);
     }
 
-    //todo -> retirar o requestbody e adicionar uma string
-    @GetMapping("/buscar")
-    public List<MusicaDTO> searchMusic(String query) throws IOException, SpotifyException, PlaylistException {
-        System.out.println("QUERY");
+    @GetMapping("/buscar-musica")
+    public List<MusicaDTO> searchMusic(String query) throws PlaylistException {
         return musicaService.searchMusic(query);
     }
 
-    @GetMapping("/genero")
-    public GeneroDTO listaGenero() throws SpotifyException, PlaylistException {
+    @GetMapping("/buscar-genero")
+    public GeneroDTO listaGenero() throws PlaylistException {
         return musicaService.listarGenero();
     }
 }

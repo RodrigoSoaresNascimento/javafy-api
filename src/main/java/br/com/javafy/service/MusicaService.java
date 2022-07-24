@@ -9,7 +9,6 @@ import br.com.javafy.dto.spotify.musica.MusicaFullDTO;
 import br.com.javafy.entity.Headers;
 import br.com.javafy.entity.MusicaEntity;
 import br.com.javafy.exceptions.PlaylistException;
-import br.com.javafy.exceptions.SpotifyException;
 import br.com.javafy.repository.MusicaRepository;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.DeserializationFeature;
@@ -46,8 +45,7 @@ public class MusicaService {
         }
     }
 
-    private List<MusicaDTO> convertJsonToMusicaDTO(Map<String, Object> tracks)
-            throws JsonProcessingException {
+    private List<MusicaDTO> convertJsonToMusicaDTO(Map<String, Object> tracks){
         ObjectMapper mapper = new ObjectMapper();
         mapper.configure(DeserializationFeature.FAIL_ON_UNKNOWN_PROPERTIES, false);
         List<Map<String, Object>> items = (List<Map<String, Object>>) tracks.get("items");
@@ -66,34 +64,33 @@ public class MusicaService {
     }
 
     public MusicaFullDTO musicById(String id) throws PlaylistException {
-        TokenDTO tokenDTO = getToken();
-        return spotifyClient.getTrack(tokenDTO.getAutorization(), id);
+        return spotifyClient.getTrack(getToken().getAutorization(), id);
     }
 
     public List<MusicaFullDTO> getList(String ids) throws PlaylistException {
-        System.out.println("NO GET TOKEN");
-        TokenDTO tokenDTO = getToken();
-        return spotifyClient.getTracks(tokenDTO.getAutorization(), ids).get("tracks");
+        return spotifyClient.getTracks(getToken().getAutorization(), ids).get("tracks");
     }
 
-    public List<MusicaDTO> searchMusic(String query) throws JsonProcessingException, PlaylistException {
-        TokenDTO tokenDTO = getToken();
+    public List<MusicaDTO> searchMusic(String query) throws PlaylistException {
         var t = spotifyClient.search(
-                tokenDTO.getAutorization(),
+                getToken().getAutorization(),
                 query.replace(" ", "+"),
                 "track"
         ).get("tracks");
         return convertJsonToMusicaDTO(t);
     }
 
-    public void saveMusicaRepository(Set<MusicaEntity> musicaEntities) {
-        musicaRepository.saveAll(musicaEntities);
+    public void saveMusicaRepository(Set<MusicaEntity> musicaEntities) throws PlaylistException {
+        try {
+            musicaRepository.saveAll(musicaEntities);
+        } catch (Exception e){
+            throw new PlaylistException("Error ao salvar a musica");
+        }
     }
 
-
-    public GeneroDTO listarGenero() throws SpotifyException, PlaylistException {
-        TokenDTO token = getToken();
-        return spotifyClient.getGenre(token.getAutorization());
+    public GeneroDTO listarGenero() throws PlaylistException {
+        return spotifyClient.getGenre(getToken().getAutorization());
     }
+
 }
 

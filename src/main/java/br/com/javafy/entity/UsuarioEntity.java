@@ -33,6 +33,7 @@ public class UsuarioEntity {
     @Column(name = "genero")
     private String genero;
 
+    @Enumerated(EnumType.ORDINAL)
     @Column(name = "premium")
     private TiposdePlano plano;
     @Column(name = "email")
