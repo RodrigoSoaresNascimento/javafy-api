@@ -1,5 +1,7 @@
 package br.com.javafy.controller;
 
+import br.com.javafy.documentation.DocumentationArtista;
+import br.com.javafy.documentation.DocumentationRelatorio;
 import br.com.javafy.dto.ComentarioPlaylistRelatorioDTO;
 import br.com.javafy.dto.UsuarioRelatorioDTO;
 import br.com.javafy.service.ComentarioService;
@@ -16,7 +18,7 @@ import java.util.List;
 @RestController
 @RequestMapping("/relatorios")
 @Validated
-public class RelatorioController {
+public class RelatorioController implements DocumentationRelatorio {
 
     @Autowired
     private ComentarioService comentarioService;

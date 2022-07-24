@@ -1,11 +1,9 @@
 package br.com.javafy.dto;
 
-import br.com.javafy.entity.PlayListEntity;
 import br.com.javafy.enums.TiposdePlano;
+import io.swagger.v3.oas.annotations.media.Schema;
 import lombok.*;
 
-import java.util.List;
-import java.util.Set;
 
 @Getter
 @Setter
@@ -14,8 +12,12 @@ import java.util.Set;
 @ToString
 public class UsuarioRelatorioDTO {
 
+    @Schema(example = "Duda")
     private String nome;
+    @Schema(example = "duda@gmail.com")
     private String email;
+    @Schema(example = "PREMIUM, FREE")
     private TiposdePlano plano;
+    @Schema(example = "Rock")
     private String nomePlaylist;
 }
