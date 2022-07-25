@@ -23,10 +23,6 @@ public class MusicaEntity {
 
     @JsonIgnore
     @ManyToMany(fetch = FetchType.LAZY, mappedBy = "musicas")
-//    @JoinTable(name = "playlist_musica",
-//            joinColumns = @JoinColumn(name="id_musica"),
-//            inverseJoinColumns = @JoinColumn(name="id_playlist")
-//    )
     private Set<PlayListEntity> playLists;
 
     @Override

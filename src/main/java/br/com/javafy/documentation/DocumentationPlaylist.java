@@ -55,4 +55,7 @@ public interface DocumentationPlaylist {
     public void delete (@PathVariable Integer idPlayList) throws SQLException,
             PessoaNaoCadastradaException;
 
+    @Operation(summary = "deleta uma musica de uma playlist")
+    @MagiaResponse
+    void removeMusica(Integer idPlayList,String idMusica ) throws PlaylistException;
 }

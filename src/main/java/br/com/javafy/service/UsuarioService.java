@@ -54,9 +54,9 @@ public class UsuarioService {
         return converterUsuarioDTO(retornaUsuarioEntityById(id));
     }
 
-    public PageDTO<UsuarioDTO> listarUsuariosPorNomePaginado(String nome, Integer pagina, Integer registro){
+    public PageDTO<UsuarioDTO> listarUsuariosPorNomePaginado(Integer pagina, Integer registro){
         PageRequest pageRequest = PageRequest.of(pagina, registro);
-        Page<UsuarioEntity> page = usuarioRepository.findUsuarioEntitiesByNome(nome, pageRequest);
+        Page<UsuarioEntity> page = usuarioRepository.findAll(pageRequest);
         List<UsuarioDTO> usuarioDTOS = page.getContent().stream()
                 .map(usuarioEntity -> objectMapper.convertValue(usuarioEntity, UsuarioDTO.class))
                 .toList();

@@ -34,8 +34,8 @@ public class UsuarioController implements DocumentationUsuario {
     }
 
     @GetMapping("usuario-paginado")
-    public PageDTO<UsuarioDTO> listarUsuariosPaginados(String nome, Integer pagina, Integer registro){
-        return usuarioService.listarUsuariosPorNomePaginado(nome, pagina, registro);
+    public PageDTO<UsuarioDTO> listarUsuariosPaginados( Integer pagina, Integer registro){
+        return usuarioService.listarUsuariosPorNomePaginado(pagina, registro);
     }
 
     @PostMapping

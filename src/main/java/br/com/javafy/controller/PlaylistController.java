@@ -65,8 +65,7 @@ public class PlaylistController implements DocumentationPlaylist{
     }
 
     @DeleteMapping("/remover-playlist/{idPlayList}/musica/{idMusica}")
-    public void removeMusica(@PathVariable Integer idPlayList, @PathVariable String idMusica)
-            throws PlaylistException {
+    public void removeMusica(@PathVariable Integer idPlayList, @PathVariable String idMusica) throws PlaylistException {
         playListService.removerMusica(idPlayList, idMusica);
     }
 

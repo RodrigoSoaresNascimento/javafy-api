@@ -1,6 +1,7 @@
 package br.com.javafy.documentation;
 
 import br.com.javafy.anotations.MagiaResponse;
+import br.com.javafy.dto.PageDTO;
 import br.com.javafy.dto.UsuarioCreateDTO;
 import br.com.javafy.dto.UsuarioDTO;
 import br.com.javafy.exceptions.PessoaNaoCadastradaException;
@@ -39,5 +40,9 @@ public interface DocumentationUsuario {
     @MagiaResponse
     public void delete(@PathVariable("idUser") Integer id)
             throws PessoaNaoCadastradaException;
+
+    @Operation(summary = "Tras a paginação dos usuarios que estão cadastrados no aplicativo")
+    @MagiaResponse
+    PageDTO<UsuarioDTO> listarUsuariosPaginados(Integer pagina, Integer registro);
 
     }
