@@ -7,8 +7,7 @@ import br.com.javafy.dto.usuario.UsuarioDTO;
 import br.com.javafy.dto.usuario.UsuarioRelatorioDTO;
 import br.com.javafy.entity.CargoEntity;
 import br.com.javafy.entity.UsuarioEntity;
-import br.com.javafy.enums.CargosEnum;
-import br.com.javafy.enums.TipoDeMensagem;
+import br.com.javafy.dto.usuario.*;
 import br.com.javafy.exceptions.PessoaNaoCadastradaException;
 import br.com.javafy.repository.CargoRepository;
 import br.com.javafy.repository.UsuarioRepository;
@@ -17,14 +16,13 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
-import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
+import org.springframework.security.core.context.SecurityContextHolder;
+import org.springframework.security.crypto.password.Md4PasswordEncoder;
 import org.springframework.stereotype.Service;
 
 import java.sql.SQLException;
 import java.util.List;
 import java.util.Optional;
-import java.util.Set;
-import java.util.stream.Collectors;
 
 @Service
 @Slf4j
@@ -55,7 +53,7 @@ public class UsuarioService {
     }
 
     private String encodePassword(String password){
-        return new BCryptPasswordEncoder().encode(password);
+        return new Md4PasswordEncoder().encode(password);
     }
 
     public void validUsuario(Integer idUser) throws SQLException, PessoaNaoCadastradaException {
@@ -135,7 +133,8 @@ public class UsuarioService {
         usuario.setDataNascimento(usuarioDTOAtualizar.getDataNascimento());
         usuario.setGenero(usuarioDTOAtualizar.getGenero());
         //usuario.setPlano(usuarioDTOAtualizar.getCargos());
-
+        usuario.setLogin(usuarioDTOAtualizar.getLogin());
+        usuario.setSenha(encodePassword(usuarioDTOAtualizar.getSenha()));
         return converterUsuarioDTO(usuarioRepository.save(usuario));
     }
 
@@ -147,6 +146,31 @@ public class UsuarioService {
 
     public List<UsuarioRelatorioDTO> relatorio (Integer idUsuario){
          return usuarioRepository.relatorioPessoa(idUsuario);
+    }
+
+    public UsuarioLoginDTO getLoggedUser() throws PessoaNaoCadastradaException {
+        return objectMapper.convertValue(findById(getIdLoggedUser()), UsuarioLoginDTO.class);
+    }
+
+    public Integer getIdLoggedUser() {
+        Integer findUserId = (Integer) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
+        return findUserId;
+    }
+
+    public UsuarioUpdateLoginDTO updateLogin (UsuarioUpdateLoginDTO usuario) throws PessoaNaoCadastradaException {
+        UsuarioDTO usuarioDTO = findById(getIdLoggedUser());
+        UsuarioEntity usuarioEntity = converterUsuarioEntity(usuarioDTO);
+        if(usuario.getLogin() != null){
+            usuarioEntity.setLogin(usuario.getLogin());
+        }
+
+        if(usuario.getSenha() != null){
+            usuarioEntity.setSenha(encodePassword(usuario.getSenha()));
+        }
+
+        usuarioRepository.save(usuarioEntity);
+        return objectMapper.convertValue(usuarioEntity, UsuarioUpdateLoginDTO.class);
+        //todo-> criar um serviço de email para informar a senha alterada pelo email
     }
 
 }
