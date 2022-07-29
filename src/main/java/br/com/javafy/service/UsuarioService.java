@@ -3,9 +3,9 @@ package br.com.javafy.service;
 import br.com.javafy.dto.*;
 import br.com.javafy.dto.usuario.UsuarioCreateDTO;
 import br.com.javafy.dto.usuario.UsuarioDTO;
+import br.com.javafy.dto.usuario.UsuarioLoginDTO;
 import br.com.javafy.dto.usuario.UsuarioRelatorioDTO;
 import br.com.javafy.entity.UsuarioEntity;
-import br.com.javafy.enums.TipoDeMensagem;
 import br.com.javafy.exceptions.PessoaNaoCadastradaException;
 import br.com.javafy.repository.UsuarioRepository;
 import com.fasterxml.jackson.databind.ObjectMapper;
@@ -13,7 +13,8 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
-import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
+import org.springframework.security.core.context.SecurityContextHolder;
+import org.springframework.security.crypto.password.Md4PasswordEncoder;
 import org.springframework.stereotype.Service;
 
 import java.sql.SQLException;
@@ -42,7 +43,7 @@ public class UsuarioService {
     }
 
     private String encodePassword(String password){
-        return new BCryptPasswordEncoder().encode(password);
+        return new Md4PasswordEncoder().encode(password);
     }
 
     public void validUsuario(Integer idUser) throws SQLException, PessoaNaoCadastradaException {
@@ -102,7 +103,8 @@ public class UsuarioService {
         usuario.setDataNascimento(usuarioDTOAtualizar.getDataNascimento());
         usuario.setGenero(usuarioDTOAtualizar.getGenero());
         usuario.setPlano(usuarioDTOAtualizar.getPlano());
-
+        usuario.setLogin(usuarioDTOAtualizar.getLogin());
+        usuario.setSenha(encodePassword(usuarioDTOAtualizar.getSenha()));
         return converterUsuarioDTO(usuarioRepository.save(usuario));
     }
 
@@ -114,6 +116,15 @@ public class UsuarioService {
 
     public List<UsuarioRelatorioDTO> relatorio (Integer idUsuario){
          return usuarioRepository.relatorioPessoa(idUsuario);
+    }
+
+    public UsuarioLoginDTO getLoggedUser() throws PessoaNaoCadastradaException {
+        return objectMapper.convertValue(findById(getIdLoggedUser()), UsuarioLoginDTO.class);
+    }
+
+    private Integer getIdLoggedUser() {
+        Integer findUserId = (Integer) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
+        return findUserId;
     }
 
 }
