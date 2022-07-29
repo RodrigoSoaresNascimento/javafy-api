@@ -29,8 +29,7 @@ public class TokenService {
 
     public String getToken(UsuarioEntity usuario){
         final Date now = new Date();
-        final Date exp = new Date(now.getTime() + Long.valueOf(expiration));
-
+        final Date exp = new Date(now.getTime() + Long.parseLong(expiration));
 
         String token =  Jwts.builder()
                 .setIssuer("vemser-api")
@@ -50,7 +49,9 @@ public class TokenService {
                 .setSigningKey(secret)
                 .parseClaimsJws(token.replace(TOKEN_PREFIX, ""))
                 .getBody();
+
         Integer idUsuario = body.get(Claims.ID, Integer.class);
+
         if(idUsuario != null){
             return new UsernamePasswordAuthenticationToken(
                     idUsuario,
