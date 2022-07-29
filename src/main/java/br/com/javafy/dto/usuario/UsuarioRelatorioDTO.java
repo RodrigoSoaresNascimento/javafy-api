@@ -16,8 +16,7 @@ public class UsuarioRelatorioDTO {
     private String nome;
     @Schema(example = "duda@gmail.com")
     private String email;
-    @Schema(example = "PREMIUM, FREE")
-    private TiposdePlano plano;
+
     @Schema(example = "Rock")
     private String nomePlaylist;
 }

@@ -85,9 +85,9 @@ public class PlayListService {
 
         UsuarioEntity usuario = usuarioService.retornaUsuarioEntityById(idUsuario);
 
-        if(usuario.getPlano() == TiposdePlano.FREE){
-            throw new PlaylistException("Plano Free, mude seu plano para premium");
-        }
+//        if(usuario.getPlano() == TiposdePlano.FREE){
+//            throw new PlaylistException("Plano Free, mude seu plano para premium");
+//        }
 
         PlayListEntity playList = converterParaPlaylist(playlistCreate);
 

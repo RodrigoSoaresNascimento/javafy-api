@@ -18,7 +18,6 @@ public interface UsuarioRepository extends JpaRepository<UsuarioEntity, Integer>
     @Query(" select new br.com.javafy.dto.usuario.UsuarioRelatorioDTO(" +
             " u.nome," +
             " u.email," +
-            " u.plano," +
             " p.name" +
             ")" +
             "  from usuario u " +

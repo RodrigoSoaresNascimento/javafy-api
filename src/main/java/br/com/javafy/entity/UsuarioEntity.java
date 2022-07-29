@@ -32,9 +32,6 @@ public class UsuarioEntity implements UserDetails {
     @Column(name = "genero")
     private String genero;
 
-    @Enumerated(EnumType.ORDINAL)
-    @Column(name = "premium")
-    private TiposdePlano plano;
     @Column(name = "email")
     private String email;
 
@@ -77,20 +74,18 @@ public class UsuarioEntity implements UserDetails {
     )
     private Set<ComentarioEntity> comentarios;
 
-    @Override
-    public String toString() {
-        return "UsuarioEntity{" +
-                "idUsuario=" + idUsuario +
-                ", nome='" + nome + '\'' +
-                ", dataNascimento=" + dataNascimento +
-                ", genero='" + genero + '\'' +
-                ", plano=" + plano +
-                ", email='" + email + '\'';
-    }
+
+    @ManyToMany(fetch = FetchType.LAZY)
+    @JoinTable(
+            name = "usuario_cargo",
+            joinColumns = @JoinColumn(name = "id_user"),
+            inverseJoinColumns = @JoinColumn(name = "id_cargo")
+    )
+    Set<CargoEntity> cargos;
 
     @Override
     public Collection<? extends GrantedAuthority> getAuthorities() {
-        return new ArrayList<>();
+        return cargos;
     }
 
     @Override
@@ -121,5 +116,15 @@ public class UsuarioEntity implements UserDetails {
     @Override
     public boolean isEnabled() {
         return true;
+    }
+
+    @Override
+    public String toString() {
+        return "UsuarioEntity{" +
+                "idUsuario=" + idUsuario +
+                ", nome='" + nome + '\'' +
+                ", dataNascimento=" + dataNascimento +
+                ", genero='" + genero + '\'' +
+                ", email='" + email + '\'';
     }
 }
