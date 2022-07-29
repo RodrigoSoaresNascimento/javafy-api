@@ -1,5 +1,6 @@
 package br.com.javafy.security;
 
+import br.com.javafy.entity.CargoEntity;
 import br.com.javafy.entity.UsuarioEntity;
 import br.com.javafy.service.UsuarioService;
 import io.jsonwebtoken.Claims;
@@ -12,6 +13,9 @@ import org.springframework.stereotype.Service;
 
 import java.util.Collections;
 import java.util.Date;
+import java.util.List;
+import java.util.Set;
+import java.util.stream.Collectors;
 
 @Service
 @RequiredArgsConstructor
@@ -30,10 +34,16 @@ public class TokenService {
     public String getToken(UsuarioEntity usuario){
         final Date now = new Date();
         final Date exp = new Date(now.getTime() + Long.parseLong(expiration));
+        List<String> cargos = usuario.getCargos()
+                .stream()
+                .map(c-> c.getNome()
+                        .getTipoCargo())
+                .collect(Collectors.toList());
 
         String token =  Jwts.builder()
                 .setIssuer("vemser-api")
                 .claim(Claims.ID, usuario.getIdUsuario())
+                .claim("cargo", cargos )
                 .setIssuedAt(now)
                 .setExpiration(exp)
                 .signWith(SignatureAlgorithm.HS256, secret)
