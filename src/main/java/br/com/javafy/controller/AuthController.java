@@ -66,4 +66,9 @@ public class AuthController {
         return ResponseEntity.ok(usuarioService.getLoggedUser());
     }
 
+    @DeleteMapping("/{idUser}")
+    public void delete (@PathVariable("idUser") Integer idUsuario) throws PessoaNaoCadastradaException {
+        usuarioService.delete(idUsuario);
+    }
+
 }
