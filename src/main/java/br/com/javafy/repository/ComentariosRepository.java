@@ -1,6 +1,6 @@
 package br.com.javafy.repository;
 
-import br.com.javafy.dto.ComentarioPlaylistRelatorioDTO;
+import br.com.javafy.dto.comentario.ComentarioPlaylistRelatorioDTO;
 import br.com.javafy.entity.ComentarioEntity;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
@@ -13,7 +13,7 @@ import java.util.List;
 
 @Repository
 public interface ComentariosRepository extends JpaRepository<ComentarioEntity, Integer> {
-    @Query(" select new br.com.javafy.dto.ComentarioPlaylistRelatorioDTO(" +
+    @Query(" select new br.com.javafy.dto.comentario.ComentarioPlaylistRelatorioDTO(" +
             " c.comentario," +
             " p.name," +
             " u.nome," +

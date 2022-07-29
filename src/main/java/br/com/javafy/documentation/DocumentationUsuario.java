@@ -2,8 +2,8 @@ package br.com.javafy.documentation;
 
 import br.com.javafy.anotations.MagiaResponse;
 import br.com.javafy.dto.PageDTO;
-import br.com.javafy.dto.UsuarioCreateDTO;
-import br.com.javafy.dto.UsuarioDTO;
+import br.com.javafy.dto.usuario.UsuarioCreateDTO;
+import br.com.javafy.dto.usuario.UsuarioDTO;
 import br.com.javafy.exceptions.PessoaNaoCadastradaException;
 import io.swagger.v3.oas.annotations.Operation;
 import org.springframework.http.ResponseEntity;
@@ -12,7 +12,6 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestBody;
 
 import javax.validation.Valid;
-import java.sql.SQLException;
 import java.util.List;
 @Validated
 public interface DocumentationUsuario {

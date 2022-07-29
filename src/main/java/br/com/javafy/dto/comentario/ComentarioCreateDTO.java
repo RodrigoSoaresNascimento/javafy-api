@@ -1,4 +1,4 @@
-package br.com.javafy.dto;
+package br.com.javafy.dto.comentario;
 
 import br.com.javafy.entity.PlayListEntity;
 import br.com.javafy.entity.UsuarioEntity;

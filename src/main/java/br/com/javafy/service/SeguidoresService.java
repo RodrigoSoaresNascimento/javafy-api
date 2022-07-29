@@ -3,7 +3,7 @@ package br.com.javafy.service;
 
 import br.com.javafy.entity.UsuarioEntity;
 import br.com.javafy.exceptions.PessoaNaoCadastradaException;
-import br.com.javafy.dto.UsuarioDTO;
+import br.com.javafy.dto.usuario.UsuarioDTO;
 import br.com.javafy.exceptions.SeguidoresException;
 import br.com.javafy.repository.UsuarioRepository;
 import com.fasterxml.jackson.databind.ObjectMapper;
