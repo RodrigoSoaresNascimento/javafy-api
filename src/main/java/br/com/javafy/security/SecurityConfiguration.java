@@ -30,18 +30,18 @@ public class SecurityConfiguration {
         httpSecurity.headers().frameOptions().disable()
                 .and().cors()
                 .and().csrf().disable()
-                .authorizeRequests(
+                .authorizeHttpRequests(
                         (auth) -> auth
                                 .antMatchers(
                                         "/",
                                         "/auth",
                                         "/auth/create-user")
                                 .permitAll()
+                                .antMatchers(HttpMethod.GET, "/playlist/paginacao-playlist")
+                                .hasRole(Roles.FREE)
                                 .antMatchers("/playlist/criar-playlist/**"
                                         )
-                                .hasAnyRole(Roles.PREMIUM)
-//                                .antMatchers(HttpMethod.GET, "/playlist")
-//                                .hasRole(Roles.FREE)
+                                .hasRole(Roles.PREMIUM)
                                 .anyRequest()
                                 .authenticated()
                 );
