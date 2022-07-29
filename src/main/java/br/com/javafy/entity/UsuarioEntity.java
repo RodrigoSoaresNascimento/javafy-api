@@ -39,6 +39,12 @@ public class UsuarioEntity {
     @Column(name = "email")
     private String email;
 
+    @Column(name = "login")
+    private String login;
+
+    @Column(name = "senha")
+    private String senha;
+
     @JsonIgnore
     @ManyToMany(fetch = FetchType.LAZY, cascade = CascadeType.ALL)
     @JoinTable(

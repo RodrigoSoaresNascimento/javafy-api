@@ -30,6 +30,14 @@ public class UsuarioCreateDTO {
     @NotNull
     private TiposdePlano plano;
 
+    @Schema(description = "login do usuario", example = "joão")
+    @NotBlank
+    private String login;
+
+    @Schema(description = "login do usuario", example = "HeavyMet@1")
+    @NotBlank
+    private String senha;
+
     @Schema(example = "faker@faker.com", description = "email do usuario")
     @NotBlank(message = "Email e obrigatorio")
     private String email;
