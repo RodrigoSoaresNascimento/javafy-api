@@ -8,10 +8,12 @@ import io.jsonwebtoken.SignatureAlgorithm;
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
+import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.stereotype.Service;
 
-import java.util.Collections;
 import java.util.Date;
+import java.util.List;
+
 
 @Service
 @RequiredArgsConstructor
@@ -19,7 +21,7 @@ public class TokenService {
 
     private static final String TOKEN_PREFIX = "Bearer ";
 
-    private final UsuarioService usuarioService;
+    private static final String KEY_CARGOS = "cargos";
 
     @Value("${jwt.secret}")
     private String secret;
@@ -31,9 +33,14 @@ public class TokenService {
         final Date now = new Date();
         final Date exp = new Date(now.getTime() + Long.parseLong(expiration));
 
+        List<String> cargos = usuario.getCargos().stream()
+                                .map(c -> c.getNome().getTipoCargo())
+                                .toList();
+
         String token =  Jwts.builder()
                 .setIssuer("vemser-api")
                 .claim(Claims.ID, usuario.getIdUsuario())
+                .claim(KEY_CARGOS, cargos)
                 .setIssuedAt(now)
                 .setExpiration(exp)
                 .signWith(SignatureAlgorithm.HS256, secret)
@@ -53,10 +60,14 @@ public class TokenService {
         Integer idUsuario = body.get(Claims.ID, Integer.class);
 
         if(idUsuario != null){
+            List<String> cargos = body.get(KEY_CARGOS, List.class);
+            List<SimpleGrantedAuthority> cargosGrantedAuthority = cargos.stream()
+                    .map(cargo -> new SimpleGrantedAuthority(cargo))
+                    .toList();
             return new UsernamePasswordAuthenticationToken(
                     idUsuario,
                     null,
-                    Collections.emptyList()
+                    cargosGrantedAuthority
             );
         }
         return null;
