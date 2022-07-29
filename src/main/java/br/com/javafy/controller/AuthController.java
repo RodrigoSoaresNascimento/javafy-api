@@ -3,7 +3,10 @@ package br.com.javafy.controller;
 import br.com.javafy.dto.LoginDTO;
 import br.com.javafy.dto.usuario.UsuarioCreateDTO;
 import br.com.javafy.dto.usuario.UsuarioDTO;
+import br.com.javafy.dto.usuario.UsuarioLoginDTO;
+import br.com.javafy.dto.usuario.UsuarioUpdateLoginDTO;
 import br.com.javafy.entity.UsuarioEntity;
+import br.com.javafy.exceptions.PessoaNaoCadastradaException;
 import br.com.javafy.security.TokenService;
 import br.com.javafy.service.UsuarioService;
 import lombok.RequiredArgsConstructor;
@@ -12,10 +15,7 @@ import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
 import org.springframework.stereotype.Controller;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import javax.validation.Valid;
 
@@ -49,6 +49,16 @@ public class AuthController {
         UsuarioEntity usuarioEntity = (UsuarioEntity) usuarioLogado;
 
         return tokenService.getToken(usuarioEntity);
+    }
+
+    @PutMapping("/update-user")
+    public ResponseEntity<UsuarioUpdateLoginDTO> update (@RequestBody UsuarioUpdateLoginDTO usuarioUpdateLoginDTO) throws PessoaNaoCadastradaException {
+        return ResponseEntity.ok(usuarioService.updateLogin(usuarioUpdateLoginDTO));
+    }
+
+    @GetMapping("/get-user")
+    public ResponseEntity<UsuarioLoginDTO> getUser () throws PessoaNaoCadastradaException {
+        return ResponseEntity.ok(usuarioService.getLoggedUser());
     }
 
 }

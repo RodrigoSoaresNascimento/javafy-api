@@ -1,10 +1,7 @@
 package br.com.javafy.service;
 
 import br.com.javafy.dto.*;
-import br.com.javafy.dto.usuario.UsuarioCreateDTO;
-import br.com.javafy.dto.usuario.UsuarioDTO;
-import br.com.javafy.dto.usuario.UsuarioLoginDTO;
-import br.com.javafy.dto.usuario.UsuarioRelatorioDTO;
+import br.com.javafy.dto.usuario.*;
 import br.com.javafy.entity.UsuarioEntity;
 import br.com.javafy.exceptions.PessoaNaoCadastradaException;
 import br.com.javafy.repository.UsuarioRepository;
@@ -122,9 +119,25 @@ public class UsuarioService {
         return objectMapper.convertValue(findById(getIdLoggedUser()), UsuarioLoginDTO.class);
     }
 
-    private Integer getIdLoggedUser() {
+    public Integer getIdLoggedUser() {
         Integer findUserId = (Integer) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
         return findUserId;
+    }
+
+    public UsuarioUpdateLoginDTO updateLogin (UsuarioUpdateLoginDTO usuario) throws PessoaNaoCadastradaException {
+        UsuarioDTO usuarioDTO = findById(getIdLoggedUser());
+        UsuarioEntity usuarioEntity = converterUsuarioEntity(usuarioDTO);
+        if(usuario.getLogin() != null){
+            usuarioEntity.setLogin(usuario.getLogin());
+        }
+
+        if(usuario.getSenha() != null){
+            usuarioEntity.setSenha(encodePassword(usuario.getSenha()));
+        }
+
+        usuarioRepository.save(usuarioEntity);
+        return objectMapper.convertValue(usuarioEntity, UsuarioUpdateLoginDTO.class);
+        //todo-> criar um serviço de email para informar a senha alterada pelo email
     }
 
 }
