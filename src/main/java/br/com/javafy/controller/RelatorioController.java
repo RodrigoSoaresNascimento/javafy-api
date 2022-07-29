@@ -1,9 +1,8 @@
 package br.com.javafy.controller;
 
-import br.com.javafy.documentation.DocumentationArtista;
 import br.com.javafy.documentation.DocumentationRelatorio;
-import br.com.javafy.dto.ComentarioPlaylistRelatorioDTO;
-import br.com.javafy.dto.UsuarioRelatorioDTO;
+import br.com.javafy.dto.comentario.ComentarioPlaylistRelatorioDTO;
+import br.com.javafy.dto.usuario.UsuarioRelatorioDTO;
 import br.com.javafy.service.ComentarioService;
 import br.com.javafy.service.UsuarioService;
 import org.springframework.beans.factory.annotation.Autowired;

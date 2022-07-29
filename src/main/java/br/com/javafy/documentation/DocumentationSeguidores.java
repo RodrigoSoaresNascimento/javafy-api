@@ -1,7 +1,7 @@
 package br.com.javafy.documentation;
 
 import br.com.javafy.anotations.MagiaResponse;
-import br.com.javafy.dto.UsuarioDTO;
+import br.com.javafy.dto.usuario.UsuarioDTO;
 import br.com.javafy.exceptions.PessoaNaoCadastradaException;
 import io.swagger.v3.oas.annotations.Operation;
 import org.springframework.validation.annotation.Validated;

@@ -1,6 +1,9 @@
 package br.com.javafy.service;
 
 import br.com.javafy.dto.*;
+import br.com.javafy.dto.usuario.UsuarioCreateDTO;
+import br.com.javafy.dto.usuario.UsuarioDTO;
+import br.com.javafy.dto.usuario.UsuarioRelatorioDTO;
 import br.com.javafy.entity.UsuarioEntity;
 import br.com.javafy.enums.TipoDeMensagem;
 import br.com.javafy.exceptions.PessoaNaoCadastradaException;
@@ -10,10 +13,12 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
+import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
 
 import java.sql.SQLException;
 import java.util.List;
+import java.util.Optional;
 
 @Service
 @Slf4j
@@ -34,6 +39,10 @@ public class UsuarioService {
 
     public UsuarioDTO converterUsuarioDTO(UsuarioEntity usuario) {
         return objectMapper.convertValue(usuario, UsuarioDTO.class);
+    }
+
+    private String encodePassword(String password){
+        return new BCryptPasswordEncoder().encode(password);
     }
 
     public void validUsuario(Integer idUser) throws SQLException, PessoaNaoCadastradaException {
@@ -71,12 +80,17 @@ public class UsuarioService {
                 .toList();
     }
 
+    public Optional<UsuarioEntity> findByLogin(String login){
+        return usuarioRepository.findByLogin(login);
+    }
+
     public UsuarioDTO create(UsuarioCreateDTO usuario)  {
-          UsuarioEntity usuarioEntity = converterUsuarioEntity(usuario);
-          usuarioEntity = usuarioRepository.save(usuarioEntity);
-          UsuarioDTO usuarioDTO= converterUsuarioDTO(usuarioEntity);
-          emailService.sendEmail(usuarioDTO, TipoDeMensagem.CREATE.getTipoDeMensagem());
-          return usuarioDTO;
+        UsuarioEntity usuarioEntity = converterUsuarioEntity(usuario);
+        usuarioEntity.setSenha(encodePassword(usuario.getSenha()));
+        usuarioEntity = usuarioRepository.save(usuarioEntity);
+        UsuarioDTO usuarioDTO= converterUsuarioDTO(usuarioEntity);
+        //emailService.sendEmail(usuarioDTO, TipoDeMensagem.CREATE.getTipoDeMensagem());
+        return usuarioDTO;
     }
 
     public UsuarioDTO update(UsuarioCreateDTO usuarioDTOAtualizar, Integer idUsuario)

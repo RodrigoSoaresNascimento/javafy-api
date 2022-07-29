@@ -1,8 +1,8 @@
 package br.com.javafy.documentation;
 
 import br.com.javafy.anotations.MagiaResponse;
-import br.com.javafy.dto.ComentarioPlaylistRelatorioDTO;
-import br.com.javafy.dto.UsuarioRelatorioDTO;
+import br.com.javafy.dto.comentario.ComentarioPlaylistRelatorioDTO;
+import br.com.javafy.dto.usuario.UsuarioRelatorioDTO;
 import io.swagger.v3.oas.annotations.Operation;
 
 import java.util.List;

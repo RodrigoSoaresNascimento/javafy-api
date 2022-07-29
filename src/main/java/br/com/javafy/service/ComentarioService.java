@@ -1,6 +1,9 @@
 package br.com.javafy.service;
 
 import br.com.javafy.dto.*;
+import br.com.javafy.dto.comentario.ComentarioCreateDTO;
+import br.com.javafy.dto.comentario.ComentarioDTO;
+import br.com.javafy.dto.comentario.ComentarioPlaylistRelatorioDTO;
 import br.com.javafy.entity.ComentarioEntity;
 import br.com.javafy.exceptions.ComentarioNaoCadastradoException;
 import br.com.javafy.repository.ComentariosRepository;

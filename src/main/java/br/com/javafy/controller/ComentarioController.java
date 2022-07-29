@@ -2,8 +2,8 @@ package br.com.javafy.controller;
 
 
 import br.com.javafy.documentation.DocumentationComentario;
-import br.com.javafy.dto.ComentarioCreateDTO;
-import br.com.javafy.dto.ComentarioDTO;
+import br.com.javafy.dto.comentario.ComentarioCreateDTO;
+import br.com.javafy.dto.comentario.ComentarioDTO;
 import br.com.javafy.exceptions.ComentarioNaoCadastradoException;
 import br.com.javafy.service.ComentarioService;
 import org.springframework.beans.factory.annotation.Autowired;

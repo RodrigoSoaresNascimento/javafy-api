@@ -6,7 +6,7 @@ import br.com.javafy.documentation.DocumentationSeguidores;
 import br.com.javafy.exceptions.PessoaNaoCadastradaException;
 import br.com.javafy.exceptions.SeguidoresException;
 import br.com.javafy.service.SeguidoresService;
-import br.com.javafy.dto.UsuarioDTO;
+import br.com.javafy.dto.usuario.UsuarioDTO;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 import java.util.List;

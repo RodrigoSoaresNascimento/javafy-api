@@ -1,7 +1,7 @@
 package br.com.javafy.service;
 
 
-import br.com.javafy.dto.UsuarioDTO;
+import br.com.javafy.dto.usuario.UsuarioDTO;
 import br.com.javafy.enums.TipoDeMensagem;
 import freemarker.template.Template;
 import freemarker.template.TemplateException;
