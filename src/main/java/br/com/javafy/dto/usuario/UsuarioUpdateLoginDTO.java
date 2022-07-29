@@ -17,8 +17,7 @@ public class UsuarioUpdateLoginDTO {
     @NotBlank
     private String login;
 
-    @JsonIgnore
-    @Schema(hidden = true)
+    @Schema(description = "senha do usuario", example = "joão123")
     @NotBlank
     private String senha;
 
