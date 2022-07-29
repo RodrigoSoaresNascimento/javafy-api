@@ -6,6 +6,7 @@ import br.com.javafy.dto.usuario.UsuarioDTO;
 import br.com.javafy.dto.usuario.UsuarioLoginDTO;
 import br.com.javafy.dto.usuario.UsuarioUpdateLoginDTO;
 import br.com.javafy.entity.UsuarioEntity;
+import br.com.javafy.enums.CargosEnum;
 import br.com.javafy.exceptions.PessoaNaoCadastradaException;
 import br.com.javafy.security.TokenService;
 import br.com.javafy.service.UsuarioService;
@@ -32,15 +33,19 @@ public class AuthController {
     private final AuthenticationManager authenticationManager;
 
     @PostMapping("/create-user")
-    public ResponseEntity<UsuarioDTO> create(@RequestBody UsuarioCreateDTO usuarioCreateDTO){
-        return ResponseEntity.ok(usuarioService.create(usuarioCreateDTO));
+    public ResponseEntity<UsuarioDTO> create(
+            @RequestBody UsuarioCreateDTO usuarioCreateDTO,
+            CargosEnum cargos){
+        return ResponseEntity.ok(usuarioService.create(usuarioCreateDTO, cargos));
     }
 
     @PostMapping
     public String auth(@RequestBody @Valid LoginDTO login){
 
         UsernamePasswordAuthenticationToken userPassAuthToken =
-                new UsernamePasswordAuthenticationToken(login.getLogin(), login.getSenha());
+                new UsernamePasswordAuthenticationToken(
+                        login.getLogin(),
+                        login.getSenha());
 
         Authentication authentication =
                 authenticationManager.authenticate(userPassAuthToken);

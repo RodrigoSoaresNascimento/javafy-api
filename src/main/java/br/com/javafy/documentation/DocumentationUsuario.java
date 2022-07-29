@@ -4,6 +4,7 @@ import br.com.javafy.anotations.MagiaResponse;
 import br.com.javafy.dto.PageDTO;
 import br.com.javafy.dto.usuario.UsuarioCreateDTO;
 import br.com.javafy.dto.usuario.UsuarioDTO;
+import br.com.javafy.enums.CargosEnum;
 import br.com.javafy.exceptions.PessoaNaoCadastradaException;
 import io.swagger.v3.oas.annotations.Operation;
 import org.springframework.http.ResponseEntity;
@@ -27,7 +28,9 @@ public interface DocumentationUsuario {
 
     @Operation(summary = "Cria um perfil de usuario")
     @MagiaResponse
-    public ResponseEntity<UsuarioDTO> create(@Valid @RequestBody UsuarioCreateDTO usuario);
+    public ResponseEntity<UsuarioDTO> create(
+            @Valid @RequestBody UsuarioCreateDTO usuario, CargosEnum cargos
+    );
 
     @Operation(summary = "Atualiza um perfil de usuario pelo seu ID")
     @MagiaResponse

@@ -1,6 +1,5 @@
 package br.com.javafy.dto.usuario;
 
-import br.com.javafy.enums.TiposdePlano;
 import io.swagger.v3.oas.annotations.media.Schema;
 import lombok.*;
 

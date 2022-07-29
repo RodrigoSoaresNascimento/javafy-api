@@ -4,9 +4,9 @@ import java.util.Arrays;
 
 public enum CargosEnum {
 
-    FREE("ROLE_FREE"),
-    PREMIUM("ROLE_PREMIUM"),
-    ADMIN("ROLE_ADMIN");
+    FREE(Roles.FREE),
+    PREMIUM(Roles.PREMIUM),
+    ADMIN(Roles.ADMIN);
 
     private String tipoCargo;
 

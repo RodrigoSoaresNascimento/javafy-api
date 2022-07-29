@@ -1,7 +1,5 @@
 package br.com.javafy.dto.usuario;
 
-import br.com.javafy.enums.CargosEnum;
-import br.com.javafy.enums.TiposdePlano;
 import io.swagger.v3.oas.annotations.media.Schema;
 import lombok.*;
 
@@ -27,9 +25,6 @@ public class UsuarioCreateDTO {
     @Schema(example = "F", description = "genero do usuario")
     @Size(min = 1, max = 20)
     private String genero;
-
-    @NotNull
-    private Set<CargoDTO> cargos;
 
     @Schema(description = "login do usuario", example = "joão")
     @NotBlank

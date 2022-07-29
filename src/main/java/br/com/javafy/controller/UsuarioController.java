@@ -2,6 +2,7 @@ package br.com.javafy.controller;
 
 import br.com.javafy.documentation.DocumentationUsuario;
 import br.com.javafy.dto.PageDTO;
+import br.com.javafy.enums.CargosEnum;
 import br.com.javafy.service.UsuarioService;
 import br.com.javafy.dto.usuario.UsuarioCreateDTO;
 import br.com.javafy.dto.usuario.UsuarioDTO;
@@ -39,8 +40,10 @@ public class UsuarioController implements DocumentationUsuario {
     }
 
     @PostMapping
-    public ResponseEntity<UsuarioDTO> create(@Valid @RequestBody UsuarioCreateDTO usuario) {
-        return ResponseEntity.ok(usuarioService.create(usuario));
+    public ResponseEntity<UsuarioDTO> create(
+            @Valid @RequestBody UsuarioCreateDTO usuario,
+            @RequestBody CargosEnum cargos) {
+        return ResponseEntity.ok(usuarioService.create(usuario, cargos));
     }
 
     @PutMapping("/{idUser}")

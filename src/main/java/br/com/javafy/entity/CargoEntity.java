@@ -23,7 +23,8 @@ public class CargoEntity implements GrantedAuthority {
     @SequenceGenerator(name = "SEQ_ID_CARGO", sequenceName = "seq_id+cargo", allocationSize = 1)
     private Integer idCargo;
 
-    @Enumerated(EnumType.ORDINAL)
+    @Column(name = "nome")
+    @Enumerated(EnumType.STRING)
     private CargosEnum nome;
 
     @JsonIgnore
