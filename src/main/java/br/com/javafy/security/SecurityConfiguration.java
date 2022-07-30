@@ -37,11 +37,11 @@ public class SecurityConfiguration {
                                         "/auth",
                                         "/auth/create-user")
                                 .permitAll()
-                                .antMatchers("/playlist/criar-playlist/**"
+                                .antMatchers("/playlist/**"
                                         )
                                 .hasAnyRole(Roles.PREMIUM)
-//                                .antMatchers(HttpMethod.GET, "/playlist")
-//                                .hasRole(Roles.FREE)
+                                .antMatchers(HttpMethod.GET, "/playlist")
+                                .hasRole(Roles.FREE)
                                 .anyRequest()
                                 .authenticated()
                 );
