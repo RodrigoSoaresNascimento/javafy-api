@@ -7,6 +7,7 @@ import br.com.javafy.dto.spotify.musica.MusicaFullDTO;
 import br.com.javafy.exceptions.PlaylistException;
 import br.com.javafy.service.MusicaService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.ResponseEntity;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 
@@ -22,17 +23,17 @@ public class MusicaController implements DocumentationMusica {
 
 
     @GetMapping("/id-do-artista/{id}")
-    public MusicaFullDTO musicById(@PathVariable("id") String id) throws  PlaylistException {
-        return musicaService.musicById(id);
+    public ResponseEntity<MusicaFullDTO> musicById(@PathVariable("id") String id) throws  PlaylistException {
+        return ResponseEntity.ok(musicaService.musicById(id));
     }
 
     @GetMapping("/buscar-musica")
-    public List<MusicaDTO> searchMusic(String query) throws PlaylistException {
-        return musicaService.searchMusic(query);
+    public ResponseEntity<List<MusicaDTO>> searchMusic(String query) throws PlaylistException {
+        return ResponseEntity.ok(musicaService.searchMusic(query));
     }
 
     @GetMapping("/buscar-genero")
-    public GeneroDTO listaGenero() throws PlaylistException {
-        return musicaService.listarGenero();
+    public ResponseEntity<GeneroDTO> listaGenero() throws PlaylistException {
+        return ResponseEntity.ok(musicaService.listarGenero());
     }
 }

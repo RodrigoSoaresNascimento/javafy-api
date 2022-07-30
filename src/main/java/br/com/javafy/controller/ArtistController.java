@@ -35,8 +35,8 @@ public class ArtistController implements DocumentationArtista {
     }
 
     @GetMapping("/{id}/{market}")
-    public List<MusicaDTO> getTopTracksArtists(@PathVariable("id") String id, @PathVariable("market") String pais) throws SpotifyException {
-        return service.searchArtist(id,pais);
+    public  ResponseEntity<List<MusicaDTO>> getTopTracksArtists(@PathVariable("id") String id, @PathVariable("market") String pais) throws SpotifyException {
+        return ResponseEntity.ok(service.searchArtist(id,pais));
     }
 
 }
