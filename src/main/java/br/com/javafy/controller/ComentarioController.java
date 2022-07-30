@@ -2,6 +2,7 @@ package br.com.javafy.controller;
 
 
 import br.com.javafy.documentation.DocumentationComentario;
+import br.com.javafy.dto.PageDTO;
 import br.com.javafy.dto.comentario.ComentarioCreateDTO;
 import br.com.javafy.dto.comentario.ComentarioDTO;
 import br.com.javafy.exceptions.ComentarioNaoCadastradoException;
@@ -39,6 +40,11 @@ public class ComentarioController implements DocumentationComentario {
                                                 @Valid @RequestBody ComentarioCreateDTO comentarioCreateDTO)
             throws ComentarioNaoCadastradoException {
         return ResponseEntity.ok(comentarioService.create(idPlaylist, comentarioCreateDTO));
+    }
+
+    @GetMapping("/paginacao-comentario")
+    public ResponseEntity<PageDTO<ComentarioDTO>> comentarios (Integer pagina, Integer qtRegistro){
+        return ResponseEntity.ok(comentarioService.listarComentariosPaginado(pagina,qtRegistro));
     }
 
     @PutMapping("/{idComentario}")

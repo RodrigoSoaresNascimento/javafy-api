@@ -65,15 +65,14 @@ public class ComentarioService {
 
     //todo -> este metodo não esta sendo usando na controller
 
-//    public PageDTO<ComentarioDTO> listarComentariosPaginado(Integer idComentario,
-//                                                            Integer pagina, Integer registro){
-//        PageRequest pageRequest = PageRequest.of(pagina, registro);
-//        Page<ComentarioEntity> page = comentariosRepository.comentarioPaginadoPorId(idComentario, pageRequest);
-//        List<ComentarioDTO> comentarioDTOS = page.getContent().stream()
-//                .map(comentarioEntity -> objectMapper.convertValue(comentarioEntity, ComentarioDTO.class))
-//                .toList();
-//        return new PageDTO<>(page.getTotalElements(), page.getTotalPages(), pagina, registro, comentarioDTOS);
-//    }
+    public PageDTO<ComentarioDTO> listarComentariosPaginado(Integer pagina, Integer registro){
+        PageRequest pageRequest = PageRequest.of(pagina, registro);
+        Page<ComentarioEntity> page = comentariosRepository.findAll(pageRequest);
+        List<ComentarioDTO> comentarioDTOS = page.getContent().stream()
+                .map(comentarioEntity -> objectMapper.convertValue(comentarioEntity, ComentarioDTO.class))
+                .toList();
+        return new PageDTO<>(page.getTotalElements(), page.getTotalPages(), pagina, registro, comentarioDTOS);
+    }
 
     public ComentarioDTO create(Integer idPlaylist, ComentarioCreateDTO comentarioCreateDTO)
             throws ComentarioNaoCadastradoException {

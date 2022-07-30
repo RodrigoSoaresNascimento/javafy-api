@@ -1,6 +1,7 @@
 package br.com.javafy.documentation;
 
 import br.com.javafy.anotations.MagiaResponse;
+import br.com.javafy.dto.PageDTO;
 import br.com.javafy.dto.comentario.ComentarioCreateDTO;
 import br.com.javafy.dto.comentario.ComentarioDTO;
 import br.com.javafy.exceptions.ComentarioNaoCadastradoException;
@@ -42,5 +43,10 @@ public interface DocumentationComentario {
     @MagiaResponse
     public void delete(@PathVariable("idComentario") Integer id)
             throws PessoaException, SQLException, ComentarioNaoCadastradoException;
+
+    @Operation(summary = "Tras comentarios paginados")
+    @MagiaResponse
+    ResponseEntity<PageDTO<ComentarioDTO>>  comentarios (Integer pagina, Integer qtRegistro);
+
 
 }

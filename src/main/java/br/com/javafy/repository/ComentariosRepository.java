@@ -24,6 +24,6 @@ public interface ComentariosRepository extends JpaRepository<ComentarioEntity, I
     List<ComentarioPlaylistRelatorioDTO> relatorioComentarios();
 
     //todo -> mudei o nome conforme correção passada no trabalho anterior
-    //Page<ComentarioEntity> comentarioPaginadoPorId (Integer idComentario, PageRequest pageRequest);
+    Page<ComentarioEntity> findComentarioEntitiesByIdComentario (Integer idComentario, PageRequest pageRequest);
 
 }
