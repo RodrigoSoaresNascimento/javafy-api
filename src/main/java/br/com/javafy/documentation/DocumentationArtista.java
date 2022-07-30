@@ -15,13 +15,13 @@ public interface DocumentationArtista {
     @Operation(summary = "Exibir um artista",
             description = "Exibir um artista especificado por Id.")
     @MagiaResponse
-    public ResponseEntity<ArtistaDTO> artistById(@PathVariable("id") String id)
+    ResponseEntity<ArtistaDTO> artistById(@PathVariable("id") String id)
             throws SpotifyException;
 
     @Operation(summary = "Faz uma query no artista.",
             description = "Exibir uma lista de artista pesquisada.")
     @MagiaResponse
-    public ResponseEntity<List<ArtistaDTO>> searchArtist(String query)
+    ResponseEntity<List<ArtistaDTO>> searchArtist(String query)
             throws SpotifyException, PlaylistException;
 
 }

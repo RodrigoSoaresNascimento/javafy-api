@@ -11,10 +11,10 @@ public interface DocumentationRelatorio {
 
     @Operation(summary = "Retorna o relatorio dos comentarios feitos nas playlist")
     @MagiaResponse
-    List<ComentarioPlaylistRelatorioDTO> relatorioComentarioPlaylist(Integer idUsuario);
+    List<ComentarioPlaylistRelatorioDTO> relatorioComentarioPlaylist();
 
     @Operation(summary = "Retorna um relatorio de cada playlist de um usuario")
     @MagiaResponse
-    List<UsuarioRelatorioDTO> relatorioPlayList (Integer idUsuario);
+    List<UsuarioRelatorioDTO> relatorioPlayList ();
 
 }

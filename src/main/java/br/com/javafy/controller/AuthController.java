@@ -1,5 +1,6 @@
 package br.com.javafy.controller;
 
+import br.com.javafy.documentation.DocumentationAuth;
 import br.com.javafy.dto.LoginDTO;
 import br.com.javafy.dto.usuario.UsuarioCreateDTO;
 import br.com.javafy.dto.usuario.UsuarioDTO;
@@ -7,10 +8,11 @@ import br.com.javafy.dto.usuario.UsuarioLoginDTO;
 import br.com.javafy.dto.usuario.UsuarioUpdateLoginDTO;
 import br.com.javafy.entity.UsuarioEntity;
 import br.com.javafy.enums.CargosEnum;
-import br.com.javafy.exceptions.PessoaNaoCadastradaException;
+import br.com.javafy.exceptions.PessoaException;
 import br.com.javafy.security.TokenService;
 import br.com.javafy.service.UsuarioService;
 import lombok.RequiredArgsConstructor;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
@@ -24,7 +26,7 @@ import javax.validation.Valid;
 @RestController
 @RequestMapping("/auth")
 @RequiredArgsConstructor
-public class AuthController {
+public class AuthController implements DocumentationAuth {
 
     private final UsuarioService usuarioService;
 
@@ -32,15 +34,9 @@ public class AuthController {
 
     private final AuthenticationManager authenticationManager;
 
-    @PostMapping("/create-user")
-    public ResponseEntity<UsuarioDTO> create(
-            @RequestBody UsuarioCreateDTO usuarioCreateDTO,
-            CargosEnum cargos){
-        return ResponseEntity.ok(usuarioService.create(usuarioCreateDTO, cargos));
-    }
 
     @PostMapping
-    public String auth(@RequestBody @Valid LoginDTO login){
+    public ResponseEntity<String> auth(@RequestBody @Valid LoginDTO login){
 
         UsernamePasswordAuthenticationToken userPassAuthToken =
                 new UsernamePasswordAuthenticationToken(
@@ -53,22 +49,32 @@ public class AuthController {
         Object usuarioLogado =  authentication.getPrincipal();
         UsuarioEntity usuarioEntity = (UsuarioEntity) usuarioLogado;
 
-        return tokenService.getToken(usuarioEntity);
+        return ResponseEntity.ok(tokenService.getToken(usuarioEntity));
     }
 
-    @PutMapping("/update-user")
-    public ResponseEntity<UsuarioUpdateLoginDTO> update (@RequestBody UsuarioUpdateLoginDTO usuarioUpdateLoginDTO) throws PessoaNaoCadastradaException {
-        return ResponseEntity.ok(usuarioService.updateLogin(usuarioUpdateLoginDTO));
-    }
-
-    @GetMapping("/get-user")
-    public ResponseEntity<UsuarioLoginDTO> getUser () throws PessoaNaoCadastradaException {
+    @GetMapping("/get-islogged")
+    public ResponseEntity<UsuarioLoginDTO> getUser () throws PessoaException {
         return ResponseEntity.ok(usuarioService.getLoggedUser());
     }
 
-    @DeleteMapping("/{idUser}")
-    public void delete (@PathVariable("idUser") Integer idUsuario) throws PessoaNaoCadastradaException {
-        usuarioService.delete(idUsuario);
+    @PostMapping("/create-user")
+    public ResponseEntity<UsuarioDTO> create(
+            @RequestBody UsuarioCreateDTO usuarioCreateDTO,
+            CargosEnum cargos){
+        return ResponseEntity.ok(usuarioService.create(usuarioCreateDTO, cargos));
+    }
+
+    @PutMapping("/update-credenciais")
+    public ResponseEntity<UsuarioUpdateLoginDTO> update
+            (@RequestBody UsuarioUpdateLoginDTO usuarioUpdateLoginDTO) throws PessoaException {
+        return ResponseEntity.ok(usuarioService.updateLogin(usuarioUpdateLoginDTO));
+    }
+
+    // TODO -> TEM QUE CRIAR OUTRO MÉTODO PARA REMOVER OUTROS USUÁRIOS
+    @DeleteMapping("/remover-usuario")
+    public void delete (@PathVariable("idUser") Integer idUsuario) throws PessoaException {
+
+        //usuarioService.delete();
     }
 
 }

@@ -21,9 +21,8 @@ public interface ComentariosRepository extends JpaRepository<ComentarioEntity, I
             ")" +
             "  from comentario c " +
             "  inner join c.playList p" +
-            "  inner join c.usuarioEntity u" +
-            " where (:idUsuario is null OR u.idUsuario = :idUsuario )")
-    List<ComentarioPlaylistRelatorioDTO> relatorioComentarios(@Param("idUsuario") Integer idPessoa);
+            "  inner join c.usuarioEntity u ")
+    List<ComentarioPlaylistRelatorioDTO> relatorioComentarios();
 
     Page<ComentarioEntity> findByIdComentario(Integer idComentario, PageRequest pageRequest);
 

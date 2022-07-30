@@ -6,7 +6,6 @@ import br.com.javafy.client.spotify.SpotifyClient;
 import br.com.javafy.dto.spotify.artista.ArtistaDTO;
 import br.com.javafy.dto.spotify.TokenDTO;
 import br.com.javafy.dto.spotify.musica.MusicaDTO;
-import br.com.javafy.dto.spotify.musica.MusicaFullDTO;
 import br.com.javafy.entity.Headers;
 import br.com.javafy.exceptions.PlaylistException;
 import br.com.javafy.exceptions.SpotifyException;

@@ -5,6 +5,7 @@ import br.com.javafy.documentation.DocumentationComentario;
 import br.com.javafy.dto.comentario.ComentarioCreateDTO;
 import br.com.javafy.dto.comentario.ComentarioDTO;
 import br.com.javafy.exceptions.ComentarioNaoCadastradoException;
+import br.com.javafy.exceptions.PessoaException;
 import br.com.javafy.service.ComentarioService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
@@ -33,23 +34,23 @@ public class ComentarioController implements DocumentationComentario {
         return ResponseEntity.ok(comentarioService.list());
     }
 
-    @PostMapping("/{idUser}/and/{idPlaylist}")
-    public ResponseEntity<ComentarioDTO> create(@PathVariable("idUser")Integer idUser,
-                                                @PathVariable("idPlaylist")Integer idPlaylist,
+    @PostMapping("/add-in-playlist/{idPlaylist}")
+    public ResponseEntity<ComentarioDTO> create(@PathVariable("idPlaylist")Integer idPlaylist,
                                                 @Valid @RequestBody ComentarioCreateDTO comentarioCreateDTO)
             throws ComentarioNaoCadastradoException {
-        return ResponseEntity.ok(comentarioService.create(idUser, idPlaylist, comentarioCreateDTO));
+        return ResponseEntity.ok(comentarioService.create(idPlaylist, comentarioCreateDTO));
     }
 
     @PutMapping("/{idComentario}")
     public ResponseEntity<ComentarioDTO> update(@PathVariable("idComentario") Integer idComentario
             , @Valid @RequestBody ComentarioCreateDTO comentarioAtualizar)
-            throws ComentarioNaoCadastradoException {
+            throws ComentarioNaoCadastradoException, PessoaException {
         return ResponseEntity.ok(comentarioService.update(idComentario, comentarioAtualizar));
     }
 
     @DeleteMapping("/{idComentario}")
-    public void delete(@PathVariable("idComentario") Integer id) {
+    public void delete(@PathVariable("idComentario") Integer id)
+            throws ComentarioNaoCadastradoException, PessoaException {
         comentarioService.delete(id);
     }
 }

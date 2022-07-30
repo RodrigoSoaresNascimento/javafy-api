@@ -1,46 +1,38 @@
 package br.com.javafy.service;
 
 import br.com.javafy.dto.*;
-import br.com.javafy.dto.usuario.CargoDTO;
 import br.com.javafy.dto.usuario.UsuarioCreateDTO;
 import br.com.javafy.dto.usuario.UsuarioDTO;
 import br.com.javafy.dto.usuario.UsuarioRelatorioDTO;
-import br.com.javafy.entity.CargoEntity;
 import br.com.javafy.entity.UsuarioEntity;
 import br.com.javafy.dto.usuario.*;
 import br.com.javafy.enums.CargosEnum;
-import br.com.javafy.exceptions.PessoaNaoCadastradaException;
+import br.com.javafy.exceptions.PessoaException;
 import br.com.javafy.repository.CargoRepository;
 import br.com.javafy.repository.UsuarioRepository;
 import com.fasterxml.jackson.databind.ObjectMapper;
-import lombok.extern.slf4j.Slf4j;
-import org.springframework.beans.factory.annotation.Autowired;
+import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.crypto.password.Md4PasswordEncoder;
 import org.springframework.stereotype.Service;
 
-import java.sql.SQLException;
 import java.util.List;
 import java.util.Optional;
 import java.util.Set;
 
 @Service
-@Slf4j
+@RequiredArgsConstructor
 public class UsuarioService {
 
-    @Autowired
-    private UsuarioRepository usuarioRepository;
+    private final UsuarioRepository usuarioRepository;
 
-    @Autowired
-    private ObjectMapper objectMapper;
+    private final ObjectMapper objectMapper;
 
-    @Autowired
-    private EmailService emailService;
+    private final EmailService emailService;
 
-    @Autowired
-    private CargoRepository cargoRepository;
+    private final CargoRepository cargoRepository;
 
     public UsuarioEntity converterUsuarioEntity(UsuarioCreateDTO usuarioCreateDTO) {
         return objectMapper.convertValue(usuarioCreateDTO, UsuarioEntity.class);
@@ -50,30 +42,48 @@ public class UsuarioService {
         return objectMapper.convertValue(usuario, UsuarioDTO.class);
     }
 
-    public CargoEntity converterToCargos(CargoDTO cargoDTO){
-        return objectMapper.convertValue(cargoDTO, CargoEntity.class);
-    }
-
     private String encodePassword(String password){
         return new Md4PasswordEncoder().encode(password);
     }
 
-    public void validUsuario(Integer idUser) throws SQLException, PessoaNaoCadastradaException {
-        UsuarioDTO usuarioDTO = findById(idUser);
-
-        if(usuarioDTO.getIdUsuario() == null){
-            throw new PessoaNaoCadastradaException("Usuário não cadastrado. ID " + idUser);
-        }
-    }
-
-    public UsuarioEntity retornaUsuarioEntityById(Integer id) throws PessoaNaoCadastradaException {
+    public UsuarioEntity buscarOutroUsuario(Integer idUser)
+            throws PessoaException {
         return usuarioRepository
-                .findById(id)
-                .orElseThrow(() -> new PessoaNaoCadastradaException("Usuário não cadastrado"));
+                .findById(idUser)
+                .orElseThrow(() -> new PessoaException("Usuário não cadastrado"));
     }
 
-    public UsuarioDTO findById(Integer id) throws PessoaNaoCadastradaException {
-        return converterUsuarioDTO(retornaUsuarioEntityById(id));
+    private Integer getIdLoggedUser()
+            throws PessoaException {
+        Integer idUser;
+        try {
+            idUser =  (Integer) SecurityContextHolder.getContext()
+                    .getAuthentication().getPrincipal();
+        } catch (Exception e){
+            throw new PessoaException("Usuário não logado");
+        }
+        return idUser;
+    }
+
+    public Optional<UsuarioEntity> findByLogin(String login){
+        return usuarioRepository.findByLogin(login);
+    }
+
+    public UsuarioLoginDTO getLoggedUser()
+            throws PessoaException {
+        return objectMapper.convertValue(retornaUsuarioEntityById(), UsuarioLoginDTO.class);
+    }
+
+    public UsuarioEntity retornaUsuarioEntityById()
+            throws PessoaException {
+        return usuarioRepository
+                .findById(getIdLoggedUser())
+                .orElseThrow(() -> new PessoaException("Usuário não cadastrado"));
+    }
+
+    public UsuarioDTO findById()
+            throws PessoaException {
+        return converterUsuarioDTO(retornaUsuarioEntityById());
     }
 
     public PageDTO<UsuarioDTO> listarUsuariosPorNomePaginado(Integer pagina, Integer registro){
@@ -93,13 +103,7 @@ public class UsuarioService {
                 .toList();
     }
 
-    public Optional<UsuarioEntity> findByLogin(String login){
-        return usuarioRepository.findByLogin(login);
-    }
-
-
     public UsuarioDTO create(UsuarioCreateDTO usuario, CargosEnum cargo)  {
-        //System.out.println(cargoRepository.findByNome(cargo.getTipoCargo()));
 
         UsuarioEntity usuarioEntity = converterUsuarioEntity(usuario);
         usuarioEntity.setCargos(Set.of(cargoRepository.findByNome(cargo)));
@@ -111,42 +115,35 @@ public class UsuarioService {
         return usuarioDTO;
     }
 
-    public UsuarioDTO update(UsuarioCreateDTO usuarioDTOAtualizar, Integer idUsuario)
-            throws PessoaNaoCadastradaException {
+    public UsuarioDTO update(UsuarioUpdateDTO usuarioUpdate)
+            throws PessoaException {
 
-        UsuarioEntity usuario = retornaUsuarioEntityById(idUsuario);
-        usuario.setEmail(usuarioDTOAtualizar.getEmail());
-        usuario.setNome(usuarioDTOAtualizar.getNome());
-        usuario.setDataNascimento(usuarioDTOAtualizar.getDataNascimento());
-        usuario.setGenero(usuarioDTOAtualizar.getGenero());
+        UsuarioEntity usuario = retornaUsuarioEntityById();
+
+        if(usuarioUpdate.getEmail() != null){
+            usuario.setEmail(usuarioUpdate.getEmail());
+        }
+
+        if(usuarioUpdate.getGenero() != null){
+            usuario.setGenero(usuarioUpdate.getGenero());
+        }
+
+        if(usuarioUpdate.getDataNascimento() != null){
+            usuario.setDataNascimento(usuarioUpdate.getDataNascimento());
+        }
+
+        if(usuarioUpdate.getNome() != null) {
+            usuario.setNome(usuarioUpdate.getNome());
+        }
+
         //usuario.setPlano(usuarioDTOAtualizar.getCargos());
-        usuario.setLogin(usuarioDTOAtualizar.getLogin());
-        usuario.setSenha(encodePassword(usuarioDTOAtualizar.getSenha()));
+
         return converterUsuarioDTO(usuarioRepository.save(usuario));
     }
 
-    public void delete(Integer idUsuario) throws PessoaNaoCadastradaException {
-
-        UsuarioEntity usuario = retornaUsuarioEntityById(idUsuario);
-        usuarioRepository.delete(usuario);
-    }
-
-    public List<UsuarioRelatorioDTO> relatorio (Integer idUsuario){
-         return usuarioRepository.relatorioPessoa(idUsuario);
-    }
-
-    public UsuarioLoginDTO getLoggedUser() throws PessoaNaoCadastradaException {
-        return objectMapper.convertValue(findById(getIdLoggedUser()), UsuarioLoginDTO.class);
-    }
-
-    public Integer getIdLoggedUser() {
-        Integer findUserId = (Integer) SecurityContextHolder
-                .getContext().getAuthentication().getPrincipal();
-        return findUserId;
-    }
-
-    public UsuarioUpdateLoginDTO updateLogin (UsuarioUpdateLoginDTO usuario) throws PessoaNaoCadastradaException {
-        UsuarioDTO usuarioDTO = findById(getIdLoggedUser());
+    public UsuarioUpdateLoginDTO updateLogin (UsuarioUpdateLoginDTO usuario)
+            throws PessoaException {
+        UsuarioDTO usuarioDTO = findById();
         UsuarioEntity usuarioEntity = converterUsuarioEntity(usuarioDTO);
 
         if(usuario.getLogin() != null){
@@ -160,6 +157,16 @@ public class UsuarioService {
         usuarioRepository.save(usuarioEntity);
         return objectMapper.convertValue(usuarioEntity, UsuarioUpdateLoginDTO.class);
         //todo-> criar um serviço de email para informar a senha alterada pelo email
+    }
+
+    public void delete()
+            throws PessoaException {
+        UsuarioEntity usuario = retornaUsuarioEntityById();
+        usuarioRepository.delete(usuario);
+    }
+
+    public List<UsuarioRelatorioDTO> relatorio (){
+        return usuarioRepository.relatorioPessoa();
     }
 
 }

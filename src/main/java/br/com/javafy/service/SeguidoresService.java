@@ -2,7 +2,7 @@ package br.com.javafy.service;
 
 
 import br.com.javafy.entity.UsuarioEntity;
-import br.com.javafy.exceptions.PessoaNaoCadastradaException;
+import br.com.javafy.exceptions.PessoaException;
 import br.com.javafy.dto.usuario.UsuarioDTO;
 import br.com.javafy.exceptions.SeguidoresException;
 import br.com.javafy.repository.UsuarioRepository;
@@ -30,28 +30,28 @@ public class SeguidoresService {
         return objectMapper.convertValue(user, UsuarioDTO.class);
     }
 
-    public List<UsuarioDTO> getAllSeguidores(Integer idUser)
-            throws PessoaNaoCadastradaException {
-        return usuarioService.retornaUsuarioEntityById(idUser)
+    public List<UsuarioDTO> getAllSeguidores()
+            throws PessoaException {
+        return usuarioService.retornaUsuarioEntityById()
                 .getSeguidores()
                 .stream()
                 .map(this::converterParaUsuarioDTO)
                 .collect(Collectors.toList());
     }
 
-    public List<UsuarioDTO> getAllSeguindo(Integer idUser)
-            throws PessoaNaoCadastradaException {
-       return usuarioService.retornaUsuarioEntityById(idUser)
+    public List<UsuarioDTO> getAllSeguindo()
+            throws PessoaException {
+       return usuarioService.retornaUsuarioEntityById()
                .getSeguindo()
                 .stream()
                 .map(this::converterParaUsuarioDTO)
                 .collect(Collectors.toList());
     }
 
-    public boolean seguirUser(Integer meuId,Integer idSeguindo)
-            throws PessoaNaoCadastradaException, SeguidoresException {
-        UsuarioEntity usuario = usuarioService.retornaUsuarioEntityById(meuId);
-        UsuarioEntity usuarioParaSeguir = usuarioService.retornaUsuarioEntityById(idSeguindo);
+    public boolean seguirUser(Integer idSeguindo)
+            throws PessoaException, SeguidoresException {
+        UsuarioEntity usuario = usuarioService.retornaUsuarioEntityById();
+        UsuarioEntity usuarioParaSeguir = usuarioService.buscarOutroUsuario(idSeguindo);
         usuario.getSeguidores().add(usuarioParaSeguir);
 
         try {
@@ -62,15 +62,19 @@ public class SeguidoresService {
         }
     }
 
-    public void deixarDeSeguirUsuario(Integer meuId, Integer idSeguindo)
-            throws PessoaNaoCadastradaException {
+    public boolean deixarDeSeguirUsuario(Integer idSeguindo)
+            throws PessoaException, SeguidoresException {
 
-        UsuarioEntity usuario = usuarioService.retornaUsuarioEntityById(meuId);
-        UsuarioEntity usuarioParaSeguir = usuarioService.retornaUsuarioEntityById(idSeguindo);
+        UsuarioEntity usuario = usuarioService.retornaUsuarioEntityById();
+        UsuarioEntity usuarioParaSeguir = usuarioService.buscarOutroUsuario(idSeguindo);
 
         usuario.getSeguidores().remove(usuarioParaSeguir);
-        usuario.setIdUsuario(meuId);
-        repository.save(usuario);
 
+        try {
+            repository.save(usuario);
+            return true;
+        } catch (Exception e){
+            throw new SeguidoresException("Error ao seguir usuario");
+        }
     }
 }

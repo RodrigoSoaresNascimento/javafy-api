@@ -3,7 +3,6 @@ package br.com.javafy.config;
 import feign.Contract;
 import feign.Feign;
 import feign.Logger;
-import feign.codec.ErrorDecoder;
 import feign.form.FormEncoder;
 import feign.jackson.JacksonDecoder;
 import feign.jackson.JacksonEncoder;
