@@ -81,7 +81,7 @@ public class PlayListService {
     public PlayListDTO create (PlayListCreate playlistCreate)
             throws PessoaException, PlaylistException, SpotifyException {
 
-        UsuarioEntity usuario = usuarioService.retornaUsuarioEntityById();
+        UsuarioEntity usuario = usuarioService.retornarUsuarioEntityById();
 
         PlayListEntity playList = converterParaPlaylist(playlistCreate);
 
@@ -161,7 +161,7 @@ public class PlayListService {
     private void validarAutorizacaoRemoverPlaylist(PlayListEntity playList)
             throws PessoaException, PlaylistException {
 
-        UsuarioEntity usuario = usuarioService.retornaUsuarioEntityById();
+        UsuarioEntity usuario = usuarioService.retornarUsuarioEntityById();
         List<CargoEntity> validar =  usuario.getCargos()
                 .stream()
                 .filter(c-> c.getNome().getTipoCargo().equals(Roles.ADMIN))
@@ -177,7 +177,7 @@ public class PlayListService {
     private void playlistEhDoUsuario(PlayListEntity playList)
             throws PessoaException, PlaylistException {
 
-        UsuarioEntity usuario = usuarioService.retornaUsuarioEntityById();
+        UsuarioEntity usuario = usuarioService.retornarUsuarioEntityById();
 
         if(!(usuario.getIdUsuario().equals(playList.getUsuario().getIdUsuario()))){
             throw new PlaylistException("Você não tem autorização para excluir a playlist.");

@@ -71,10 +71,10 @@ public class UsuarioService {
 
     public UsuarioLoginDTO getLoggedUser()
             throws PessoaException {
-        return objectMapper.convertValue(retornaUsuarioEntityById(), UsuarioLoginDTO.class);
+        return objectMapper.convertValue(retornarUsuarioEntityById(), UsuarioLoginDTO.class);
     }
 
-    public UsuarioEntity retornaUsuarioEntityById()
+    public UsuarioEntity retornarUsuarioEntityById()
             throws PessoaException {
         return usuarioRepository
                 .findById(getIdLoggedUser())
@@ -83,7 +83,7 @@ public class UsuarioService {
 
     public UsuarioDTO findById()
             throws PessoaException {
-        return converterUsuarioDTO(retornaUsuarioEntityById());
+        return converterUsuarioDTO(retornarUsuarioEntityById());
     }
 
     public PageDTO<UsuarioDTO> listarUsuariosPorNomePaginado(Integer pagina, Integer registro){
@@ -118,7 +118,7 @@ public class UsuarioService {
     public UsuarioDTO update(UsuarioUpdateDTO usuarioUpdate)
             throws PessoaException {
 
-        UsuarioEntity usuario = retornaUsuarioEntityById();
+        UsuarioEntity usuario = retornarUsuarioEntityById();
 
         if(usuarioUpdate.getEmail() != null){
             usuario.setEmail(usuarioUpdate.getEmail());
@@ -161,7 +161,7 @@ public class UsuarioService {
 
     public void delete()
             throws PessoaException {
-        UsuarioEntity usuario = retornaUsuarioEntityById();
+        UsuarioEntity usuario = retornarUsuarioEntityById();
         usuarioRepository.delete(usuario);
     }
 

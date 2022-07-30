@@ -2,20 +2,20 @@ package br.com.javafy.enums;
 
 import java.util.Arrays;
 
-public enum TiposdePlano {
+public enum TiposDePlano {
     PREMIUM(0),
     FREE(1);
 
     private Integer tipo;
-    TiposdePlano(Integer i) {
+    TiposDePlano(Integer i) {
     }
 
     public Integer getTipo() {
         return this.tipo;
     }
 
-    public static TiposdePlano ofTipo(Integer tipo){
-        return Arrays.stream(TiposdePlano.values())
+    public static TiposDePlano ofTipo(Integer tipo){
+        return Arrays.stream(TiposDePlano.values())
                 .filter(tp -> tp.getTipo().equals(tipo))
                 .findFirst()
                 .get();

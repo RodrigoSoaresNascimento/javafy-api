@@ -6,7 +6,6 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
-import org.springframework.data.repository.query.Param;
 import org.springframework.stereotype.Repository;
 
 import java.util.List;
@@ -24,6 +23,7 @@ public interface ComentariosRepository extends JpaRepository<ComentarioEntity, I
             "  inner join c.usuarioEntity u ")
     List<ComentarioPlaylistRelatorioDTO> relatorioComentarios();
 
-    Page<ComentarioEntity> findByIdComentario(Integer idComentario, PageRequest pageRequest);
+    //todo -> mudei o nome conforme correção passada no trabalho anterior
+    //Page<ComentarioEntity> comentarioPaginadoPorId (Integer idComentario, PageRequest pageRequest);
 
 }

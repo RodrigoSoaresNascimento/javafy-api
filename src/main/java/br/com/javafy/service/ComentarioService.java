@@ -63,21 +63,23 @@ public class ComentarioService {
                 .collect(Collectors.toList());
     }
 
-    public PageDTO<ComentarioDTO> listarComentariosPaginado(Integer idComentario,
-                                                            Integer pagina, Integer registro){
-        PageRequest pageRequest = PageRequest.of(pagina, registro);
-        Page<ComentarioEntity> page = comentariosRepository.findByIdComentario(idComentario, pageRequest);
-        List<ComentarioDTO> comentarioDTOS = page.getContent().stream()
-                .map(comentarioEntity -> objectMapper.convertValue(comentarioEntity, ComentarioDTO.class))
-                .toList();
-        return new PageDTO<>(page.getTotalElements(), page.getTotalPages(), pagina, registro, comentarioDTOS);
-    }
+    //todo -> este metodo não esta sendo usando na controller
+
+//    public PageDTO<ComentarioDTO> listarComentariosPaginado(Integer idComentario,
+//                                                            Integer pagina, Integer registro){
+//        PageRequest pageRequest = PageRequest.of(pagina, registro);
+//        Page<ComentarioEntity> page = comentariosRepository.comentarioPaginadoPorId(idComentario, pageRequest);
+//        List<ComentarioDTO> comentarioDTOS = page.getContent().stream()
+//                .map(comentarioEntity -> objectMapper.convertValue(comentarioEntity, ComentarioDTO.class))
+//                .toList();
+//        return new PageDTO<>(page.getTotalElements(), page.getTotalPages(), pagina, registro, comentarioDTOS);
+//    }
 
     public ComentarioDTO create(Integer idPlaylist, ComentarioCreateDTO comentarioCreateDTO)
             throws ComentarioNaoCadastradoException {
         try {
             ComentarioEntity comentarioEntity = converterComentarioDTO(new ComentarioDTO());
-            comentarioEntity.setUsuarioEntity(usuarioService.retornaUsuarioEntityById());
+            comentarioEntity.setUsuarioEntity(usuarioService.retornarUsuarioEntityById());
             comentarioEntity.setPlayList(playListService.retornaPlaylistEntityById(idPlaylist));
             comentarioEntity.setComentario(comentarioCreateDTO.getComentario());
             comentariosRepository.save(comentarioEntity);
@@ -111,7 +113,7 @@ public class ComentarioService {
             throws PessoaException, ComentarioNaoCadastradoException {
 
         Integer idDonoDoComentario = comentario.getUsuarioEntity().getIdUsuario();
-        UsuarioEntity usuario = usuarioService.retornaUsuarioEntityById();
+        UsuarioEntity usuario = usuarioService.retornarUsuarioEntityById();
 
         List<CargoEntity> contemAdmin =  usuario.getCargos()
                 .stream()

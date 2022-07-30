@@ -32,7 +32,7 @@ public class SeguidoresService {
 
     public List<UsuarioDTO> getAllSeguidores()
             throws PessoaException {
-        return usuarioService.retornaUsuarioEntityById()
+        return usuarioService.retornarUsuarioEntityById()
                 .getSeguidores()
                 .stream()
                 .map(this::converterParaUsuarioDTO)
@@ -41,7 +41,7 @@ public class SeguidoresService {
 
     public List<UsuarioDTO> getAllSeguindo()
             throws PessoaException {
-       return usuarioService.retornaUsuarioEntityById()
+       return usuarioService.retornarUsuarioEntityById()
                .getSeguindo()
                 .stream()
                 .map(this::converterParaUsuarioDTO)
@@ -50,7 +50,7 @@ public class SeguidoresService {
 
     public boolean seguirUser(Integer idSeguindo)
             throws PessoaException, SeguidoresException {
-        UsuarioEntity usuario = usuarioService.retornaUsuarioEntityById();
+        UsuarioEntity usuario = usuarioService.retornarUsuarioEntityById();
         UsuarioEntity usuarioParaSeguir = usuarioService.buscarOutroUsuario(idSeguindo);
         usuario.getSeguidores().add(usuarioParaSeguir);
 
@@ -65,7 +65,7 @@ public class SeguidoresService {
     public boolean deixarDeSeguirUsuario(Integer idSeguindo)
             throws PessoaException, SeguidoresException {
 
-        UsuarioEntity usuario = usuarioService.retornaUsuarioEntityById();
+        UsuarioEntity usuario = usuarioService.retornarUsuarioEntityById();
         UsuarioEntity usuarioParaSeguir = usuarioService.buscarOutroUsuario(idSeguindo);
 
         usuario.getSeguidores().remove(usuarioParaSeguir);
