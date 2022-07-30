@@ -4,15 +4,17 @@ import br.com.javafy.dto.PageDTO;
 import br.com.javafy.dto.playlist.PlayListCreate;
 import br.com.javafy.dto.playlist.PlayListDTO;
 import br.com.javafy.dto.playlist.PlaylistAddMusicaDTO;
+import br.com.javafy.entity.CargoEntity;
 import br.com.javafy.entity.MusicaEntity;
 import br.com.javafy.entity.PlayListEntity;
 import br.com.javafy.entity.UsuarioEntity;
-import br.com.javafy.exceptions.PessoaNaoCadastradaException;
+import br.com.javafy.enums.Roles;
+import br.com.javafy.exceptions.PessoaException;
 import br.com.javafy.exceptions.PlaylistException;
 import br.com.javafy.exceptions.SpotifyException;
 import br.com.javafy.repository.PlayListRepository;
 import com.fasterxml.jackson.databind.ObjectMapper;
-import org.springframework.beans.factory.annotation.Autowired;
+import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.stereotype.Service;
@@ -21,21 +23,17 @@ import java.util.List;
 import java.util.Set;
 import java.util.stream.Collectors;
 
-
 @Service
+@RequiredArgsConstructor
 public class PlayListService {
 
-    @Autowired
-    private ObjectMapper objectMapper;
+    private final ObjectMapper objectMapper;
 
-    @Autowired
-    private PlayListRepository playListRepository;
+    private final PlayListRepository playListRepository;
 
-    @Autowired
-    private MusicaService musicaService;
+    private final MusicaService musicaService;
 
-    @Autowired
-    private UsuarioService usuarioService;
+    private final UsuarioService usuarioService;
 
     public PlayListDTO converterParaPlaylistDTO (PlayListEntity playList){
         return objectMapper.convertValue(playList,PlayListDTO.class);
@@ -45,10 +43,11 @@ public class PlayListService {
         return objectMapper.convertValue(playList, PlayListEntity.class);
     }
 
-    public PlayListEntity retornaPlaylistEntityById(Integer id) throws PlaylistException {
+    public PlayListEntity retornaPlaylistEntityById(Integer id)
+            throws PlaylistException {
         return playListRepository
                 .findById(id)
-                .orElseThrow(() -> new PlaylistException("Playlist Não Cadastrada"));
+                .orElseThrow(() -> new PlaylistException("Playlist Não Cadastrada."));
     }
 
     public PlayListDTO getPlaylistWithIdWithMusics (Integer idPlaylist)
@@ -79,14 +78,10 @@ public class PlayListService {
                 page.getTotalPages(), pagina, registro, playlistsDTOs);
     }
 
-    public PlayListDTO create (PlayListCreate playlistCreate, Integer idUsuario)
-            throws PessoaNaoCadastradaException, PlaylistException, SpotifyException {
+    public PlayListDTO create (PlayListCreate playlistCreate)
+            throws PessoaException, PlaylistException, SpotifyException {
 
-        UsuarioEntity usuario = usuarioService.retornaUsuarioEntityById(idUsuario);
-
-//        if(usuario.getPlano() == TiposdePlano.FREE){
-//            throw new PlaylistException("Plano Free, mude seu plano para premium");
-//        }
+        UsuarioEntity usuario = usuarioService.retornaUsuarioEntityById();
 
         PlayListEntity playList = converterParaPlaylist(playlistCreate);
 
@@ -97,9 +92,11 @@ public class PlayListService {
     }
 
     public PlayListDTO update(Integer idPlaylist, PlaylistAddMusicaDTO playlistCreate)
-            throws PlaylistException, SpotifyException {
+            throws PlaylistException, SpotifyException, PessoaException {
 
         PlayListEntity playList  = retornaPlaylistEntityById(idPlaylist);
+
+        playlistEhDoUsuario(playList);
 
         if(playlistCreate.getName() != null){
             playList.setName(playlistCreate.getName());
@@ -123,19 +120,27 @@ public class PlayListService {
         return getMusicaForPlaylist(playList);
     }
 
-    public void delete (Integer idPlaylist)
-            throws PessoaNaoCadastradaException, PlaylistException {
-        playListRepository.delete(retornaPlaylistEntityById(idPlaylist));
-    }
-
     public void removerMusica (Integer idPlaylist, String idMusica)
-            throws PlaylistException {
+            throws PlaylistException, PessoaException {
 
         PlayListEntity playList = retornaPlaylistEntityById(idPlaylist);
+
+        validarAutorizacaoRemoverPlaylist(playList);
+
         Set<MusicaEntity> musicaEntities = playList.getMusicas();
         musicaEntities.removeIf(m-> idMusica.equals(m.getIdMusica()));
         playList.setMusicas(musicaEntities);
         playListRepository.save(playList);
+    }
+
+    public void delete (Integer idPlaylist)
+            throws PessoaException, PlaylistException {
+
+        PlayListEntity playList = retornaPlaylistEntityById(idPlaylist);
+
+        validarAutorizacaoRemoverPlaylist(playList);
+
+        playListRepository.delete(playList);
     }
 
     private PlayListDTO getMusicaForPlaylist(PlayListEntity playList)
@@ -150,6 +155,33 @@ public class PlayListService {
             playListDTO.setMusicas(musicaService.getList(ids));
         }
         return playListDTO;
+
+    }
+
+    private void validarAutorizacaoRemoverPlaylist(PlayListEntity playList)
+            throws PessoaException, PlaylistException {
+
+        UsuarioEntity usuario = usuarioService.retornaUsuarioEntityById();
+        List<CargoEntity> validar =  usuario.getCargos()
+                .stream()
+                .filter(c-> c.getNome().getTipoCargo().equals(Roles.ADMIN))
+                .toList();
+
+        if(!(usuario.getIdUsuario().equals(playList.getUsuario().getIdUsuario())
+                || validar.isEmpty())){
+            throw new PlaylistException("Você não tem autorização para excluir a playlist.");
+        }
+
+    }
+
+    private void playlistEhDoUsuario(PlayListEntity playList)
+            throws PessoaException, PlaylistException {
+
+        UsuarioEntity usuario = usuarioService.retornaUsuarioEntityById();
+
+        if(!(usuario.getIdUsuario().equals(playList.getUsuario().getIdUsuario()))){
+            throw new PlaylistException("Você não tem autorização para excluir a playlist.");
+        }
 
     }
 

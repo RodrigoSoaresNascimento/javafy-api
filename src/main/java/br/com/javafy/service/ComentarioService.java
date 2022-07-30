@@ -4,8 +4,12 @@ import br.com.javafy.dto.*;
 import br.com.javafy.dto.comentario.ComentarioCreateDTO;
 import br.com.javafy.dto.comentario.ComentarioDTO;
 import br.com.javafy.dto.comentario.ComentarioPlaylistRelatorioDTO;
+import br.com.javafy.entity.CargoEntity;
 import br.com.javafy.entity.ComentarioEntity;
+import br.com.javafy.entity.UsuarioEntity;
+import br.com.javafy.enums.Roles;
 import br.com.javafy.exceptions.ComentarioNaoCadastradoException;
+import br.com.javafy.exceptions.PessoaException;
 import br.com.javafy.repository.ComentariosRepository;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -48,8 +52,8 @@ public class ComentarioService {
         return converterComentario(findComentarioEntityById(id));
     }
 
-    public List<ComentarioPlaylistRelatorioDTO> relatorioComentarioPlaylist (Integer idUsuario){
-        return comentariosRepository.relatorioComentarios(idUsuario);
+    public List<ComentarioPlaylistRelatorioDTO> relatorioComentarioPlaylist () {
+        return comentariosRepository.relatorioComentarios();
     }
 
     public List<ComentarioDTO> list() {
@@ -69,11 +73,11 @@ public class ComentarioService {
         return new PageDTO<>(page.getTotalElements(), page.getTotalPages(), pagina, registro, comentarioDTOS);
     }
 
-    public ComentarioDTO create(Integer idUser, Integer idPlaylist, ComentarioCreateDTO comentarioCreateDTO)
+    public ComentarioDTO create(Integer idPlaylist, ComentarioCreateDTO comentarioCreateDTO)
             throws ComentarioNaoCadastradoException {
         try {
             ComentarioEntity comentarioEntity = converterComentarioDTO(new ComentarioDTO());
-            comentarioEntity.setUsuarioEntity(usuarioService.retornaUsuarioEntityById(idUser));
+            comentarioEntity.setUsuarioEntity(usuarioService.retornaUsuarioEntityById());
             comentarioEntity.setPlayList(playListService.retornaPlaylistEntityById(idPlaylist));
             comentarioEntity.setComentario(comentarioCreateDTO.getComentario());
             comentariosRepository.save(comentarioEntity);
@@ -85,19 +89,41 @@ public class ComentarioService {
 
     public ComentarioDTO update(Integer idComentario,
                                 ComentarioCreateDTO comentarioAtualizar)
-            throws ComentarioNaoCadastradoException {
+            throws ComentarioNaoCadastradoException, PessoaException {
 
         ComentarioEntity comentarioEntity = findComentarioEntityById(idComentario);
+        comentarioEhDoUsuario(comentarioEntity);
 
         comentarioEntity.setComentario(comentarioAtualizar.getComentario());
-        comentarioEntity.setUsuarioEntity(comentarioEntity.getUsuarioEntity());
-        comentarioEntity.setPlayList(comentarioEntity.getPlayList());
         comentariosRepository.save(comentarioEntity);
         return converterComentario(comentarioEntity);
     }
 
-    public void delete(Integer idComentario) {
-        comentariosRepository.deleteById(idComentario);
+    public void delete(Integer idComentario)
+            throws ComentarioNaoCadastradoException, PessoaException {
+
+        ComentarioEntity comentario = findComentarioEntityById(idComentario);
+        comentarioEhDoUsuario(comentario);
+        comentariosRepository.delete(comentario);
+    }
+
+    private void comentarioEhDoUsuario(ComentarioEntity comentario)
+            throws PessoaException, ComentarioNaoCadastradoException {
+
+        Integer idDonoDoComentario = comentario.getUsuarioEntity().getIdUsuario();
+        UsuarioEntity usuario = usuarioService.retornaUsuarioEntityById();
+
+        List<CargoEntity> contemAdmin =  usuario.getCargos()
+                .stream()
+                .filter(c-> c.getNome().getTipoCargo().equals(Roles.ADMIN))
+                .toList();
+
+        boolean valido = !idDonoDoComentario
+                .equals(usuario.getIdUsuario()) || contemAdmin.isEmpty();
+
+        if(valido){
+            throw new ComentarioNaoCadastradoException("Não é possível remover o comentário.");
+        }
     }
 
 }

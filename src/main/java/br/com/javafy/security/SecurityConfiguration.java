@@ -4,7 +4,6 @@ import br.com.javafy.enums.Roles;
 import lombok.RequiredArgsConstructor;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
-import org.springframework.http.HttpMethod;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.config.annotation.authentication.configuration.AuthenticationConfiguration;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
@@ -30,18 +29,20 @@ public class SecurityConfiguration {
         httpSecurity.headers().frameOptions().disable()
                 .and().cors()
                 .and().csrf().disable()
-                .authorizeRequests(
+                .authorizeHttpRequests(
                         (auth) -> auth
                                 .antMatchers(
                                         "/",
                                         "/auth",
                                         "/auth/create-user")
                                 .permitAll()
-                                .antMatchers("/playlist/criar-playlist/**"
+                                .antMatchers(
+                                        "/playlist/criar-playlist/**",
+                                        "/playlist/remover-playlist/**",
+                                        "/playlist/deletar-playlist/**",
+                                        "/playlist/atualizar-playlist/**"
                                         )
-                                .hasAnyRole(Roles.PREMIUM)
-//                                .antMatchers(HttpMethod.GET, "/playlist")
-//                                .hasRole(Roles.FREE)
+                                .hasAnyRole(Roles.PREMIUM, Roles.ADMIN)
                                 .anyRequest()
                                 .authenticated()
                 );

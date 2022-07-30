@@ -52,7 +52,8 @@ public class EmailService {
 
     }
 
-    public String geContentFromTemplate(UsuarioDTO usuarioDTO, String tipoMensagem) throws IOException, TemplateException {
+    public String geContentFromTemplate(UsuarioDTO usuarioDTO, String tipoMensagem)
+            throws IOException, TemplateException {
         Map<String, Object> dados = new HashMap<>();
         dados.put("nome", usuarioDTO.getNome());
         dados.put("id", usuarioDTO.getIdUsuario());

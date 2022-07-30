@@ -4,7 +4,7 @@ import br.com.javafy.anotations.MagiaResponse;
 import br.com.javafy.dto.comentario.ComentarioCreateDTO;
 import br.com.javafy.dto.comentario.ComentarioDTO;
 import br.com.javafy.exceptions.ComentarioNaoCadastradoException;
-import br.com.javafy.exceptions.PessoaNaoCadastradaException;
+import br.com.javafy.exceptions.PessoaException;
 import io.swagger.v3.oas.annotations.Operation;
 import org.springframework.http.ResponseEntity;
 import org.springframework.validation.annotation.Validated;
@@ -20,7 +20,7 @@ public interface DocumentationComentario {
     @Operation(summary = "Procura um comentario pelo seu ID")
     @MagiaResponse
     public ResponseEntity<ComentarioDTO> findById(@PathVariable("idComentario") Integer idUser)
-            throws SQLException, PessoaNaoCadastradaException, ComentarioNaoCadastradoException;
+            throws SQLException, PessoaException, ComentarioNaoCadastradoException;
 
     @Operation(summary = "Lista todos os comentarios pelo seu ID")
     @MagiaResponse
@@ -28,8 +28,7 @@ public interface DocumentationComentario {
 
     @Operation(summary = "Cria um perfil de comentario")
     @MagiaResponse
-    public ResponseEntity<ComentarioDTO> create(@PathVariable("idUser")Integer idUser,
-                                                @PathVariable("idPlaylist")Integer idPlaylist,
+    public ResponseEntity<ComentarioDTO> create(@PathVariable("idPlaylist")Integer idPlaylist,
                                                 @Valid @RequestBody ComentarioCreateDTO comentarioCreateDTO)
             throws ComentarioNaoCadastradoException;
 
@@ -37,11 +36,11 @@ public interface DocumentationComentario {
     @MagiaResponse
     public ResponseEntity<ComentarioDTO> update(@PathVariable("idComentario") Integer idComentario
             , @Valid @RequestBody ComentarioCreateDTO comentarioAtualizar)
-            throws ComentarioNaoCadastradoException;
+            throws ComentarioNaoCadastradoException, PessoaException;
 
     @Operation(summary = "Apaga comentario pelo seu ID")
     @MagiaResponse
     public void delete(@PathVariable("idComentario") Integer id)
-            throws PessoaNaoCadastradaException, SQLException;
+            throws PessoaException, SQLException, ComentarioNaoCadastradoException;
 
 }

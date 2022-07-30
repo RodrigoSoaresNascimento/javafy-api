@@ -21,9 +21,8 @@ public interface UsuarioRepository extends JpaRepository<UsuarioEntity, Integer>
             " p.name" +
             ")" +
             "  from usuario u " +
-            "  inner join u.playlist p " +
-            " where (:idUsuario is null OR u.idUsuario = :idUsuario )")
-    List<UsuarioRelatorioDTO> relatorioPessoa(@Param("idUsuario") Integer idPessoa);
+            "  inner join u.playlist p ")
+    List<UsuarioRelatorioDTO> relatorioPessoa();
 
     Page<UsuarioEntity> findUsuarioEntitiesByNome(String nome, PageRequest pageRequest);
 

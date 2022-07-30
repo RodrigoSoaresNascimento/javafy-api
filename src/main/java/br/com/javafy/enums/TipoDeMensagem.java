@@ -13,6 +13,8 @@ public enum TipoDeMensagem {
         this.tipoDeMensagem = tipoDeMensagem;
     }
 
+
+
     public static TipoDeMensagem tipo (String tipoMensagem){
         return Arrays.stream(TipoDeMensagem.values())
                 .filter(tp -> tp.getTipoDeMensagem().equals(tipoMensagem))

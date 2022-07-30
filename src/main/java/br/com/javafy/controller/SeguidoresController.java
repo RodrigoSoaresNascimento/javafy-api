@@ -3,7 +3,7 @@ package br.com.javafy.controller;
 
 
 import br.com.javafy.documentation.DocumentationSeguidores;
-import br.com.javafy.exceptions.PessoaNaoCadastradaException;
+import br.com.javafy.exceptions.PessoaException;
 import br.com.javafy.exceptions.SeguidoresException;
 import br.com.javafy.service.SeguidoresService;
 import br.com.javafy.dto.usuario.UsuarioDTO;
@@ -18,29 +18,27 @@ public class SeguidoresController implements DocumentationSeguidores {
     @Autowired
     SeguidoresService service;
 
-    @GetMapping(value = "/to-user/{idUser}")
-    public List<UsuarioDTO> fromUser(@PathVariable("idUser") Integer idUser)
-            throws PessoaNaoCadastradaException {
-        return service.getAllSeguindo(idUser);
+    @GetMapping(value = "/to-user")
+    public List<UsuarioDTO> fromUser()
+            throws PessoaException {
+        return service.getAllSeguindo();
     }
 
-    @GetMapping(value = "/from-user/{idUser}")
-    public List<UsuarioDTO> toUser(@PathVariable("idUser") Integer idUser)
-            throws PessoaNaoCadastradaException {
-        return service.getAllSeguidores(idUser);
+    @GetMapping(value = "/from-user")
+    public List<UsuarioDTO> toUser()
+            throws PessoaException {
+        return service.getAllSeguidores();
     }
 
-    @PostMapping(value = "/{meuId}/seguir/{idSeguindo}")
-    public Boolean seguirUser(@PathVariable("meuId") Integer meuId,
-                              @PathVariable("idSeguindo") Integer idSeguindo)
-            throws PessoaNaoCadastradaException, SeguidoresException {
-        return service.seguirUser(meuId,idSeguindo);
+    @PostMapping(value = "/seguir-usuario/{idSeguindo}")
+    public boolean seguirUser(@PathVariable("idSeguindo") Integer idSeguindo)
+            throws PessoaException, SeguidoresException {
+        return service.seguirUser(idSeguindo);
     }
 
-    @DeleteMapping(value = "{meuId}/deixarSeguir/{idSeguindo}")
-    public void deixarDeSeguirUsuario( @PathVariable("meuId") Integer meuId,
-            @PathVariable("idSeguindo") Integer idSeguindo)
-            throws PessoaNaoCadastradaException {
-        service.deixarDeSeguirUsuario(meuId,idSeguindo);
+    @DeleteMapping(value = "/deixarDeSeguir-usuario/{idSeguindo}")
+    public boolean deixarDeSeguirUsuario(@PathVariable("idSeguindo") Integer idSeguindo)
+            throws PessoaException, SeguidoresException {
+        return service.deixarDeSeguirUsuario(idSeguindo);
     }
 }

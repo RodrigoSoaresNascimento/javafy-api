@@ -2,6 +2,7 @@ package br.com.javafy.enums;
 
 import java.util.Arrays;
 
+
 public enum CargosEnum {
 
     ROLE_FREE(Roles.FREE),
@@ -18,7 +19,11 @@ public enum CargosEnum {
         return tipoCargo;
     }
 
-    public static CargosEnum offTipo(String tipoCargo){
+    public String getRole(){
+        return "ROLE_" + tipoCargo;
+    }
+
+    public static CargosEnum ofTipo(String tipoCargo){
         return Arrays.stream(CargosEnum.values())
                 .filter(tp -> tp.getTipoCargo().equals(tipoCargo))
                 .findFirst()

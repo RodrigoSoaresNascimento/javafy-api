@@ -5,7 +5,7 @@ import br.com.javafy.dto.PageDTO;
 import br.com.javafy.dto.playlist.PlayListCreate;
 import br.com.javafy.dto.playlist.PlayListDTO;
 import br.com.javafy.dto.playlist.PlaylistAddMusicaDTO;
-import br.com.javafy.exceptions.PessoaNaoCadastradaException;
+import br.com.javafy.exceptions.PessoaException;
 import br.com.javafy.exceptions.PlaylistException;
 import br.com.javafy.exceptions.SpotifyException;
 import io.swagger.v3.oas.annotations.Operation;
@@ -39,23 +39,23 @@ public interface DocumentationPlaylist {
 
     @Operation(summary = "Cria uma playlist.")
     @MagiaResponse
-    public PlayListDTO create (@Valid @RequestBody PlayListCreate playListCreate,
-                               @PathVariable Integer idUsuario) throws PlaylistException, PessoaNaoCadastradaException, SpotifyException;
+    public PlayListDTO create (@Valid @RequestBody PlayListCreate playListCreate)
+            throws PlaylistException, PessoaException, SpotifyException;
 
 
     @Operation(summary = "Atualiza uma playlist.")
     @MagiaResponse
     public ResponseEntity<PlayListDTO> update (@PathVariable Integer idPlaylist,
                                                @Valid @RequestBody PlaylistAddMusicaDTO playlist)
-            throws PlaylistException, SpotifyException;
+            throws PlaylistException, SpotifyException, PessoaException;
 
 
     @Operation(summary = "Deleta uma playlist.")
     @MagiaResponse
     public void delete (@PathVariable Integer idPlayList) throws SQLException,
-            PessoaNaoCadastradaException;
+            PessoaException;
 
     @Operation(summary = "deleta uma musica de uma playlist")
     @MagiaResponse
-    void removeMusica(Integer idPlayList,String idMusica ) throws PlaylistException;
+    void removeMusica(Integer idPlayList,String idMusica ) throws PlaylistException, PessoaException;
 }

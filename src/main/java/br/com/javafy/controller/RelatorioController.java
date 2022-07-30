@@ -27,14 +27,13 @@ public class RelatorioController implements DocumentationRelatorio {
 
     @GetMapping("/comentarios-playlist")
     public List<ComentarioPlaylistRelatorioDTO>
-    relatorioComentarioPlaylist(@RequestParam(required = false) Integer idUsuario){
-        return comentarioService.relatorioComentarioPlaylist(idUsuario);
+    relatorioComentarioPlaylist(){
+        return comentarioService.relatorioComentarioPlaylist();
     }
 
     @GetMapping("/relatorio-playlists")
-    public List<UsuarioRelatorioDTO> relatorioPlayList
-            (@RequestParam(required = false) Integer id){
-        return usuarioService.relatorio(id);
+    public List<UsuarioRelatorioDTO> relatorioPlayList(){
+        return usuarioService.relatorio();
     }
 
 }

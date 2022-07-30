@@ -7,7 +7,7 @@ import br.com.javafy.dto.usuario.UsuarioLoginDTO;
 import br.com.javafy.dto.usuario.UsuarioUpdateLoginDTO;
 import br.com.javafy.entity.UsuarioEntity;
 import br.com.javafy.enums.CargosEnum;
-import br.com.javafy.exceptions.PessoaNaoCadastradaException;
+import br.com.javafy.exceptions.PessoaException;
 import br.com.javafy.security.TokenService;
 import br.com.javafy.service.UsuarioService;
 import lombok.RequiredArgsConstructor;
@@ -32,12 +32,6 @@ public class AuthController {
 
     private final AuthenticationManager authenticationManager;
 
-    @PostMapping("/create-user")
-    public ResponseEntity<UsuarioDTO> create(
-            @RequestBody UsuarioCreateDTO usuarioCreateDTO,
-            CargosEnum cargos){
-        return ResponseEntity.ok(usuarioService.create(usuarioCreateDTO, cargos));
-    }
 
     @PostMapping
     public String auth(@RequestBody @Valid LoginDTO login){
@@ -56,19 +50,28 @@ public class AuthController {
         return tokenService.getToken(usuarioEntity);
     }
 
-    @PutMapping("/update-user")
-    public ResponseEntity<UsuarioUpdateLoginDTO> update (@RequestBody UsuarioUpdateLoginDTO usuarioUpdateLoginDTO) throws PessoaNaoCadastradaException {
-        return ResponseEntity.ok(usuarioService.updateLogin(usuarioUpdateLoginDTO));
-    }
-
-    @GetMapping("/get-user")
-    public ResponseEntity<UsuarioLoginDTO> getUser () throws PessoaNaoCadastradaException {
+    @GetMapping("/get-islogged")
+    public ResponseEntity<UsuarioLoginDTO> getUser () throws PessoaException {
         return ResponseEntity.ok(usuarioService.getLoggedUser());
     }
 
-    @DeleteMapping("/{idUser}")
-    public void delete (@PathVariable("idUser") Integer idUsuario) throws PessoaNaoCadastradaException {
-        usuarioService.delete(idUsuario);
+    @PostMapping("/create-user")
+    public ResponseEntity<UsuarioDTO> create(
+            @RequestBody UsuarioCreateDTO usuarioCreateDTO,
+            CargosEnum cargos){
+        return ResponseEntity.ok(usuarioService.create(usuarioCreateDTO, cargos));
+    }
+
+    @PutMapping("/update-credenciais")
+    public ResponseEntity<UsuarioUpdateLoginDTO> update
+            (@RequestBody UsuarioUpdateLoginDTO usuarioUpdateLoginDTO) throws PessoaException {
+        return ResponseEntity.ok(usuarioService.updateLogin(usuarioUpdateLoginDTO));
+    }
+
+    // TODO -> TEM QUE CRIAR OUTRO MÉTODO PARA REMOVER OUTROS USUÁRIOS
+    @DeleteMapping("/remover-usuario")
+    public void delete (@PathVariable("idUser") Integer idUsuario) throws PessoaException {
+        //usuarioService.delete();
     }
 
 }

@@ -4,8 +4,9 @@ import br.com.javafy.anotations.MagiaResponse;
 import br.com.javafy.dto.PageDTO;
 import br.com.javafy.dto.usuario.UsuarioCreateDTO;
 import br.com.javafy.dto.usuario.UsuarioDTO;
+import br.com.javafy.dto.usuario.UsuarioUpdateDTO;
 import br.com.javafy.enums.CargosEnum;
-import br.com.javafy.exceptions.PessoaNaoCadastradaException;
+import br.com.javafy.exceptions.PessoaException;
 import io.swagger.v3.oas.annotations.Operation;
 import org.springframework.http.ResponseEntity;
 import org.springframework.validation.annotation.Validated;
@@ -19,29 +20,22 @@ public interface DocumentationUsuario {
 
     @Operation(summary = "Procura um usuario pelo seu ID")
     @MagiaResponse
-    public ResponseEntity<UsuarioDTO> findById(@PathVariable("idUser") Integer idUser)
-            throws PessoaNaoCadastradaException;
+    public ResponseEntity<UsuarioDTO> findById()
+            throws PessoaException;
 
     @Operation(summary = "Lista todos os usuarios")
     @MagiaResponse
     public ResponseEntity<List<UsuarioDTO>> list();
 
-    @Operation(summary = "Cria um perfil de usuario")
-    @MagiaResponse
-    public ResponseEntity<UsuarioDTO> create(
-            @Valid @RequestBody UsuarioCreateDTO usuario, CargosEnum cargos
-    );
-
     @Operation(summary = "Atualiza um perfil de usuario pelo seu ID")
     @MagiaResponse
-    public ResponseEntity<UsuarioDTO> update(@PathVariable("idUser") Integer id,
-            @Valid @RequestBody UsuarioCreateDTO usuario)
-            throws PessoaNaoCadastradaException;
+    public ResponseEntity<UsuarioDTO> update(@Valid @RequestBody UsuarioUpdateDTO usuario)
+            throws PessoaException;
 
     @Operation(summary = "Apaga um perfil de usuario pelo seu ID")
     @MagiaResponse
-    public void delete(@PathVariable("idUser") Integer id)
-            throws PessoaNaoCadastradaException;
+    public void delete()
+            throws PessoaException;
 
     @Operation(summary = "Tras a paginação dos usuarios que estão cadastrados no aplicativo")
     @MagiaResponse

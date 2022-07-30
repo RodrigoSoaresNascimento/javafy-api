@@ -51,8 +51,8 @@ public class CustomGlobalExceptionHandler extends ResponseEntityExceptionHandler
         return new ResponseEntity<>(body, HttpStatus.BAD_REQUEST);
     }
 
-    @ExceptionHandler(PessoaNaoCadastradaException.class)
-    public ResponseEntity<Object> handleException(PessoaNaoCadastradaException exception,
+    @ExceptionHandler(PessoaException.class)
+    public ResponseEntity<Object> handleException(PessoaException exception,
                                                   HttpServletRequest request) {
         return returnError(exception.getMessage());
     }
