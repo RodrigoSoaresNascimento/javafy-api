@@ -33,5 +33,5 @@ public interface DocumentationAuth {
     @Operation(summary = "deleta o usuario",
             description = "Deleta uma conta de usuario atraves do cargo de admin")
     @MagiaResponse
-    void delete (Integer idUsuario) throws PessoaException;
+    void delete (Integer login) throws PessoaException;
 }

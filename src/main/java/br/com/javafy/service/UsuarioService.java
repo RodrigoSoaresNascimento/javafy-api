@@ -165,6 +165,14 @@ public class UsuarioService {
         usuarioRepository.delete(usuario);
     }
 
+    public void restrigirUsuario(Integer idUsuario)
+            throws PessoaException {
+        Optional<UsuarioEntity> usuarioParaRestringir = usuarioRepository.findById(idUsuario);
+        UsuarioEntity usuarioEntity = usuarioParaRestringir.get();
+        usuarioEntity.setEnable(false);
+        usuarioRepository.save(usuarioEntity);
+    }
+
     public List<UsuarioRelatorioDTO> relatorio (){
         return usuarioRepository.relatorioPessoa();
     }

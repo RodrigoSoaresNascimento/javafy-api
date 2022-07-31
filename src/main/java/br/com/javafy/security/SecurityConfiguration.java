@@ -43,6 +43,8 @@ public class SecurityConfiguration {
                                         "/playlist/atualizar-playlist/**"
                                         )
                                 .hasAnyRole(Roles.PREMIUM, Roles.ADMIN)
+                                .antMatchers("/auth/remover/**")
+                                .hasRole(Roles.ADMIN)
                                 .anyRequest()
                                 .authenticated()
                 );

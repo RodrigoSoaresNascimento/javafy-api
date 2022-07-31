@@ -12,7 +12,6 @@ import br.com.javafy.exceptions.PessoaException;
 import br.com.javafy.security.TokenService;
 import br.com.javafy.service.UsuarioService;
 import lombok.RequiredArgsConstructor;
-import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
@@ -71,10 +70,10 @@ public class AuthController implements DocumentationAuth {
     }
 
     // TODO -> TEM QUE CRIAR OUTRO MÉTODO PARA REMOVER OUTROS USUÁRIOS
-    @DeleteMapping("/remover-usuario")
-    public void delete (@PathVariable("idUser") Integer idUsuario) throws PessoaException {
+    @DeleteMapping("/remover/{idUsuario}")
+    public void delete (@PathVariable Integer idUsuario) throws PessoaException {
 
-        //usuarioService.delete();
+        usuarioService.restrigirUsuario(idUsuario);
     }
 
 }
