@@ -1,8 +1,6 @@
 package br.com.javafy.security;
 
-import br.com.javafy.entity.CargoEntity;
 import br.com.javafy.entity.UsuarioEntity;
-import br.com.javafy.service.UsuarioService;
 import io.jsonwebtoken.Claims;
 import io.jsonwebtoken.Jwts;
 import io.jsonwebtoken.SignatureAlgorithm;
