@@ -93,7 +93,7 @@ public class ComentarioService {
             throws ComentarioNaoCadastradoException, PessoaException {
 
         ComentarioEntity comentarioEntity = findComentarioEntityById(idComentario);
-        comentarioEhDoUsuario(comentarioEntity);
+        comentarioEhDoUsuarioOrAdminTaExcluindo(comentarioEntity);
 
         comentarioEntity.setComentario(comentarioAtualizar.getComentario());
         comentariosRepository.save(comentarioEntity);
@@ -104,11 +104,11 @@ public class ComentarioService {
             throws ComentarioNaoCadastradoException, PessoaException {
 
         ComentarioEntity comentario = findComentarioEntityById(idComentario);
-        comentarioEhDoUsuario(comentario);
+        comentarioEhDoUsuarioOrAdminTaExcluindo(comentario);
         comentariosRepository.delete(comentario);
     }
 
-    private void comentarioEhDoUsuario(ComentarioEntity comentario)
+    private void comentarioEhDoUsuarioOrAdminTaExcluindo(ComentarioEntity comentario)
             throws PessoaException, ComentarioNaoCadastradoException {
 
         Integer idDonoDoComentario = comentario.getUsuarioEntity().getIdUsuario();
