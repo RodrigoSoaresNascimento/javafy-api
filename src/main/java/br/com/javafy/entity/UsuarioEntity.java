@@ -41,7 +41,7 @@ public class UsuarioEntity implements UserDetails {
     private String senha;
 
     @Column(name = "enable")
-    private boolean enable = true;
+    private boolean enable;
 
     @JsonIgnore
     @ManyToMany(fetch = FetchType.LAZY, cascade = CascadeType.ALL)

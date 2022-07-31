@@ -72,7 +72,6 @@ public class AuthController implements DocumentationAuth {
     // TODO -> TEM QUE CRIAR OUTRO MÉTODO PARA REMOVER OUTROS USUÁRIOS
     @DeleteMapping("/remover/{idUsuario}")
     public void delete (@PathVariable Integer idUsuario) throws PessoaException {
-
         usuarioService.restrigirUsuario(idUsuario);
     }
 

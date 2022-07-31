@@ -108,6 +108,7 @@ public class UsuarioService {
         UsuarioEntity usuarioEntity = converterUsuarioEntity(usuario);
         usuarioEntity.setCargos(Set.of(cargoRepository.findByNome(cargo)));
         usuarioEntity.setSenha(encodePassword(usuario.getSenha()));
+        usuarioEntity.setEnable(true);
         usuarioEntity = usuarioRepository.save(usuarioEntity);
         UsuarioDTO usuarioDTO= converterUsuarioDTO(usuarioEntity);
 
