@@ -114,15 +114,12 @@ public class ComentarioService {
         Integer idDonoDoComentario = comentario.getUsuarioEntity().getIdUsuario();
         UsuarioEntity usuario = usuarioService.retornarUsuarioEntityById();
 
-        List<CargoEntity> contemAdmin =  usuario.getCargos()
-                .stream()
-                .filter(c-> c.getNome().getTipoCargo().equals(Roles.ADMIN))
-                .toList();
+        boolean userNotAdmin = !usuario.getCargo().getNome().getTipoCargo()
+                .equals(Roles.ADMIN);
+        boolean usuarioNaoEhDonoDoComentario = !idDonoDoComentario
+                .equals(usuario.getIdUsuario());
 
-        boolean valido = !idDonoDoComentario
-                .equals(usuario.getIdUsuario()) || contemAdmin.isEmpty();
-
-        if(valido){
+        if(userNotAdmin || usuarioNaoEhDonoDoComentario){
             throw new ComentarioNaoCadastradoException("Não é possível remover o comentário.");
         }
     }

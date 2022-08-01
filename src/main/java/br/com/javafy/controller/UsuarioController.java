@@ -3,6 +3,8 @@ package br.com.javafy.controller;
 import br.com.javafy.documentation.DocumentationUsuario;
 import br.com.javafy.dto.PageDTO;
 import br.com.javafy.dto.usuario.UsuarioUpdateDTO;
+import br.com.javafy.enums.CargosEnum;
+import br.com.javafy.enums.CargosUser;
 import br.com.javafy.service.UsuarioService;
 import br.com.javafy.dto.usuario.UsuarioDTO;
 import br.com.javafy.exceptions.PessoaException;
@@ -39,9 +41,12 @@ public class UsuarioController implements DocumentationUsuario {
     }
 
     @PutMapping("/update-user")
-    public ResponseEntity<UsuarioDTO> update(@Valid @RequestBody UsuarioUpdateDTO usuario)
+    public ResponseEntity<UsuarioDTO> update(
+            @RequestParam(required = false) CargosUser cargos,
+            @Valid @RequestBody UsuarioUpdateDTO usuario
+    )
             throws PessoaException {
-        return ResponseEntity.ok(usuarioService.update(usuario));
+        return ResponseEntity.ok(usuarioService.update(usuario, cargos));
     }
 
     @DeleteMapping("/delete-user")

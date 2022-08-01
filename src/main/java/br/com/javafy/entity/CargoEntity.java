@@ -21,6 +21,7 @@ public class CargoEntity implements GrantedAuthority {
     @Id
     @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "SEQ_ID_CARGO")
     @SequenceGenerator(name = "SEQ_ID_CARGO", sequenceName = "seq_id+cargo", allocationSize = 1)
+    @Column(name = "id_cargo")
     private Integer idCargo;
 
     @Column(name = "nome")
@@ -28,13 +29,10 @@ public class CargoEntity implements GrantedAuthority {
     private CargosEnum nome;
 
     @JsonIgnore
-    @ManyToMany(fetch = FetchType.LAZY)
-    @JoinTable(
-            name = "usuario_cargo",
-            joinColumns = @JoinColumn(name = "id_cargo"),
-            inverseJoinColumns = @JoinColumn(name = "id_user")
-    )
-    Set<UsuarioEntity> usuarios;
+    @OneToMany(fetch = FetchType.LAZY,
+            mappedBy = "cargo")
+    private Set<UsuarioEntity> usuarios;
+
 
     @Override
     public String getAuthority() {

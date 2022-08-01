@@ -19,11 +19,9 @@ import java.time.LocalDate;
 public class UsuarioUpdateDTO {
 
     @Schema(example = "Juliana", description = "Nome do usuario")
-    @NotBlank(message = "Nome não pode ser nulo.")
     private String nome;
 
     @Schema(example = "2000-10-10", description = "Data de nascimento do usuario")
-    @NotNull
     @Past
     private LocalDate dataNascimento;
 
@@ -32,7 +30,6 @@ public class UsuarioUpdateDTO {
     private String genero;
 
     @Schema(example = "faker@faker.com", description = "Email do usuario")
-    @NotBlank(message = "Email e obrigatorio")
     private String email;
 
     @Override

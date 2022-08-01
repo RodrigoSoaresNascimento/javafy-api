@@ -76,18 +76,15 @@ public class UsuarioEntity implements UserDetails {
     )
     private Set<ComentarioEntity> comentarios;
 
+    @JsonIgnore
+    @ManyToOne(fetch = FetchType.LAZY) // traz quando solicitado
+    @JoinColumn(name = "id_cargo", referencedColumnName = "id_cargo")
+    private CargoEntity cargo; // contato.getPessoa()
 
-    @ManyToMany(fetch = FetchType.LAZY)
-    @JoinTable(
-            name = "usuario_cargo",
-            joinColumns = @JoinColumn(name = "id_user"),
-            inverseJoinColumns = @JoinColumn(name = "id_cargo")
-    )
-    Set<CargoEntity> cargos;
 
     @Override
     public Collection<? extends GrantedAuthority> getAuthorities() {
-        return cargos;
+        return List.of(cargo);
     }
 
     @Override
@@ -118,6 +115,19 @@ public class UsuarioEntity implements UserDetails {
     @Override
     public boolean isEnabled() {
         return enable;
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+        UsuarioEntity usuario = (UsuarioEntity) o;
+        return Objects.equals(idUsuario, usuario.idUsuario);
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(idUsuario);
     }
 
     @Override

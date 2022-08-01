@@ -4,9 +4,12 @@ import br.com.javafy.dto.*;
 import br.com.javafy.dto.usuario.UsuarioCreateDTO;
 import br.com.javafy.dto.usuario.UsuarioDTO;
 import br.com.javafy.dto.usuario.UsuarioRelatorioDTO;
+import br.com.javafy.entity.CargoEntity;
 import br.com.javafy.entity.UsuarioEntity;
 import br.com.javafy.dto.usuario.*;
 import br.com.javafy.enums.CargosEnum;
+import br.com.javafy.enums.CargosUser;
+import br.com.javafy.enums.TipoDeMensagem;
 import br.com.javafy.exceptions.PessoaException;
 import br.com.javafy.repository.CargoRepository;
 import br.com.javafy.repository.UsuarioRepository;
@@ -106,40 +109,46 @@ public class UsuarioService {
     public UsuarioDTO create(UsuarioCreateDTO usuario, CargosEnum cargo)  {
 
         UsuarioEntity usuarioEntity = converterUsuarioEntity(usuario);
-        usuarioEntity.setCargos(Set.of(cargoRepository.findByNome(cargo)));
+        usuarioEntity.setCargo(cargoRepository.findByNome(cargo));
         usuarioEntity.setSenha(encodePassword(usuario.getSenha()));
         usuarioEntity.setEnable(true);
         usuarioEntity = usuarioRepository.save(usuarioEntity);
         UsuarioDTO usuarioDTO= converterUsuarioDTO(usuarioEntity);
 
-        //emailService.sendEmail(usuarioDTO, TipoDeMensagem.CREATE.getTipoDeMensagem());
+        emailService.sendEmail(usuarioDTO, TipoDeMensagem.CREATE.getTipoDeMensagem());
         return usuarioDTO;
     }
 
-    public UsuarioDTO update(UsuarioUpdateDTO usuarioUpdate)
+    public UsuarioDTO update(UsuarioUpdateDTO usuarioUpdate, CargosUser cargo)
             throws PessoaException {
 
-        UsuarioEntity usuario = retornarUsuarioEntityById();
+        UsuarioEntity usuarioEntity = retornarUsuarioEntityById();
+
+        if(cargo != null){
+            CargosEnum cargosEnum = CargosEnum.ofTipo(cargo.getTipoCargo());
+            CargoEntity cargoEntity = cargoRepository.findByNome(cargosEnum);
+            usuarioEntity.setCargo(cargoEntity);
+        }
 
         if(usuarioUpdate.getEmail() != null){
-            usuario.setEmail(usuarioUpdate.getEmail());
+            usuarioEntity.setEmail(usuarioUpdate.getEmail());
         }
 
         if(usuarioUpdate.getGenero() != null){
-            usuario.setGenero(usuarioUpdate.getGenero());
+            usuarioEntity.setGenero(usuarioUpdate.getGenero());
         }
 
         if(usuarioUpdate.getDataNascimento() != null){
-            usuario.setDataNascimento(usuarioUpdate.getDataNascimento());
+            usuarioEntity.setDataNascimento(usuarioUpdate.getDataNascimento());
         }
 
         if(usuarioUpdate.getNome() != null) {
-            usuario.setNome(usuarioUpdate.getNome());
+            usuarioEntity.setNome(usuarioUpdate.getNome());
         }
+        System.out.println(usuarioEntity);
+        usuarioEntity = usuarioRepository.save(usuarioEntity);
 
-        //usuario.setPlano(usuarioDTOAtualizar.getCargos());
-
-        return converterUsuarioDTO(usuarioRepository.save(usuario));
+        return converterUsuarioDTO(usuarioEntity);
     }
 
     public UsuarioUpdateLoginDTO updateLogin (UsuarioUpdateLoginDTO usuario)
@@ -168,8 +177,7 @@ public class UsuarioService {
 
     public void restrigirUsuario(Integer idUsuario)
             throws PessoaException {
-        Optional<UsuarioEntity> usuarioParaRestringir = usuarioRepository.findById(idUsuario);
-        UsuarioEntity usuarioEntity = usuarioParaRestringir.get();
+        UsuarioEntity usuarioEntity = buscarOutroUsuario(idUsuario);
         usuarioEntity.setEnable(false);
         usuarioRepository.save(usuarioEntity);
     }

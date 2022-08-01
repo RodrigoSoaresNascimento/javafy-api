@@ -35,9 +35,8 @@ public class TokenService {
     public String getToken(UsuarioEntity usuario){
         final Date now = new Date();
         final Date exp = new Date(now.getTime() + Long.parseLong(expiration));
-        List<String> cargos = usuario.getCargos().stream()
-                                .map(c -> c.getNome().getRole())
-                                .toList();
+
+        List<String> cargos = List.of(usuario.getCargo().getNome().getRole());
 
         String token =  Jwts.builder()
                 .setIssuer("vemser-api")

@@ -65,13 +65,14 @@ public class AuthController implements DocumentationAuth {
 
     @PutMapping("/update-credenciais")
     public ResponseEntity<UsuarioUpdateLoginDTO> update
-            (@RequestBody UsuarioUpdateLoginDTO usuarioUpdateLoginDTO) throws PessoaException {
+            (@RequestBody UsuarioUpdateLoginDTO usuarioUpdateLoginDTO
+             ) throws PessoaException {
         return ResponseEntity.ok(usuarioService.updateLogin(usuarioUpdateLoginDTO));
     }
 
     // TODO -> TEM QUE CRIAR OUTRO MÉTODO PARA REMOVER OUTROS USUÁRIOS
     @DeleteMapping("/remover/{idUsuario}")
-    public void delete (@PathVariable Integer idUsuario) throws PessoaException {
+    public void restrigirUsuario (@PathVariable Integer idUsuario) throws PessoaException {
         usuarioService.restrigirUsuario(idUsuario);
     }
 

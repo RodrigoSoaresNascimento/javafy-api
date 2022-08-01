@@ -23,7 +23,8 @@ public interface DocumentationAuth {
     @Operation(summary = "Atualiza as credenciais",
             description = "Atualiza as credenciais de acesso a aplicação como senha e login")
     @MagiaResponse
-    ResponseEntity<UsuarioUpdateLoginDTO> update (UsuarioUpdateLoginDTO usuarioUpdateLoginDTO) throws PessoaException;
+    ResponseEntity<UsuarioUpdateLoginDTO> update (UsuarioUpdateLoginDTO usuarioUpdateLoginDTO)
+            throws PessoaException;
 
     @Operation(summary = "Exibe um usuario logado",
             description = "Retorna o usuario logado na aplicação")
@@ -33,5 +34,5 @@ public interface DocumentationAuth {
     @Operation(summary = "deleta o usuario",
             description = "Deleta uma conta de usuario atraves do cargo de admin")
     @MagiaResponse
-    void delete (Integer login) throws PessoaException;
+    void restrigirUsuario (Integer login) throws PessoaException;
 }

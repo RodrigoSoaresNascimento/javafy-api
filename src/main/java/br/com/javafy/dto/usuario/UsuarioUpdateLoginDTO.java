@@ -14,11 +14,9 @@ import javax.validation.constraints.NotBlank;
 public class UsuarioUpdateLoginDTO {
 
     @Schema(description = "login do usuario", example = "joão")
-    @NotBlank
     private String login;
 
     @Schema(description = "senha do usuario", example = "joão123")
-    @NotBlank
     private String senha;
 
 }
