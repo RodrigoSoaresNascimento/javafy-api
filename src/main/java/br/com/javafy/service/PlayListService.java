@@ -161,12 +161,14 @@ public class PlayListService {
             throws PessoaException, PlaylistException {
 
         UsuarioEntity usuario = usuarioService.retornarUsuarioEntityById();
-        boolean userNotAdmin = !usuario.getCargo().getNome().getTipoCargo()
+        boolean userEhAdmin = usuario.getCargo().getNome().getTipoCargo()
                 .equals(Roles.ADMIN);
-        boolean usuarioNaoEhDonoDaPlaylist = !usuario.getIdUsuario()
+        boolean usuarioEhDonoDaPlaylist = usuario.getIdUsuario()
                 .equals(playList.getUsuario().getIdUsuario());
 
-        if(userNotAdmin || usuarioNaoEhDonoDaPlaylist ){
+        if(userEhAdmin || usuarioEhDonoDaPlaylist ){
+            return;
+        } else {
             throw new PlaylistException("Você não tem autorização para excluir a playlist.");
         }
 
