@@ -4,7 +4,6 @@ import br.com.javafy.dto.*;
 import br.com.javafy.dto.comentario.ComentarioCreateDTO;
 import br.com.javafy.dto.comentario.ComentarioDTO;
 import br.com.javafy.dto.comentario.ComentarioPlaylistRelatorioDTO;
-import br.com.javafy.entity.CargoEntity;
 import br.com.javafy.entity.ComentarioEntity;
 import br.com.javafy.entity.UsuarioEntity;
 import br.com.javafy.enums.Roles;

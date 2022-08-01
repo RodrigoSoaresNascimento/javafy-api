@@ -4,7 +4,6 @@ import br.com.javafy.dto.PageDTO;
 import br.com.javafy.dto.playlist.PlayListCreate;
 import br.com.javafy.dto.playlist.PlayListDTO;
 import br.com.javafy.dto.playlist.PlaylistAddMusicaDTO;
-import br.com.javafy.entity.CargoEntity;
 import br.com.javafy.entity.MusicaEntity;
 import br.com.javafy.entity.PlayListEntity;
 import br.com.javafy.entity.UsuarioEntity;
