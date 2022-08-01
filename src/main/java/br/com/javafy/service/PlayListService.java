@@ -167,6 +167,7 @@ public class PlayListService {
                 .equals(playList.getUsuario().getIdUsuario());
 
         if(userEhAdmin || usuarioEhDonoDaPlaylist ){
+
             return;
         } else {
             throw new PlaylistException("Você não tem autorização para excluir a playlist.");
