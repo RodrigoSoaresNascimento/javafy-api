@@ -1,4 +1,4 @@
-package br.com.javafy;
+package br.com.javafy.service;
 
 import br.com.javafy.dto.usuario.UsuarioDTO;
 import br.com.javafy.entity.CargoEntity;
