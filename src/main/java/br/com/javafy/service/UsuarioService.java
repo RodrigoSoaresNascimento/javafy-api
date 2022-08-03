@@ -56,7 +56,7 @@ public class UsuarioService {
                 .orElseThrow(() -> new PessoaException("Usuário não cadastrado"));
     }
 
-    private Integer getIdLoggedUser()
+    public Integer getIdLoggedUser()
             throws PessoaException {
         Integer idUser;
         try {
