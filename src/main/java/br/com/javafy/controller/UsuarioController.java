@@ -3,7 +3,6 @@ package br.com.javafy.controller;
 import br.com.javafy.documentation.DocumentationUsuario;
 import br.com.javafy.dto.PageDTO;
 import br.com.javafy.dto.usuario.UsuarioUpdateDTO;
-import br.com.javafy.enums.CargosEnum;
 import br.com.javafy.enums.CargosUser;
 import br.com.javafy.service.UsuarioService;
 import br.com.javafy.dto.usuario.UsuarioDTO;

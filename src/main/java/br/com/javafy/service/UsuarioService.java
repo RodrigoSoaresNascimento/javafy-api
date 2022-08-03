@@ -56,7 +56,7 @@ public class UsuarioService {
                 .orElseThrow(() -> new PessoaException("Usuário não cadastrado"));
     }
 
-    private Integer getIdLoggedUser()
+    public Integer getIdLoggedUser()
             throws PessoaException {
         Integer idUser;
         try {
@@ -153,8 +153,7 @@ public class UsuarioService {
 
     public UsuarioUpdateLoginDTO updateLogin (UsuarioUpdateLoginDTO usuario)
             throws PessoaException {
-        UsuarioDTO usuarioDTO = findById();
-        UsuarioEntity usuarioEntity = converterUsuarioEntity(usuarioDTO);
+        UsuarioEntity usuarioEntity = retornarUsuarioEntityById();
 
         if(usuario.getLogin() != null){
             usuarioEntity.setLogin(usuario.getLogin());
@@ -166,7 +165,7 @@ public class UsuarioService {
 
         usuarioRepository.save(usuarioEntity);
         return objectMapper.convertValue(usuarioEntity, UsuarioUpdateLoginDTO.class);
-        //todo-> criar um serviço de email para informar a senha alterada pelo email
+
     }
 
     public void delete()
