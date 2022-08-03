@@ -4,6 +4,7 @@ package br.com.javafy.service;
 import br.com.javafy.dto.PageDTO;
 import br.com.javafy.dto.comentario.ComentarioCreateDTO;
 import br.com.javafy.dto.comentario.ComentarioDTO;
+import br.com.javafy.dto.comentario.ComentarioPlaylistRelatorioDTO;
 import br.com.javafy.dto.playlist.PlayListDTO;
 import br.com.javafy.entity.CargoEntity;
 import br.com.javafy.entity.ComentarioEntity;
@@ -15,7 +16,6 @@ import br.com.javafy.exceptions.ComentarioNaoCadastradoException;
 import br.com.javafy.exceptions.PessoaException;
 import br.com.javafy.exceptions.PlaylistException;
 import br.com.javafy.repository.ComentariosRepository;
-import br.com.javafy.repository.UsuarioRepository;
 import com.fasterxml.jackson.databind.DeserializationFeature;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.SerializationFeature;
@@ -55,9 +55,6 @@ public class ComentarioServiceTest {
 
     @Mock
     private UsuarioService usuarioService;
-
-    @Mock
-    private UsuarioRepository usuarioRepository;
 
 
     @Before
@@ -104,8 +101,6 @@ public class ComentarioServiceTest {
         ComentarioDTO comentarioDTO = comentarioService.create(getComentario().getIdComentario(), getComentarioCreateDTO());
 
         assertNotNull(comentarioDTO);
-        //todo-> falta eu saber o porque não tá pegando o id
-        //assertEquals(comentario.getIdComentario(), comentarioDTO.getIdComentario());
         assertEquals(comentario.getComentario(), comentarioDTO.getComentario());
 
     }
@@ -203,6 +198,66 @@ public class ComentarioServiceTest {
         comentarioService.delete(comentarioEntity.getIdComentario());
         verify(comentariosRepository, times(1)).delete(any(ComentarioEntity.class));
 
+    }
+
+//    @Test(expected = ComentarioNaoCadastradoException.class)
+//    public void nãoDeveDeletarComentarioWhereUserIsNotAdmin() throws PessoaException, ComentarioNaoCadastradoException {
+//
+//        UsuarioEntity usuario = getUsuarioEntity();
+//
+//        ComentarioEntity comentarioEntity = getComentario();
+//
+//        when(comentariosRepository.findById(anyInt()))
+//                .thenReturn(Optional.of(comentarioEntity));
+//
+//        UsuarioEntity usuarioPremium = getUsuarioEntity();
+//        when(usuarioService.retornarUsuarioEntityById()).thenReturn(usuarioPremium);
+//
+//        // act
+//        doNothing().when(comentariosRepository).delete(any(ComentarioEntity.class));
+//
+//        // act
+//        comentarioService.delete(comentarioEntity.getIdComentario());
+//        verify(comentariosRepository, times(1)).delete(any(ComentarioEntity.class));
+//
+//
+//    }
+
+    @Test
+    public void deveBuscarComentarioPeloDTOId () throws ComentarioNaoCadastradoException {
+        // setup
+
+        Optional<ComentarioEntity> comentario = Optional.of(getComentario());
+
+        when(comentariosRepository.findById(anyInt())).thenReturn(comentario);
+
+        // act
+        ComentarioDTO comentarioDTO = comentarioService.findComentarioDTOById(comentario.get().getIdComentario());
+
+        // assert
+        assertNotNull(comentarioDTO);
+        assertEquals(comentario.get().getIdComentario(), comentarioDTO.getIdComentario());
+        assertEquals(comentario.get().getComentario(), comentarioDTO.getComentario());
+
+    }
+
+    @Test
+    public void deveTestarRelatorioComentarioPlayListComSucesso () {
+
+        ComentarioPlaylistRelatorioDTO relatorioDTO = new ComentarioPlaylistRelatorioDTO();
+        relatorioDTO.setComentario(getComentario().getComentario());
+        relatorioDTO.setEmail(getUsuarioAdmin().getEmail());
+        relatorioDTO.setNomeUsuario(getUsuarioEntity().getNome());
+        relatorioDTO.setNomePlaylist(getPlayList().getName());
+
+        List<ComentarioPlaylistRelatorioDTO> relatorioDTOS = List.of(relatorioDTO);
+
+        when(comentariosRepository.relatorioComentarios()).thenReturn(relatorioDTOS);
+
+        List<ComentarioPlaylistRelatorioDTO> relatorioUsuario = comentarioService.relatorioComentarioPlaylist();
+
+        assertNotNull(relatorioUsuario);
+        assertTrue(!relatorioUsuario.isEmpty());
     }
 
     private static UsuarioEntity getUsuarioEntity() {
