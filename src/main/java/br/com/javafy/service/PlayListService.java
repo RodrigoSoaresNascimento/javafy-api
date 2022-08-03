@@ -154,7 +154,6 @@ public class PlayListService {
             playListDTO.setMusicas(musicaService.getList(ids));
         }
         return playListDTO;
-
     }
 
     private void validarAutorizacaoRemoverPlaylist(PlayListEntity playList)
@@ -185,5 +184,7 @@ public class PlayListService {
         }
 
     }
+
+
 
 }
