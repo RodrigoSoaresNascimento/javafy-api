@@ -112,12 +112,16 @@ public class ComentarioService {
         Integer idDonoDoComentario = comentario.getUsuarioEntity().getIdUsuario();
         UsuarioEntity usuario = usuarioService.retornarUsuarioEntityById();
 
-        boolean userNotAdmin = !usuario.getCargo().getNome().getTipoCargo()
+        boolean userAdmin = usuario.getCargo().getNome().getTipoCargo()
                 .equals(Roles.ADMIN);
-        boolean usuarioNaoEhDonoDoComentario = !idDonoDoComentario
+        boolean usuarioEhDonoDoComentario = idDonoDoComentario
                 .equals(usuario.getIdUsuario());
 
-        if(userNotAdmin || usuarioNaoEhDonoDoComentario){
+
+
+        if(userAdmin || usuarioEhDonoDoComentario){
+            return;
+        } else {
             throw new ComentarioNaoCadastradoException("Não é possível remover o comentário.");
         }
     }
