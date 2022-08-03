@@ -7,6 +7,7 @@ import br.com.javafy.dto.comentario.ComentarioCreateDTO;
 import br.com.javafy.dto.comentario.ComentarioDTO;
 import br.com.javafy.exceptions.ComentarioNaoCadastradoException;
 import br.com.javafy.exceptions.PessoaException;
+import br.com.javafy.exceptions.PlaylistException;
 import br.com.javafy.service.ComentarioService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
@@ -38,7 +39,7 @@ public class ComentarioController implements DocumentationComentario {
     @PostMapping("/add-in-playlist/{idPlaylist}")
     public ResponseEntity<ComentarioDTO> create(@PathVariable("idPlaylist")Integer idPlaylist,
                                                 @Valid @RequestBody ComentarioCreateDTO comentarioCreateDTO)
-            throws ComentarioNaoCadastradoException {
+            throws ComentarioNaoCadastradoException, PessoaException, PlaylistException {
         return ResponseEntity.ok(comentarioService.create(idPlaylist, comentarioCreateDTO));
     }
 

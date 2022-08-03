@@ -6,6 +6,7 @@ import br.com.javafy.dto.comentario.ComentarioCreateDTO;
 import br.com.javafy.dto.comentario.ComentarioDTO;
 import br.com.javafy.exceptions.ComentarioNaoCadastradoException;
 import br.com.javafy.exceptions.PessoaException;
+import br.com.javafy.exceptions.PlaylistException;
 import io.swagger.v3.oas.annotations.Operation;
 import org.springframework.http.ResponseEntity;
 import org.springframework.validation.annotation.Validated;
@@ -31,7 +32,7 @@ public interface DocumentationComentario {
     @MagiaResponse
     public ResponseEntity<ComentarioDTO> create(@PathVariable("idPlaylist")Integer idPlaylist,
                                                 @Valid @RequestBody ComentarioCreateDTO comentarioCreateDTO)
-            throws ComentarioNaoCadastradoException;
+            throws ComentarioNaoCadastradoException, PessoaException, PlaylistException;
 
     @Operation(summary = "Atualiza um comentario pelo seu ID")
     @MagiaResponse

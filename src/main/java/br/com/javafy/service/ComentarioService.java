@@ -10,6 +10,7 @@ import br.com.javafy.entity.UsuarioEntity;
 import br.com.javafy.enums.Roles;
 import br.com.javafy.exceptions.ComentarioNaoCadastradoException;
 import br.com.javafy.exceptions.PessoaException;
+import br.com.javafy.exceptions.PlaylistException;
 import br.com.javafy.repository.ComentariosRepository;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -73,17 +74,14 @@ public class ComentarioService {
     }
 
     public ComentarioDTO create(Integer idPlaylist, ComentarioCreateDTO comentarioCreateDTO)
-            throws ComentarioNaoCadastradoException {
-        try {
+            throws PessoaException, PlaylistException {
+
             ComentarioEntity comentarioEntity = converterComentarioDTO(new ComentarioDTO());
             comentarioEntity.setUsuarioEntity(usuarioService.retornarUsuarioEntityById());
             comentarioEntity.setPlayList(playListService.retornaPlaylistEntityById(idPlaylist));
             comentarioEntity.setComentario(comentarioCreateDTO.getComentario());
             comentariosRepository.save(comentarioEntity);
             return converterComentario(comentarioEntity);
-        } catch (Exception e){
-            throw new ComentarioNaoCadastradoException("Não foi possível cadastrar o comentário");
-        }
     }
 
     public ComentarioDTO update(Integer idComentario,
