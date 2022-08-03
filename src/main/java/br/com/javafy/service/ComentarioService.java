@@ -62,8 +62,6 @@ public class ComentarioService {
                 .collect(Collectors.toList());
     }
 
-    //todo -> este metodo não esta sendo usando na controller
-
     public PageDTO<ComentarioDTO> listarComentariosPaginado(Integer pagina, Integer registro){
         PageRequest pageRequest = PageRequest.of(pagina, registro);
         Page<ComentarioEntity> page = comentariosRepository.findAll(pageRequest);
