@@ -114,12 +114,13 @@ public class PlayListServiceTest {
                 Optional.of(playListEntity)
         );
 
-        when(playListService.retornaPlaylistEntityById(anyInt())).thenReturn(
-                playListEntity
-        );
-
+        // TODO -> VER COMO FAZER COM MÉTODO PRIVADO - O método ainda não pega as musicas
         // Ação
-        //PlayListDTO playListDTO = playListService.getPlaylistWithIdWithMusics(idPlaylist);
+        PlayListDTO playListDTO = playListService.getPlaylistWithIdWithMusics(idPlaylist);
+
+        assertEquals(nomePlaylist, playListDTO.getName());
+        assertEquals(idPlaylist, playListDTO.getIdPlaylist());
+
     }
 
     @Test
@@ -198,7 +199,7 @@ public class PlayListServiceTest {
                 Optional.of(playList)
         );
 
-        doNothing().when(musicaService).saveMusicaRepository(Set.of());
+        //doNothing().when(musicaService).saveMusicaRepository(Set.of());
 
         when(playListRepository.save(any(PlayListEntity.class))).thenReturn(playList);
         when(usuarioService.retornarUsuarioEntityById()).thenReturn(usuario);
@@ -324,8 +325,10 @@ public class PlayListServiceTest {
     }
 
     @Test
-    public void deveRemoverMusica() throws PessoaException {
-        MusicaEntity musica = new MusicaEntity("0csbIHcIB2Xu0QmfmulXul", Set.of());
+    public void deveRemoverMusica() throws PessoaException, PlaylistException {
+        // Corrigir o método na service. Da forma que está é errado.
+        String idMusica = "0csbIHcIB2Xu0QmfmulXul";
+        MusicaEntity musica = new MusicaEntity(idMusica, Set.of());
 
         Integer idPlaylist = 1;
         String nome = "Playlist para deletar";
@@ -340,7 +343,7 @@ public class PlayListServiceTest {
 
         when(usuarioService.retornarUsuarioEntityById()).thenReturn(usuario);
 
-        doNothing().when(playListRepository).save(playListEntity);
+        playListService.removerMusica(idPlaylist, idMusica);
 
         verify(playListRepository, times(1))
                 .save(any(PlayListEntity.class));
