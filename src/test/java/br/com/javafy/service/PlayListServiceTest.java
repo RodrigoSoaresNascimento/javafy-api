@@ -110,17 +110,21 @@ public class PlayListServiceTest {
         PlayListEntity playListEntity =
                 getPlayListEntity(idPlaylist, nomePlaylist, usuario);
 
+        playListEntity
+                .setMusicas(Set.of(new MusicaEntity("3UW7pLXAXwvGc6cMnnYd0e", Set.of())));
+
         when(playListRepository.findById(any(Integer.class))).thenReturn(
                 Optional.of(playListEntity)
         );
 
-        // TODO -> VER COMO FAZER COM MÉTODO PRIVADO - O método ainda não pega as musicas
+        when(musicaService.getList(anyString())).thenReturn(List.of(getMusicaFullDTO()));
+
         // Ação
         PlayListDTO playListDTO = playListService.getPlaylistWithIdWithMusics(idPlaylist);
 
         assertEquals(nomePlaylist, playListDTO.getName());
         assertEquals(idPlaylist, playListDTO.getIdPlaylist());
-
+        assertEquals(1, playListDTO.getMusicas().size());
     }
 
     @Test
@@ -404,8 +408,13 @@ public class PlayListServiceTest {
         return usuarioEntity;
     }
 
-    private PlayListDTO getPlaylistDTO(){
-        return new PlayListDTO(1, "nomeDoido", Arrays.asList());
+    private MusicaFullDTO getMusicaFullDTO(){
+        MusicaFullDTO musica = new MusicaFullDTO();
+        musica.setIdMusica("3UW7pLXAXwvGc6cMnnYd0e");
+        musica.setNome("Depois do adeus");
+        musica.setPopularidade(47);
+        musica.setUrlMusica("https://p.scdn.co/mp3-preview/85bb4c8899395291a0bd3526c5750f4464ddddfc?cid=68e29005ed5d4c838871f76bd274f6b8");
+        return musica;
     }
 
 }

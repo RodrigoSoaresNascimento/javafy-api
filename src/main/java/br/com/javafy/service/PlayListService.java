@@ -64,14 +64,7 @@ public class PlayListService {
         Page<PlayListEntity> page=  playListRepository.findAll(pageRequest);
         List<PlayListDTO> playlistsDTOs = page.getContent()
                 .stream()
-                .map(p-> {
-                    try {
-                        return getMusicaForPlaylist(p);
-                    } catch (PlaylistException e) {
-                        e.printStackTrace();
-                    }
-                    return null;
-                })
+                .map(this::converterParaPlaylistDTO)
                 .toList();
         return new PageDTO<>(page.getTotalElements(),
                 page.getTotalPages(), pagina, registro, playlistsDTOs);
@@ -184,7 +177,5 @@ public class PlayListService {
         }
 
     }
-
-
 
 }

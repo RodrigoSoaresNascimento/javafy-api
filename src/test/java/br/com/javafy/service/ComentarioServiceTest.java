@@ -1,10 +1,11 @@
 package br.com.javafy.service;
 
 
+import br.com.javafy.dto.PageDTO;
 import br.com.javafy.dto.comentario.ComentarioCreateDTO;
 import br.com.javafy.dto.comentario.ComentarioDTO;
+import br.com.javafy.dto.comentario.ComentarioPlaylistRelatorioDTO;
 import br.com.javafy.dto.playlist.PlayListDTO;
-import br.com.javafy.dto.usuario.UsuarioDTO;
 import br.com.javafy.entity.CargoEntity;
 import br.com.javafy.entity.ComentarioEntity;
 import br.com.javafy.entity.PlayListEntity;
@@ -15,7 +16,6 @@ import br.com.javafy.exceptions.ComentarioNaoCadastradoException;
 import br.com.javafy.exceptions.PessoaException;
 import br.com.javafy.exceptions.PlaylistException;
 import br.com.javafy.repository.ComentariosRepository;
-import br.com.javafy.repository.UsuarioRepository;
 import com.fasterxml.jackson.databind.DeserializationFeature;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.SerializationFeature;
@@ -26,6 +26,9 @@ import org.junit.runner.RunWith;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.MockitoJUnitRunner;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageImpl;
+import org.springframework.data.domain.Pageable;
 import org.springframework.test.util.ReflectionTestUtils;
 
 import java.time.LocalDate;
@@ -52,9 +55,6 @@ public class ComentarioServiceTest {
 
     @Mock
     private UsuarioService usuarioService;
-
-    @Mock
-    private UsuarioRepository usuarioRepository;
 
 
     @Before
@@ -101,7 +101,6 @@ public class ComentarioServiceTest {
         ComentarioDTO comentarioDTO = comentarioService.create(getComentario().getIdComentario(), getComentarioCreateDTO());
 
         assertNotNull(comentarioDTO);
-        //assertEquals(comentario.getIdComentario(), comentarioDTO.getIdComentario());
         assertEquals(comentario.getComentario(), comentarioDTO.getComentario());
 
     }
@@ -127,21 +126,19 @@ public class ComentarioServiceTest {
 
     }
 
-//    @Test(expected = ComentarioNaoCadastradoException.class)
-//    public void deveTestarExcecaoComSucesso () throws ComentarioNaoCadastradoException {
-//
-//        ComentarioEntity comentario = getComentario();
-//
-//
-//
-//        doThrow(new ComentarioNaoCadastradoException("Comentario não comentado"))
-//                .when(comentariosRepository)
-//                .findById(anyInt());
-//
-//
-//        comentarioService.findComentarioEntityById(comentario.getIdComentario());
-//
-//    }
+    @Test(expected = ComentarioNaoCadastradoException.class)
+    public void deveTestarExcecaoComSucesso () throws ComentarioNaoCadastradoException, PessoaException {
+
+        ComentarioEntity comentario = getComentario();
+
+
+
+        when(comentariosRepository.findById(anyInt())).thenReturn(Optional.empty());
+
+
+        comentarioService.update(comentario.getIdComentario(), getComentarioDTO());
+
+    }
 
     @Test
     public void deveTestarDeleteComentarioComSucesso() throws ComentarioNaoCadastradoException, PessoaException {
@@ -163,6 +160,106 @@ public class ComentarioServiceTest {
 
     }
 
+    @Test
+    public void deveTestarComentarioPaginadoComSucesso() {
+        // setup
+        List<ComentarioEntity> cometarios = List.of(getComentario());
+        Page<ComentarioEntity> pageComentarios = new PageImpl<>(cometarios);
+
+        when(comentariosRepository.findAll(any(Pageable.class)))
+                .thenReturn(pageComentarios);
+
+        // act
+        PageDTO<ComentarioDTO> paginaDeComentarios = comentarioService
+                .listarComentariosPaginado(1000, 3);
+
+        // assert
+        assertNotNull(paginaDeComentarios);
+        assertEquals(1, pageComentarios.getTotalPages());
+        assertEquals(1, paginaDeComentarios.getContent().size());
+    }
+
+    @Test
+    public void deveDeletarComentarioWhereUserIsAdminComSucesso() throws PessoaException, ComentarioNaoCadastradoException {
+
+        UsuarioEntity usuario = getUsuarioEntity();
+
+        ComentarioEntity comentarioEntity = getComentario();
+
+        when(comentariosRepository.findById(anyInt()))
+                .thenReturn(Optional.of(comentarioEntity));
+
+        UsuarioEntity usuarioAdmin = getUsuarioAdmin();
+        when(usuarioService.retornarUsuarioEntityById()).thenReturn(usuarioAdmin);
+
+        doNothing().when(comentariosRepository).delete(any(ComentarioEntity.class));
+
+        // act
+        comentarioService.delete(comentarioEntity.getIdComentario());
+        verify(comentariosRepository, times(1)).delete(any(ComentarioEntity.class));
+
+    }
+
+//    @Test(expected = ComentarioNaoCadastradoException.class)
+//    public void nãoDeveDeletarComentarioWhereUserIsNotAdmin() throws PessoaException, ComentarioNaoCadastradoException {
+//
+//        UsuarioEntity usuario = getUsuarioEntity();
+//
+//        ComentarioEntity comentarioEntity = getComentario();
+//
+//        when(comentariosRepository.findById(anyInt()))
+//                .thenReturn(Optional.of(comentarioEntity));
+//
+//        UsuarioEntity usuarioPremium = getUsuarioEntity();
+//        when(usuarioService.retornarUsuarioEntityById()).thenReturn(usuarioPremium);
+//
+//        // act
+//        doNothing().when(comentariosRepository).delete(any(ComentarioEntity.class));
+//
+//        // act
+//        comentarioService.delete(comentarioEntity.getIdComentario());
+//        verify(comentariosRepository, times(1)).delete(any(ComentarioEntity.class));
+//
+//
+//    }
+
+    @Test
+    public void deveBuscarComentarioPeloDTOId () throws ComentarioNaoCadastradoException {
+        // setup
+
+        Optional<ComentarioEntity> comentario = Optional.of(getComentario());
+
+        when(comentariosRepository.findById(anyInt())).thenReturn(comentario);
+
+        // act
+        ComentarioDTO comentarioDTO = comentarioService.findComentarioDTOById(comentario.get().getIdComentario());
+
+        // assert
+        assertNotNull(comentarioDTO);
+        assertEquals(comentario.get().getIdComentario(), comentarioDTO.getIdComentario());
+        assertEquals(comentario.get().getComentario(), comentarioDTO.getComentario());
+
+    }
+
+    @Test
+    public void deveTestarRelatorioComentarioPlayListComSucesso () {
+
+        ComentarioPlaylistRelatorioDTO relatorioDTO = new ComentarioPlaylistRelatorioDTO();
+        relatorioDTO.setComentario(getComentario().getComentario());
+        relatorioDTO.setEmail(getUsuarioAdmin().getEmail());
+        relatorioDTO.setNomeUsuario(getUsuarioEntity().getNome());
+        relatorioDTO.setNomePlaylist(getPlayList().getName());
+
+        List<ComentarioPlaylistRelatorioDTO> relatorioDTOS = List.of(relatorioDTO);
+
+        when(comentariosRepository.relatorioComentarios()).thenReturn(relatorioDTOS);
+
+        List<ComentarioPlaylistRelatorioDTO> relatorioUsuario = comentarioService.relatorioComentarioPlaylist();
+
+        assertNotNull(relatorioUsuario);
+        assertTrue(!relatorioUsuario.isEmpty());
+    }
+
     private static UsuarioEntity getUsuarioEntity() {
         UsuarioEntity usuarioEntity = new UsuarioEntity();
         usuarioEntity.setDataNascimento(LocalDate.of(1991, 9, 8));
@@ -176,6 +273,21 @@ public class ComentarioServiceTest {
         usuarioEntity.setEnable(true);
         return usuarioEntity;
     }
+
+    private UsuarioEntity getUsuarioAdmin() {
+        UsuarioEntity usuarioEntity = new UsuarioEntity();
+        usuarioEntity.setIdUsuario(2);
+        usuarioEntity.setEnable(true);
+        usuarioEntity.setCargo(new CargoEntity(3, CargosEnum.ofTipo(Roles.ADMIN), Set.of()));
+        usuarioEntity.setGenero("M");
+        usuarioEntity.setNome("Cleber");
+        usuarioEntity.setDataNascimento(LocalDate.of(1994, 10, 13));
+        usuarioEntity.setEmail("faker@faker.com");
+        usuarioEntity.setSenha("1234");
+        usuarioEntity.setLogin("login");
+        return usuarioEntity;
+    }
+
 
     private static ComentarioEntity getComentario() {
         ComentarioEntity comentario = new ComentarioEntity();
