@@ -5,7 +5,6 @@ import br.com.javafy.dto.PageDTO;
 import br.com.javafy.dto.comentario.ComentarioCreateDTO;
 import br.com.javafy.dto.comentario.ComentarioDTO;
 import br.com.javafy.dto.comentario.ComentarioPlaylistRelatorioDTO;
-import br.com.javafy.dto.playlist.PlayListDTO;
 import br.com.javafy.entity.CargoEntity;
 import br.com.javafy.entity.ComentarioEntity;
 import br.com.javafy.entity.PlayListEntity;
@@ -131,10 +130,7 @@ public class ComentarioServiceTest {
 
         ComentarioEntity comentario = getComentario();
 
-
-
         when(comentariosRepository.findById(anyInt())).thenReturn(Optional.empty());
-
 
         comentarioService.update(comentario.getIdComentario(), getComentarioDTO());
 
@@ -200,28 +196,21 @@ public class ComentarioServiceTest {
 
     }
 
-//    @Test(expected = ComentarioNaoCadastradoException.class)
-//    public void nãoDeveDeletarComentarioWhereUserIsNotAdmin() throws PessoaException, ComentarioNaoCadastradoException {
-//
-//        UsuarioEntity usuario = getUsuarioEntity();
-//
-//        ComentarioEntity comentarioEntity = getComentario();
-//
-//        when(comentariosRepository.findById(anyInt()))
-//                .thenReturn(Optional.of(comentarioEntity));
-//
-//        UsuarioEntity usuarioPremium = getUsuarioEntity();
-//        when(usuarioService.retornarUsuarioEntityById()).thenReturn(usuarioPremium);
-//
-//        // act
-//        doNothing().when(comentariosRepository).delete(any(ComentarioEntity.class));
-//
-//        // act
-//        comentarioService.delete(comentarioEntity.getIdComentario());
-//        verify(comentariosRepository, times(1)).delete(any(ComentarioEntity.class));
-//
-//
-//    }
+    @Test(expected = ComentarioNaoCadastradoException.class)
+    public void nãoDeveDeletarComentarioWhereUserIsNotAdmin() throws PessoaException, ComentarioNaoCadastradoException {
+
+        ComentarioEntity comentarioEntity = getComentario();
+
+        when(comentariosRepository.findById(anyInt()))
+                .thenReturn(Optional.of(comentarioEntity));
+
+        UsuarioEntity usuarioPremium = getUsuarioFree();
+        when(usuarioService.retornarUsuarioEntityById()).thenReturn(usuarioPremium);
+
+        // act
+        comentarioService.delete(comentarioEntity.getIdComentario());
+
+    }
 
     @Test
     public void deveBuscarComentarioPeloDTOId () throws ComentarioNaoCadastradoException {
@@ -257,7 +246,7 @@ public class ComentarioServiceTest {
         List<ComentarioPlaylistRelatorioDTO> relatorioUsuario = comentarioService.relatorioComentarioPlaylist();
 
         assertNotNull(relatorioUsuario);
-        assertTrue(!relatorioUsuario.isEmpty());
+        assertFalse(relatorioUsuario.isEmpty());
     }
 
     private static UsuarioEntity getUsuarioEntity() {
@@ -285,6 +274,20 @@ public class ComentarioServiceTest {
         usuarioEntity.setEmail("faker@faker.com");
         usuarioEntity.setSenha("1234");
         usuarioEntity.setLogin("login");
+        return usuarioEntity;
+    }
+
+    private UsuarioEntity getUsuarioFree() {
+        UsuarioEntity usuarioEntity = new UsuarioEntity();
+        usuarioEntity.setIdUsuario(3);
+        usuarioEntity.setEnable(true);
+        usuarioEntity.setCargo(new CargoEntity(4, CargosEnum.ofTipo(Roles.FREE), Set.of()));
+        usuarioEntity.setGenero("M");
+        usuarioEntity.setNome("Rodrigo");
+        usuarioEntity.setDataNascimento(LocalDate.of(1994, 10, 13));
+        usuarioEntity.setEmail("faker@faker.com");
+        usuarioEntity.setSenha("12345");
+        usuarioEntity.setLogin("login12");
         return usuarioEntity;
     }
 
@@ -320,10 +323,6 @@ public class ComentarioServiceTest {
         playList.setIdPlaylist(10);
         return playList;
 
-    }
-
-    private PlayListDTO getPlaylistDTO(){
-        return new PlayListDTO(1, "nomeDoido", Arrays.asList());
     }
 
 }
