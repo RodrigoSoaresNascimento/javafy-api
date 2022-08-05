@@ -8,6 +8,7 @@ import br.com.javafy.dto.usuario.UsuarioLoginDTO;
 import br.com.javafy.dto.usuario.UsuarioUpdateDTO;
 import br.com.javafy.entity.CargoEntity;
 import br.com.javafy.entity.ComentarioEntity;
+import br.com.javafy.entity.PlayListEntity;
 import br.com.javafy.entity.UsuarioEntity;
 import br.com.javafy.enums.CargosEnum;
 import br.com.javafy.enums.CargosUser;
@@ -33,6 +34,7 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageImpl;
 import org.springframework.data.domain.Pageable;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
+import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.test.util.ReflectionTestUtils;
 
@@ -43,9 +45,9 @@ import java.util.Optional;
 import java.util.Set;
 
 import static org.junit.Assert.*;
-import static org.mockito.ArgumentMatchers.any;
-import static org.mockito.ArgumentMatchers.anyInt;
-import static org.mockito.Mockito.when;
+import static org.mockito.ArgumentMatchers.*;
+import static org.mockito.Mockito.*;
+import static org.mockito.Mockito.times;
 
 @RunWith(MockitoJUnitRunner.class)
 public class UsuarioServiceTest {
@@ -77,6 +79,11 @@ public class UsuarioServiceTest {
         objectMapper.configure(SerializationFeature.FAIL_ON_EMPTY_BEANS, false);
         objectMapper.disable(SerializationFeature.WRITE_DATES_AS_TIMESTAMPS);
         ReflectionTestUtils.setField(usuarioService, "objectMapper", objectMapper);
+    }
+
+    @Test(expected = PessoaException.class)
+    public void deveGetIdLoggedUser() throws PessoaException {
+        usuarioService.getIdLoggedUser();
     }
 
     @Test
@@ -162,32 +169,67 @@ public class UsuarioServiceTest {
         assertEquals(1, pageUsuarios.getTotalPages());
         assertEquals(1, paginaDeUsuarios.getContent().size());
     }
-    //todo-> tentar pegar o usuario logado e o id dele
-//    @Test
-//    public void deveTestarGetLoggedComSucesso() throws PessoaException {
-//        UsuarioEntity usuario = getUsuarioEntity();
-//
-//        UsernamePasswordAuthenticationToken usernamePasswordAuthenticationToken =
-//                new UsernamePasswordAuthenticationToken(
-//                        usuario.getLogin(),
-//                        usuario.getSenha()
-//                );
-//
-//        SecurityContextHolder.getContext()
-//                .setAuthentication(usernamePasswordAuthenticationToken);
-//
-//        when(usuarioService.getIdLoggedUser()).thenReturn(anyInt());
-//
-//        UsuarioLoginDTO usuarioDTO = usuarioService.getLoggedUser();
-//
-//        assertNotNull(usuarioDTO);
-//        assertEquals(usuarioDTO.getEmail(), usuario.getEmail());
-//        assertEquals(usuarioDTO.getLogin(), usuario.getLogin());
-//
-//    }
+
+    @Test
+    public void deveFindByLogin(){
+        UsuarioEntity usuario = getUsuarioAdmin();
+
+        when(usuarioRepository.findByLogin(anyString())).thenReturn(Optional.of(usuario));
+
+        Optional<UsuarioEntity> usuarioEntity = usuarioService.findByLogin(usuario.getLogin());
+
+        assertTrue(usuarioEntity.isPresent());
+        assertEquals(CargosEnum.ofTipo(Roles.ADMIN), usuarioEntity.get().getCargo().getNome());
+
+    }
+
+    @Test
+    public void deveGetLoggedUser()
+            throws PessoaException {
+        UsuarioEntity usuario = getUsuarioFree();
+
+        addUserInContextSecurity();
+        when(usuarioRepository.findById(anyInt())).thenReturn(Optional.of(usuario));
+        usuarioService.getLoggedUser();
+
+    }
+
+    @Test(expected = PessoaException.class)
+    public void deveGetLoggedUserWithException()
+            throws PessoaException {
+        usuarioService.getLoggedUser();
+    }
 
 
+    @Test(expected = PessoaException.class )
+    public void deveNaoRestringirUsuarioException() throws PessoaException {
+        when(usuarioRepository.findById(anyInt())).thenReturn(Optional.empty());
+        usuarioService.restrigirUsuario(anyInt());
+        verify(usuarioRepository, times(0))
+                .save(any(UsuarioEntity.class));
+    }
 
+
+    @Test
+    public void deveRestringirUsuario() throws PessoaException {
+        UsuarioEntity usuario = getUsuarioAdmin();
+        when(usuarioRepository.findById(anyInt())).thenReturn(Optional.of(usuario));
+
+        usuarioService.restrigirUsuario(anyInt());
+        verify(usuarioRepository, times(1))
+                .save(any(UsuarioEntity.class));
+    }
+
+
+    private static void addUserInContextSecurity(){
+        UsernamePasswordAuthenticationToken usernamePasswordAuthenticationToken =
+                new UsernamePasswordAuthenticationToken(
+                        123,
+                        null
+                );
+
+        SecurityContextHolder.getContext().setAuthentication(usernamePasswordAuthenticationToken);
+    }
 
     private static UsuarioDTO getUsuarioDTO() {
         UsuarioDTO usuarioDTO = new UsuarioDTO();

@@ -26,11 +26,8 @@ import java.util.Optional;
 public class UsuarioService {
 
     private final UsuarioRepository usuarioRepository;
-
     private final ObjectMapper objectMapper;
-
     private final EmailService emailService;
-
     private final CargoRepository cargoRepository;
 
     public UsuarioEntity converterUsuarioEntity(UsuarioCreateDTO usuarioCreateDTO) {
@@ -45,15 +42,13 @@ public class UsuarioService {
         return new Md4PasswordEncoder().encode(password);
     }
 
-    public UsuarioEntity buscarOutroUsuario(Integer idUser)
-            throws PessoaException {
+    public UsuarioEntity buscarOutroUsuario(Integer idUser) throws PessoaException {
         return usuarioRepository
                 .findById(idUser)
                 .orElseThrow(() -> new PessoaException("Usuário não cadastrado"));
     }
 
-    public Integer getIdLoggedUser()
-            throws PessoaException {
+    public Integer getIdLoggedUser() throws PessoaException {
         Integer idUser;
         try {
             idUser =  (Integer) SecurityContextHolder.getContext()
@@ -103,14 +98,12 @@ public class UsuarioService {
     }
 
     public UsuarioDTO create(UsuarioCreateDTO usuario, CargosEnum cargo)  {
-
         UsuarioEntity usuarioEntity = converterUsuarioEntity(usuario);
         usuarioEntity.setCargo(cargoRepository.findByNome(cargo));
         usuarioEntity.setSenha(encodePassword(usuario.getSenha()));
         usuarioEntity.setEnable(true);
         usuarioEntity = usuarioRepository.save(usuarioEntity);
         UsuarioDTO usuarioDTO= converterUsuarioDTO(usuarioEntity);
-
         emailService.sendEmail(usuarioDTO, TipoDeMensagem.CREATE.getTipoDeMensagem());
         return usuarioDTO;
     }
