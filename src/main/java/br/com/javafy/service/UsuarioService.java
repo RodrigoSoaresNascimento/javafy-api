@@ -1,12 +1,9 @@
 package br.com.javafy.service;
 
-import br.com.javafy.dto.*;
-import br.com.javafy.dto.usuario.UsuarioCreateDTO;
-import br.com.javafy.dto.usuario.UsuarioDTO;
-import br.com.javafy.dto.usuario.UsuarioRelatorioDTO;
+import br.com.javafy.dto.PageDTO;
+import br.com.javafy.dto.usuario.*;
 import br.com.javafy.entity.CargoEntity;
 import br.com.javafy.entity.UsuarioEntity;
-import br.com.javafy.dto.usuario.*;
 import br.com.javafy.enums.CargosEnum;
 import br.com.javafy.enums.CargosUser;
 import br.com.javafy.enums.TipoDeMensagem;
