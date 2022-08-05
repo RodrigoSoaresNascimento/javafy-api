@@ -119,30 +119,29 @@ public class UsuarioServiceTest {
 
     }
 
-//    @Test
-//    public void deveTestarUpdateUsuarioComSucesso() throws PessoaException {
-//
-//        // setup
-//        UsuarioEntity usuario = getUsuarioEntity();
-//
-//        // act
-//
-//        when(usuarioRepository.save(any(UsuarioEntity.class))).thenReturn(usuario);
-//        when(usuarioRepository.findById(anyInt())).thenReturn(Optional.of(usuario));
-//
-//        // assert
-//
-//        UsuarioDTO usuarioDTO = usuarioService.update(getUsuarioUpdateDto(), CargosUser.ROLE_PREMIUM);
-//
-//        assertNotNull(usuarioDTO);
-//        assertEquals(usuarioDTO.getIdUsuario(), usuario.getIdUsuario());
-//        assertEquals(usuarioDTO.getNome(), usuario.getNome());
-//        assertEquals(usuarioDTO.getSenha(), usuario.getSenha());
-//        assertEquals(usuarioDTO.getGenero(), usuario.getSenha());
-//        assertEquals(usuarioDTO.getLogin(), usuario.getLogin());
-//        assertEquals(usuarioDTO.getDataNascimento(), usuario.getDataNascimento());
-//
-//    }
+    @Test
+    public void deveTestarUpdateUsuarioComSucesso() throws PessoaException {
+
+        // setup
+        UsuarioEntity usuario = getUsuarioEntity();
+
+        // act
+        when(usuarioRepository.save(any(UsuarioEntity.class))).thenReturn(usuario);
+        when(usuarioRepository.findById(anyInt())).thenReturn(Optional.of(usuario));
+
+        // assert
+
+        UsuarioDTO usuarioDTO = usuarioService.update(getUsuarioUpdateDto(), CargosUser.ROLE_PREMIUM);
+
+        assertNotNull(usuarioDTO);
+        assertEquals(usuarioDTO.getIdUsuario(), usuario.getIdUsuario());
+        assertEquals(usuarioDTO.getNome(), usuario.getNome());
+        assertEquals(usuarioDTO.getSenha(), usuario.getSenha());
+        assertEquals(usuarioDTO.getGenero(), usuario.getSenha());
+        assertEquals(usuarioDTO.getLogin(), usuario.getLogin());
+        assertEquals(usuarioDTO.getDataNascimento(), usuario.getDataNascimento());
+
+    }
 
     @Test
     public void deveTestarUsuarioPaginadoComSucesso() {
@@ -163,28 +162,28 @@ public class UsuarioServiceTest {
         assertEquals(1, paginaDeUsuarios.getContent().size());
     }
     //todo-> tentar pegar o usuario logado e o id dele
-//    @Test
-//    public void deveTestarGetLoggedComSucesso() throws PessoaException {
-//        UsuarioEntity usuario = getUsuarioEntity();
-//
-//        UsernamePasswordAuthenticationToken usernamePasswordAuthenticationToken =
-//                new UsernamePasswordAuthenticationToken(
-//                        usuario.getLogin(),
-//                        usuario.getSenha()
-//                );
-//
-//        SecurityContextHolder.getContext()
-//                .setAuthentication(usernamePasswordAuthenticationToken);
-//
-//        when(usuarioService.getIdLoggedUser()).thenReturn(anyInt());
-//
-//        UsuarioLoginDTO usuarioDTO = usuarioService.getLoggedUser();
-//
-//        assertNotNull(usuarioDTO);
-//        assertEquals(usuarioDTO.getEmail(), usuario.getEmail());
-//        assertEquals(usuarioDTO.getLogin(), usuario.getLogin());
-//
-//    }
+    @Test
+    public void deveTestarGetLoggedComSucesso() throws PessoaException {
+        UsuarioEntity usuario = getUsuarioEntity();
+
+        UsernamePasswordAuthenticationToken usernamePasswordAuthenticationToken =
+                new UsernamePasswordAuthenticationToken(
+                        10,
+                        null
+                );
+
+        SecurityContextHolder.getContext()
+                .setAuthentication(usernamePasswordAuthenticationToken);
+
+        when(usuarioRepository.findById(anyInt())).thenReturn(Optional.of(usuario));
+
+        UsuarioLoginDTO usuarioDTO = usuarioService.getLoggedUser();
+
+        assertNotNull(usuarioDTO);
+        assertEquals(usuarioDTO.getEmail(), usuario.getEmail());
+        assertEquals(usuarioDTO.getLogin(), usuario.getLogin());
+
+    }
 
 
 
