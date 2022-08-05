@@ -1,6 +1,7 @@
 package br.com.javafy.client.spotify;
 
 
+import br.com.javafy.dto.albums.AlbumDTO;
 import br.com.javafy.dto.spotify.artista.ArtistaDTO;
 import br.com.javafy.dto.spotify.genero.GeneroDTO;
 import br.com.javafy.dto.spotify.musica.MusicaDTO;
@@ -47,4 +48,8 @@ public interface SpotifyClient {
 
     @RequestLine("GET /v1/artists/{id}/top-tracks?market={market}")
     public Map<String, List<MusicaDTO>> getArtistTopTracks(@HeaderMap Map<String, String> headers,@Param("id") String id,@Param("market") String pais);
+
+    @RequestLine("GET /v1/albums/{id}")
+    public AlbumDTO getAlbums(@HeaderMap Map<String, String> headers,
+                              @Param String id);
 }
