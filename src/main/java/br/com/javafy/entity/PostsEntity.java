@@ -4,11 +4,10 @@ import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
+import org.springframework.data.mongodb.core.mapping.DBRef;
 import org.springframework.data.mongodb.core.mapping.Document;
 import org.springframework.data.mongodb.core.mapping.Field;
 
-import javax.persistence.ElementCollection;
-import javax.persistence.Entity;
 import javax.persistence.Id;
 import java.time.LocalDate;
 import java.util.List;
@@ -18,8 +17,7 @@ import java.util.List;
 @NoArgsConstructor
 @Getter
 @Setter
-@Entity
-@Document(collation = "posts")
+@Document(collection = "posts")
 public class PostsEntity {
 
     @Id
@@ -41,7 +39,7 @@ public class PostsEntity {
     @Field(name = "image")
     private String image;
 
-    @Field(name = "coments")
-    @ElementCollection
+    @Field(name = "comments")
+    @DBRef
     private List<ComentsEntity> coments;
 }

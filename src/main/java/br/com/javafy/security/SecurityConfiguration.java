@@ -40,7 +40,9 @@ public class SecurityConfiguration {
                                         "/playlist/criar-playlist/**",
                                         "/playlist/remover-playlist/**",
                                         "/playlist/deletar-playlist/**",
-                                        "/playlist/atualizar-playlist/**"
+                                        "/playlist/atualizar-playlist/**",
+                                        "/coments/**",
+                                        "/posts/**"
                                         )
                                 .hasAnyRole(Roles.PREMIUM, Roles.ADMIN)
                                 .antMatchers("/auth/remover/**")
