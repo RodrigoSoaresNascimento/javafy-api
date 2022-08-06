@@ -17,8 +17,8 @@ public enum CargosUser {
         return tipoCargo;
     }
 
-    public static CargosEnum ofTipo(String tipoCargo){
-        return Arrays.stream(CargosEnum.values())
+    public static CargosUser ofTipo(String tipoCargo){
+        return Arrays.stream(CargosUser.values())
                 .filter(tp -> tp.getTipoCargo().equals(tipoCargo))
                 .findFirst()
                 .get();
