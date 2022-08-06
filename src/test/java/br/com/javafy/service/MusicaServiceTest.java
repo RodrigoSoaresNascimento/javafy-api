@@ -58,13 +58,11 @@ public class MusicaServiceTest {
 
     @Test
     public void deveGetList() throws PlaylistException {
-
         Map<String, List<MusicaFullDTO>> musicasMAP = new HashMap<>();
         musicasMAP.put("tracks", List.of(getMusicaFullDTO()));
 
         when(spotifyClient.getTracks(anyMap(), anyString()))
                 .thenReturn(musicasMAP);
-
         List<MusicaFullDTO> musicas = musicaService.getList("ids,ids");
         assertNotNull(musicas);
         assertEquals(1, musicas.size());

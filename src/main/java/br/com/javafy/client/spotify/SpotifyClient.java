@@ -2,9 +2,8 @@ package br.com.javafy.client.spotify;
 
 
 import br.com.javafy.dto.spotify.artista.ArtistaDTO;
-import br.com.javafy.dto.spotify.artista.TracksRoot;
+import br.com.javafy.dto.spotify.artista.RootArtista;
 import br.com.javafy.dto.spotify.genero.GeneroDTO;
-import br.com.javafy.dto.spotify.musica.MusicaDTO;
 import br.com.javafy.dto.spotify.musica.MusicaFullDTO;
 import br.com.javafy.dto.spotify.musica.TracksROOT;
 import feign.HeaderMap;
@@ -47,6 +46,6 @@ public interface SpotifyClient {
     public GeneroDTO getGenre(@HeaderMap Map<String, String> headers);
 
     @RequestLine("GET /v1/artists/{id}/top-tracks?market=BR")
-    public TracksRoot getArtistTopTracks(@HeaderMap Map<String, String> headers, @Param("id") String id);
+    public RootArtista getArtistTopTracks(@HeaderMap Map<String, String> headers, @Param("id") String id);
 
 }

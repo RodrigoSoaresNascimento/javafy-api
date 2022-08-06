@@ -2,6 +2,7 @@ package br.com.javafy.documentation;
 
 import br.com.javafy.anotations.MagiaResponse;
 import br.com.javafy.dto.spotify.artista.ArtistaDTO;
+import br.com.javafy.dto.spotify.artista.TrackArtista;
 import br.com.javafy.dto.spotify.musica.MusicaDTO;
 import br.com.javafy.exceptions.PlaylistException;
 import br.com.javafy.exceptions.SpotifyException;
@@ -28,6 +29,6 @@ public interface DocumentationArtista {
     @Operation(summary = "Seleciona as musicas mais populares de um artista",
             description = "Exibir uma lista de musicas de um artista em um pais")
     @MagiaResponse
-    ResponseEntity<List<MusicaDTO>> getTopTracksArtists (String id, String pais)
+    ResponseEntity<List<TrackArtista>> getTopTracksArtists (String id)
             throws SpotifyException, PlaylistException;
 }
