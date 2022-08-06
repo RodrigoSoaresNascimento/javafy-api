@@ -45,24 +45,6 @@ public class MusicaService {
         }
     }
 
-    private List<MusicaDTO> convertJsonToMusicaDTO(Map<String, Object> tracks){
-        ObjectMapper mapper = new ObjectMapper();
-        mapper.configure(DeserializationFeature.FAIL_ON_UNKNOWN_PROPERTIES, false);
-        List<Map<String, Object>> items = (List<Map<String, Object>>) tracks.get("items");
-        return items.stream().
-                map(stringObjectMap -> {
-                    String jsonResult = null;
-                    try {
-                        jsonResult = mapper.writerWithDefaultPrettyPrinter()
-                                .writeValueAsString(stringObjectMap);
-                        return mapper.readValue(jsonResult, MusicaDTO.class);
-                    } catch (JsonProcessingException e) {
-                        e.printStackTrace();
-                    }
-                    return null;
-                }).toList();
-    }
-
     public MusicaFullDTO musicById(String id) throws PlaylistException {
         return spotifyClient.getTrack(getToken().getAutorization(), id);
     }
@@ -72,12 +54,11 @@ public class MusicaService {
     }
 
     public List<MusicaDTO> searchMusic(String query) throws PlaylistException {
-        var t = spotifyClient.search(
-                getToken().getAutorization(),
+        TokenDTO tokenDTO = getToken();
+        var t = spotifyClient.search(tokenDTO.getAutorization(),
                 query.replace(" ", "+"),
-                "track"
-        ).get("tracks");
-        return convertJsonToMusicaDTO(t);
+                "track");
+        return t.getTracks().getMusicas();
     }
 
     public void saveMusicaRepository(Set<MusicaEntity> musicaEntities) throws PlaylistException {
