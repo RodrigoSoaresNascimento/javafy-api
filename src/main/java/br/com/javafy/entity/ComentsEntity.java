@@ -1,22 +1,31 @@
 package br.com.javafy.entity;
-//
-//import org.springframework.data.mongodb.core.mapping.Document;
-//import org.springframework.data.mongodb.core.mapping.Field;
 
-//import javax.persistence.Entity;
-//import javax.persistence.Id;
-//
-//@Entity
-//@Document(collation = "coments")
-//public class ComentsEntity {
-//
-//    @Id
-//    @Field(name = "_id")
-//    private String idComents;
-//
-//    @Field(name = "idUsuario")
-//    private Integer idUsuario;
-//
-//    @Field(name = "body")
-//    private String body;
-//}
+import lombok.AllArgsConstructor;
+import lombok.Getter;
+import lombok.NoArgsConstructor;
+import lombok.Setter;
+import org.springframework.data.mongodb.core.mapping.Document;
+import org.springframework.data.mongodb.core.mapping.Field;
+
+import javax.persistence.Id;
+
+@Getter
+@Setter
+@AllArgsConstructor
+@NoArgsConstructor
+@Document(collection = "coments")
+public class ComentsEntity {
+
+    @Id
+    @Field(name = "_id")
+    private String idComents;
+
+    @Field(name = "idPost")
+    private String idPosts;
+
+    @Field(name = "idUsuario")
+    private Integer idUsuario;
+
+    @Field(name = "body")
+    private String body;
+}
