@@ -35,9 +35,8 @@ public class MusicaService {
 
     private TokenDTO getToken() throws PlaylistException {
         try {
-            TokenDTO tokenDTO = spotifyAutorization
+            return spotifyAutorization
                     .authorization(headers.toDados(), headers.getGrantType());
-            return tokenDTO;
         } catch (Exception e){
             throw new PlaylistException("Erro na autenticação do spotify");
         }

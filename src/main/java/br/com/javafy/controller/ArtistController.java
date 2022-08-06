@@ -3,6 +3,7 @@ package br.com.javafy.controller;
 import br.com.javafy.documentation.DocumentationArtista;
 
 import br.com.javafy.dto.spotify.artista.ArtistaDTO;
+import br.com.javafy.dto.spotify.artista.TrackArtista;
 import br.com.javafy.dto.spotify.musica.MusicaDTO;
 import br.com.javafy.exceptions.PlaylistException;
 import br.com.javafy.exceptions.SpotifyException;
@@ -34,9 +35,9 @@ public class ArtistController implements DocumentationArtista {
         return ResponseEntity.ok(service.getList(query));
     }
 
-    @GetMapping("/{id}/{market}")
-    public  ResponseEntity<List<MusicaDTO>> getTopTracksArtists(@PathVariable("id") String id, @PathVariable("market") String pais) throws SpotifyException {
-        return ResponseEntity.ok(service.searchArtist(id,pais));
+    @GetMapping("/getTopTracksArtists/{id}")
+    public  ResponseEntity<List<TrackArtista>> getTopTracksArtists(@PathVariable("id") String id) throws SpotifyException {
+        return ResponseEntity.ok(service.searchArtist(id));
     }
 
 }
