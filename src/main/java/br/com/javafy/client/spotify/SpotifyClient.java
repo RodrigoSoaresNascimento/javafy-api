@@ -1,12 +1,11 @@
 package br.com.javafy.client.spotify;
 
 
-import br.com.javafy.dto.albums.AlbumDTO;
 import br.com.javafy.dto.spotify.artista.ArtistaDTO;
+import br.com.javafy.dto.spotify.artista.TracksRoot;
 import br.com.javafy.dto.spotify.genero.GeneroDTO;
 import br.com.javafy.dto.spotify.musica.MusicaDTO;
 import br.com.javafy.dto.spotify.musica.MusicaFullDTO;
-import br.com.javafy.dto.spotify.musica.TracksDTO;
 import br.com.javafy.dto.spotify.musica.TracksROOT;
 import feign.HeaderMap;
 import feign.Headers;
@@ -36,7 +35,6 @@ public interface SpotifyClient {
     public TracksROOT search(@HeaderMap Map<String, String> headers,
                              @Param String query, @Param String type );
 
-
     @RequestLine("GET /v1/artists/{id}")
     public ArtistaDTO getArtist(@HeaderMap Map<String, String> headers,
                                @Param("id") String id);
@@ -48,10 +46,7 @@ public interface SpotifyClient {
     @RequestLine("GET /v1/recommendations/available-genre-seeds")
     public GeneroDTO getGenre(@HeaderMap Map<String, String> headers);
 
-    @RequestLine("GET /v1/artists/{id}/top-tracks?market={market}")
-    public Map<String, List<MusicaDTO>> getArtistTopTracks(@HeaderMap Map<String, String> headers,@Param("id") String id,@Param("market") String pais);
+    @RequestLine("GET /v1/artists/{id}/top-tracks?market=BR")
+    public TracksRoot getArtistTopTracks(@HeaderMap Map<String, String> headers, @Param("id") String id);
 
-    @RequestLine("GET /v1/albums/{id}")
-    public AlbumDTO getAlbums(@HeaderMap Map<String, String> headers,
-                              @Param String id);
 }

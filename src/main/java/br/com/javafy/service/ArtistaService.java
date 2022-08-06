@@ -5,7 +5,9 @@ import br.com.javafy.client.spotify.SpotifyAuthorization;
 import br.com.javafy.client.spotify.SpotifyClient;
 import br.com.javafy.dto.spotify.artista.ArtistaDTO;
 import br.com.javafy.dto.spotify.TokenDTO;
+import br.com.javafy.dto.spotify.artista.TracksRoot;
 import br.com.javafy.dto.spotify.musica.MusicaDTO;
+import br.com.javafy.dto.spotify.musica.TracksROOT;
 import br.com.javafy.entity.Headers;
 import br.com.javafy.exceptions.PlaylistException;
 import br.com.javafy.exceptions.SpotifyException;
@@ -65,8 +67,9 @@ public class ArtistaService {
     }
 
     public List<MusicaDTO> searchArtist(String id, String pais) throws SpotifyException {
-        TokenDTO tokenDTO = getToken();
-       return spotifyClient.getArtistTopTracks(tokenDTO.getAutorization(), id, pais).get("artists");
+        //TokenDTO tokenDTO = getToken();
+        //TracksRoot tracks = spotifyClient.getArtistTopTracks(tokenDTO.getAutorization(), id);
+        return null;
     }
 
     public List<ArtistaDTO> getList(String ids) throws PlaylistException, SpotifyException {

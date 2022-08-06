@@ -35,8 +35,4 @@ public class MusicaController implements DocumentationMusica {
         return ResponseEntity.ok(musicaService.searchMusic(query));
     }
 
-    @GetMapping("/buscar-genero")
-    public ResponseEntity<GeneroDTO> listaGenero() throws PlaylistException {
-        return ResponseEntity.ok(musicaService.listarGenero());
-    }
 }

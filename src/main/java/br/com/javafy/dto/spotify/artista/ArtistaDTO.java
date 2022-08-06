@@ -20,9 +20,4 @@ public class ArtistaDTO {
     @JsonProperty("name")
     private String nome;
 
-    @JsonProperty("popularity")
-    private Integer popularidade;
-
-    @JsonProperty("genres")
-    List<String> generos;
 }

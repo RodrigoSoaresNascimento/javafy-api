@@ -203,8 +203,6 @@ public class PlayListServiceTest {
                 Optional.of(playList)
         );
 
-        //doNothing().when(musicaService).saveMusicaRepository(Set.of());
-
         when(playListRepository.save(any(PlayListEntity.class))).thenReturn(playList);
         when(usuarioService.retornarUsuarioEntityById()).thenReturn(usuario);
 

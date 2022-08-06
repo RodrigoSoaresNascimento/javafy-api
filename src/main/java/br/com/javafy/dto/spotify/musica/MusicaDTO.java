@@ -18,7 +18,7 @@ public class MusicaDTO {
     @JsonProperty("name")
     private String nome;
 
-    @JsonProperty("disc_number")
+    @JsonProperty("duration_ms")
     private Integer duracaoMs;
 
     @JsonProperty("popularity")

@@ -3,33 +3,23 @@ package br.com.javafy.service;
 import br.com.javafy.client.spotify.SpotifyAuthorization;
 import br.com.javafy.client.spotify.SpotifyClient;
 import br.com.javafy.dto.spotify.TokenDTO;
+import br.com.javafy.dto.spotify.artista.ArtistaDTO;
 import br.com.javafy.dto.spotify.musica.MusicaDTO;
 import br.com.javafy.dto.spotify.musica.MusicaFullDTO;
+import br.com.javafy.dto.spotify.musica.TracksDTO;
+import br.com.javafy.dto.spotify.musica.TracksROOT;
 import br.com.javafy.entity.Headers;
-import br.com.javafy.enums.CargosUser;
-import br.com.javafy.enums.Roles;
 import br.com.javafy.exceptions.PlaylistException;
-import com.fasterxml.jackson.databind.DeserializationFeature;
-import com.fasterxml.jackson.databind.ObjectMapper;
-import com.fasterxml.jackson.databind.SerializationFeature;
-import com.fasterxml.jackson.datatype.jsr310.JavaTimeModule;
+import br.com.javafy.repository.MusicaRepository;
 import org.junit.Before;
 import org.junit.Test;
-import org.junit.function.ThrowingRunnable;
 import org.junit.runner.RunWith;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
-import org.mockito.Mockito;
 import org.mockito.junit.MockitoJUnitRunner;
-import org.springframework.test.util.ReflectionTestUtils;
-import static org.mockito.BDDMockito.given;
-import static org.assertj.core.api.BDDAssertions.then;
 
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 
-import static org.mockito.BDDMockito.willThrow;
 import static org.mockito.Mockito.*;
 import static org.junit.Assert.*;
 
@@ -39,8 +29,6 @@ public class MusicaServiceTest {
     @InjectMocks
     private MusicaService musicaService;
 
-    //private ObjectMapper objectMapper = new ObjectMapper();
-
     @Mock
     private SpotifyClient spotifyClient;
 
@@ -48,37 +36,38 @@ public class MusicaServiceTest {
     private SpotifyAuthorization spotifyAutorization;
 
     @Mock
+    private MusicaRepository musicaRepository;
+
+    @Mock
     private Headers headers;
 
-//    @Before
-//    public void init(){
-//        objectMapper.registerModule(new JavaTimeModule());
-//        objectMapper.configure(DeserializationFeature.FAIL_ON_UNKNOWN_PROPERTIES, false);
-//        objectMapper.configure(SerializationFeature.FAIL_ON_EMPTY_BEANS, false);
-//        objectMapper.disable(SerializationFeature.WRITE_DATES_AS_TIMESTAMPS);
-//        ReflectionTestUtils.setField(musicaService, "objectMapper", objectMapper);
-//    }
+    @Before
+    public void init(){
+        TokenDTO tokenDTO = new TokenDTO("808b8b778", "Bearer ", 3600);
+        when(spotifyAutorization.authorization(headers.toDados(), headers.getGrantType()))
+                .thenReturn(tokenDTO);
+    }
 
     @Test
     public void deveTestarmusicById() throws PlaylistException {
-        TokenDTO tokenDTO = new TokenDTO("808b8b778", "Bearer ", 3600);
-
-        MusicaFullDTO musicaFullDTO = new MusicaFullDTO();
-        musicaFullDTO.setIdMusica("12698127");
-        musicaFullDTO.setNome("Depois");
-        musicaFullDTO.setPopularidade(74);
-        musicaFullDTO.setDuracaoMs(3600);
-
-
-        when(spotifyAutorization.authorization(headers.toDados(), headers.getGrantType()))
-                .thenReturn(tokenDTO);
-
+        MusicaFullDTO musicaFullDTO = getMusicaFullDTO();
         when(spotifyClient.getTrack(anyMap(), anyString())).thenReturn(musicaFullDTO);
-
         MusicaFullDTO musica = musicaService.musicById("iaisi");
-
         assertNotNull(musica);
-        assertEquals("Depois", musica.getNome());
+    }
+
+    @Test
+    public void deveGetList() throws PlaylistException {
+
+        Map<String, List<MusicaFullDTO>> musicasMAP = new HashMap<>();
+        musicasMAP.put("tracks", List.of(getMusicaFullDTO()));
+
+        when(spotifyClient.getTracks(anyMap(), anyString()))
+                .thenReturn(musicasMAP);
+
+        List<MusicaFullDTO> musicas = musicaService.getList("ids,ids");
+        assertNotNull(musicas);
+        assertEquals(1, musicas.size());
     }
 
     @Test(expected = PlaylistException.class)
@@ -89,15 +78,45 @@ public class MusicaServiceTest {
 
     @Test
     public void deveSearchMusic() throws PlaylistException {
-        Map<String, Object> tracks = new HashMap<>();
-        String busca = "musica";
-        TokenDTO tokenDTO = new TokenDTO("119rh2pork", "Bearer", 3600);
+        String query = "Marisa";
+        when(spotifyClient.search(anyMap(), anyString(), anyString())).thenReturn(getTracksRoot());
+        List<MusicaDTO> musicas = musicaService.searchMusic(query);
+        assertNotNull(musicas);
+        assertEquals(1, musicas.size());
+        assertEquals("2FU0FRwKmvTZd0lADxXJs7", musicas.get(0).getIdMusica());
 
-
-        //musicaService.searchMusic(anyString());
     }
 
+    @Test
+    public void deveSalvarMusicaNaPlaylist(){
 
+        musicaService.saveMusicaRepository(anySet());
 
+        verify(musicaRepository, times(1))
+                .saveAll(anySet());
+    }
 
+    private MusicaFullDTO getMusicaFullDTO(){
+        MusicaFullDTO musicaFullDTO = new MusicaFullDTO();
+        musicaFullDTO.setIdMusica("2FU0FRwKmvTZd0lADxXJs7");
+        musicaFullDTO.setNome("Harp Concerto in B flat, Op.4, No.6, HWV 294: 1. Andante allegro");
+        musicaFullDTO.setPopularidade(0);
+        musicaFullDTO.setDuracaoMs(146466);
+
+        ArtistaDTO artistaDTO = new ArtistaDTO();
+        artistaDTO.setId("1QL7yTHrdahRMpvNtn6rI2");
+        artistaDTO.setNome("George Frideric Handel");
+        musicaFullDTO.setArtistas(List.of(artistaDTO));
+        return musicaFullDTO;
+        }
+
+    private TracksROOT getTracksRoot(){
+            MusicaFullDTO musicaFullDTO = getMusicaFullDTO();
+            TracksROOT tracksROOT = new TracksROOT();
+
+            TracksDTO  tracksDTO = new TracksDTO();
+            tracksDTO.setMusicas(Arrays.asList(musicaFullDTO));
+            tracksROOT.setTracks(tracksDTO);
+            return tracksROOT;
+        }
 }
