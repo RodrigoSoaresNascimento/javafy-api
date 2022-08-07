@@ -3,7 +3,6 @@ package br.com.javafy.documentation;
 import br.com.javafy.anotations.MagiaResponse;
 import br.com.javafy.dto.spotify.artista.ArtistaDTO;
 import br.com.javafy.dto.spotify.artista.TrackArtista;
-import br.com.javafy.dto.spotify.musica.MusicaDTO;
 import br.com.javafy.exceptions.PlaylistException;
 import br.com.javafy.exceptions.SpotifyException;
 import io.swagger.v3.oas.annotations.Operation;

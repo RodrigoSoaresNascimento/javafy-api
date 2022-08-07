@@ -4,7 +4,6 @@ import br.com.javafy.documentation.DocumentationArtista;
 
 import br.com.javafy.dto.spotify.artista.ArtistaDTO;
 import br.com.javafy.dto.spotify.artista.TrackArtista;
-import br.com.javafy.dto.spotify.musica.MusicaDTO;
 import br.com.javafy.exceptions.PlaylistException;
 import br.com.javafy.exceptions.SpotifyException;
 import br.com.javafy.service.ArtistaService;
