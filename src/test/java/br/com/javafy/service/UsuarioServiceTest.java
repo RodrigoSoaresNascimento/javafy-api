@@ -71,13 +71,7 @@ public class UsuarioServiceTest {
     public void deveTestarBuscarPessoaPeloId() throws PessoaException {
         UsuarioEntity usuario = getUsuarioEntity();
 
-        UsernamePasswordAuthenticationToken usernamePasswordAuthenticationToken =
-                new UsernamePasswordAuthenticationToken(
-                        123,
-                        null
-                );
-
-        SecurityContextHolder.getContext().setAuthentication(usernamePasswordAuthenticationToken);
+        criarUsuarioLogado();
 
 
         when(usuarioRepository.findById(anyInt())).thenReturn(Optional.of(usuario));
@@ -87,9 +81,28 @@ public class UsuarioServiceTest {
         assertNotNull(usuarioDTO);
     }
 
+    private void criarUsuarioLogado() {
+        UsernamePasswordAuthenticationToken usernamePasswordAuthenticationToken =
+                new UsernamePasswordAuthenticationToken(
+                        123,
+                        null
+                );
+
+        SecurityContextHolder.getContext().setAuthentication(usernamePasswordAuthenticationToken);
+    }
+
+
     @Test(expected = PessoaException.class)
     public void deveGetIdLoggedUser() throws PessoaException {
 
+        criarUsuarioNãoLogado();
+
+
+
+        usuarioService.getIdLoggedUser();
+    }
+
+    private void criarUsuarioNãoLogado() {
         UsernamePasswordAuthenticationToken usernamePasswordAuthenticationToken =
                 new UsernamePasswordAuthenticationToken(
                         "123",
@@ -97,9 +110,6 @@ public class UsuarioServiceTest {
                 );
 
         SecurityContextHolder.getContext().setAuthentication(usernamePasswordAuthenticationToken);
-
-
-        usuarioService.getIdLoggedUser();
     }
 
     @Test
@@ -147,13 +157,7 @@ public class UsuarioServiceTest {
 
         // setup
         UsuarioEntity usuario = getUsuarioEntity();
-        UsernamePasswordAuthenticationToken usernamePasswordAuthenticationToken =
-                new UsernamePasswordAuthenticationToken(
-                        123,
-                        null
-                );
-
-        SecurityContextHolder.getContext().setAuthentication(usernamePasswordAuthenticationToken);
+        criarUsuarioLogado();
         CargosUser cargosEnum = CargosUser.ofTipo(Roles.PREMIUM);
         CargoEntity cargoEntity = new CargoEntity(2, CargosEnum.ofTipo(Roles.PREMIUM), Set.of());
         // act
@@ -197,14 +201,7 @@ public class UsuarioServiceTest {
     public void deveTestarGetLoggedComSucesso() throws PessoaException {
         UsuarioEntity usuario = getUsuarioEntity();
 
-        UsernamePasswordAuthenticationToken usernamePasswordAuthenticationToken =
-                new UsernamePasswordAuthenticationToken(
-                        123,
-                        null
-                );
-
-        SecurityContextHolder.getContext().setAuthentication(usernamePasswordAuthenticationToken);
-
+        criarUsuarioLogado();
         when(usuarioRepository.findById(anyInt())).thenReturn(Optional.of(usuario));
 
         UsuarioLoginDTO usuarioDTO = usuarioService.getLoggedUser();
@@ -219,13 +216,7 @@ public class UsuarioServiceTest {
     public void deveTestarGetLoggedSemSucesso() throws PessoaException {
         UsuarioEntity usuario = getUsuarioEntity();
 
-        UsernamePasswordAuthenticationToken usernamePasswordAuthenticationToken =
-                new UsernamePasswordAuthenticationToken(
-                        "123",
-                        null
-                );
-
-        SecurityContextHolder.getContext().setAuthentication(usernamePasswordAuthenticationToken);
+        criarUsuarioNãoLogado();
 
         UsuarioLoginDTO usuarioDTO = usuarioService.getLoggedUser();
 
@@ -255,13 +246,7 @@ public class UsuarioServiceTest {
 
         UsuarioEntity usuario = getUsuarioEntity();
 
-        UsernamePasswordAuthenticationToken usernamePasswordAuthenticationToken =
-                new UsernamePasswordAuthenticationToken(
-                        123,
-                        null
-                );
-
-        SecurityContextHolder.getContext().setAuthentication(usernamePasswordAuthenticationToken);
+        criarUsuarioLogado();
 
         when(usuarioRepository.save(any(UsuarioEntity.class))).thenReturn(usuario);
         when(usuarioRepository.findById(anyInt())).thenReturn(Optional.of(usuario));
@@ -278,13 +263,7 @@ public class UsuarioServiceTest {
 
         UsuarioEntity usuario = getUsuarioEntity();
 
-        UsernamePasswordAuthenticationToken usernamePasswordAuthenticationToken =
-                new UsernamePasswordAuthenticationToken(
-                        123,
-                        null
-                );
-
-        SecurityContextHolder.getContext().setAuthentication(usernamePasswordAuthenticationToken);
+        criarUsuarioLogado();
 
         when(usuarioRepository.findById(anyInt())).thenReturn(Optional.of(usuario));
         doNothing().when(usuarioRepository).delete(any(UsuarioEntity.class));
@@ -319,13 +298,7 @@ public class UsuarioServiceTest {
 
         UsuarioEntity usuario = getUsuarioEntity();
 
-        UsernamePasswordAuthenticationToken usernamePasswordAuthenticationToken =
-                new UsernamePasswordAuthenticationToken(
-                        123,
-                        null
-                );
-
-        SecurityContextHolder.getContext().setAuthentication(usernamePasswordAuthenticationToken);
+        criarUsuarioLogado();
 
         when(usuarioRepository.findByLogin(anyString())).thenReturn(Optional.of(usuario));
 
