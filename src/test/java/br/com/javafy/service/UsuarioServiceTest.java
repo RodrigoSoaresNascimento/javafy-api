@@ -6,6 +6,7 @@ import br.com.javafy.entity.CargoEntity;
 import br.com.javafy.entity.UsuarioEntity;
 import br.com.javafy.enums.CargosEnum;
 import br.com.javafy.enums.CargosUser;
+import br.com.javafy.enums.ControllerUserEnable;
 import br.com.javafy.enums.Roles;
 import br.com.javafy.exceptions.ComentarioNaoCadastradoException;
 import br.com.javafy.exceptions.PessoaException;
@@ -223,11 +224,11 @@ public class UsuarioServiceTest {
     }
 
     @Test(expected = PessoaException.class )
-    public void deveNaoRestringirUsuarioException() throws PessoaException {
+    public void deveLancarExceptionUsuarioException() throws PessoaException {
         when(usuarioRepository.findById(anyInt())).thenReturn(Optional.empty());
-        usuarioService.restrigirUsuario(anyInt());
-        verify(usuarioRepository, times(0))
-                .save(any(UsuarioEntity.class));
+        ControllerUserEnable controller = ControllerUserEnable.DESATIVAR;
+        usuarioService.controlarAcessoUsuario(anyInt(), controller);
+
     }
 
 
@@ -235,10 +236,25 @@ public class UsuarioServiceTest {
     public void deveRestringirUsuario() throws PessoaException {
         UsuarioEntity usuario = getUsuarioAdmin();
         when(usuarioRepository.findById(anyInt())).thenReturn(Optional.of(usuario));
+        ControllerUserEnable controller = ControllerUserEnable.DESATIVAR;
 
-        usuarioService.restrigirUsuario(anyInt());
+        usuarioService.controlarAcessoUsuario( 1,controller);
         verify(usuarioRepository, times(1))
                 .save(any(UsuarioEntity.class));
+        assertFalse(usuario.isEnable());
+    }
+
+    @Test
+    public void deveAtivarUsuario() throws PessoaException {
+        UsuarioEntity usuario = getUsuarioAdmin();
+        usuario.setEnable(false);
+        when(usuarioRepository.findById(anyInt())).thenReturn(Optional.of(usuario));
+        ControllerUserEnable controller = ControllerUserEnable.ATIVAR;
+
+        usuarioService.controlarAcessoUsuario( 1,controller);
+        verify(usuarioRepository, times(1))
+                .save(any(UsuarioEntity.class));
+        assertTrue(usuario.isEnable());
     }
 
     @Test

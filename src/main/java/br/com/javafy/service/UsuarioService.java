@@ -6,6 +6,7 @@ import br.com.javafy.entity.CargoEntity;
 import br.com.javafy.entity.UsuarioEntity;
 import br.com.javafy.enums.CargosEnum;
 import br.com.javafy.enums.CargosUser;
+import br.com.javafy.enums.ControllerUserEnable;
 import br.com.javafy.enums.TipoDeMensagem;
 import br.com.javafy.exceptions.PessoaException;
 import br.com.javafy.repository.CargoRepository;
@@ -163,10 +164,10 @@ public class UsuarioService {
         usuarioRepository.delete(usuario);
     }
 
-    public void restrigirUsuario(Integer idUsuario)
+    public void controlarAcessoUsuario (Integer idUsuario, ControllerUserEnable userEnable)
             throws PessoaException {
         UsuarioEntity usuarioEntity = buscarOutroUsuario(idUsuario);
-        usuarioEntity.setEnable(false);
+        usuarioEntity.setEnable(userEnable.getEnable() == 1);
         usuarioRepository.save(usuarioEntity);
     }
 

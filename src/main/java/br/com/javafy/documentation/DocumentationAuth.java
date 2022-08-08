@@ -4,6 +4,7 @@ import br.com.javafy.anotations.MagiaResponse;
 import br.com.javafy.dto.LoginDTO;
 import br.com.javafy.dto.usuario.*;
 import br.com.javafy.enums.CargosEnum;
+import br.com.javafy.enums.ControllerUserEnable;
 import br.com.javafy.exceptions.PessoaException;
 import io.swagger.v3.oas.annotations.Operation;
 import org.springframework.http.ResponseEntity;
@@ -34,5 +35,5 @@ public interface DocumentationAuth {
     @Operation(summary = "deleta o usuario",
             description = "Deleta uma conta de usuario atraves do cargo de admin")
     @MagiaResponse
-    void restrigirUsuario (Integer login) throws PessoaException;
+    void controlarAcessoUsuario (Integer login, ControllerUserEnable userEnable) throws PessoaException;
 }

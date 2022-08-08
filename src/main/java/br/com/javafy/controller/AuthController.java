@@ -8,6 +8,7 @@ import br.com.javafy.dto.usuario.UsuarioLoginDTO;
 import br.com.javafy.dto.usuario.UsuarioUpdateLoginDTO;
 import br.com.javafy.entity.UsuarioEntity;
 import br.com.javafy.enums.CargosEnum;
+import br.com.javafy.enums.ControllerUserEnable;
 import br.com.javafy.exceptions.PessoaException;
 import br.com.javafy.security.TokenService;
 import br.com.javafy.service.UsuarioService;
@@ -71,9 +72,9 @@ public class AuthController implements DocumentationAuth {
     }
 
     // TODO -> TEM QUE CRIAR OUTRO MÉTODO PARA REMOVER OUTROS USUÁRIOS
-    @DeleteMapping("/remover/{idUsuario}")
-    public void restrigirUsuario (@PathVariable Integer idUsuario) throws PessoaException {
-        usuarioService.restrigirUsuario(idUsuario);
+    @DeleteMapping("/controlar-acesso-usuario/{idUsuario}")
+    public void controlarAcessoUsuario (@PathVariable Integer idUsuario, ControllerUserEnable userEnable) throws PessoaException {
+        usuarioService.controlarAcessoUsuario(idUsuario, userEnable);
     }
 
 }
