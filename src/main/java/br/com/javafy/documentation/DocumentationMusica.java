@@ -21,9 +21,5 @@ public interface DocumentationMusica {
     @MagiaResponse
     ResponseEntity<List<MusicaDTO>> searchMusic(String query) throws  PlaylistException;
 
-    @Operation(summary = "Retonar o genero da musica pesquisada", description = "genero é rock, samba etc")
-    @MagiaResponse
-    ResponseEntity<GeneroDTO> listaGenero() throws  PlaylistException;
-
 
 }

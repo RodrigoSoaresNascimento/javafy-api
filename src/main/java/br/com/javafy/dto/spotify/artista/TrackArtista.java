@@ -1,4 +1,4 @@
-package br.com.javafy.dto.spotify.musica;
+package br.com.javafy.dto.spotify.artista;
 
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.fasterxml.jackson.annotation.JsonProperty;
@@ -6,26 +6,30 @@ import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
+import java.util.List;
+
 @Data
 @AllArgsConstructor
 @NoArgsConstructor
 @JsonIgnoreProperties(ignoreUnknown = true)
-public class MusicaDTO {
+public class TrackArtista {
+
+    @JsonProperty("artists")
+    private List<ArtistaDTO> artistas;
 
     @JsonProperty("id")
-    private String idMusica;
+    public String id;
 
     @JsonProperty("name")
-    private String nome;
-
-    @JsonProperty("duration_ms")
-    private Integer duracaoMs;
+    public String name;
 
     @JsonProperty("popularity")
-    private Integer popularidade;
+    public int popularity;
+
+    @JsonProperty("duration_ms")
+    public int durationMs;
 
     @JsonProperty("preview_url")
-    private String urlMusica;
+    public String previewUrl;
 
 }
-

@@ -14,6 +14,7 @@ import org.springframework.ui.freemarker.FreeMarkerTemplateUtils;
 
 import javax.mail.MessagingException;
 import javax.mail.internet.MimeMessage;
+import javax.swing.*;
 import java.io.IOException;
 import java.util.HashMap;
 import java.util.Map;
@@ -28,12 +29,13 @@ public class EmailService {
     @Value("${spring.mail.username}")
     private String from;
 
+    private String mensagem = "";
+
     public void sendEmail(UsuarioDTO usuarioDTO, String tipoMensagem) {
         MimeMessage mimeMessage = emailSender.createMimeMessage();
         try {
 
             MimeMessageHelper mimeMessageHelper = new MimeMessageHelper(mimeMessage, true);
-
             mimeMessageHelper.setFrom(from);
             mimeMessageHelper.setTo(usuarioDTO.getEmail());
             if(tipoMensagem.equals(TipoDeMensagem.CREATE.getTipoDeMensagem())){
@@ -47,28 +49,28 @@ public class EmailService {
 
             emailSender.send(mimeMessageHelper.getMimeMessage());
         } catch (MessagingException | IOException | TemplateException e) {
-            e.printStackTrace();
+            System.out.println("Error ao enviar o email");
+            mensagem = "Error ao enviar o email";
         }
 
     }
 
-    public String geContentFromTemplate(UsuarioDTO usuarioDTO, String tipoMensagem)
-            throws IOException, TemplateException {
+    public String geContentFromTemplate(UsuarioDTO usuarioDTO, String tipoMensagem) throws IOException, TemplateException {
         Map<String, Object> dados = new HashMap<>();
         dados.put("nome", usuarioDTO.getNome());
         dados.put("id", usuarioDTO.getIdUsuario());
         dados.put("email", from);
-        Template template;
-
-        if(tipoMensagem.equals(TipoDeMensagem.CREATE.getTipoDeMensagem())){
-            template = fmConfiguration.getTemplate("email_boas_vindas-template.ftl");
-        }else if (tipoMensagem.equals(TipoDeMensagem.UPDATE.getTipoDeMensagem())){
-            template = fmConfiguration.getTemplate("email_atualizar_endereco-template.ftl");
-        }else{
-            template = fmConfiguration.getTemplate("email_deletar_endereco-template.ftl");
-        }
+        Template template = null;
+        switch (tipoMensagem){
+            case "create"-> template = fmConfiguration.getTemplate("email_boas_vindas-template.ftl");
+            case "update" -> template = fmConfiguration.getTemplate("email_atualizar_endereco-template.ftl");
+            default -> template = fmConfiguration.getTemplate("email_deletar_endereco-template.ftl");}
 
         return FreeMarkerTemplateUtils.processTemplateIntoString(template, dados);
+    }
+
+    public String getMensagem(){
+        return mensagem;
     }
 
 }

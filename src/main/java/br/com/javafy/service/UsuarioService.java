@@ -1,14 +1,12 @@
 package br.com.javafy.service;
 
-import br.com.javafy.dto.*;
-import br.com.javafy.dto.usuario.UsuarioCreateDTO;
-import br.com.javafy.dto.usuario.UsuarioDTO;
-import br.com.javafy.dto.usuario.UsuarioRelatorioDTO;
+import br.com.javafy.dto.PageDTO;
+import br.com.javafy.dto.usuario.*;
 import br.com.javafy.entity.CargoEntity;
 import br.com.javafy.entity.UsuarioEntity;
-import br.com.javafy.dto.usuario.*;
 import br.com.javafy.enums.CargosEnum;
 import br.com.javafy.enums.CargosUser;
+import br.com.javafy.enums.ControllerUserEnable;
 import br.com.javafy.enums.TipoDeMensagem;
 import br.com.javafy.exceptions.PessoaException;
 import br.com.javafy.repository.CargoRepository;
@@ -23,18 +21,14 @@ import org.springframework.stereotype.Service;
 
 import java.util.List;
 import java.util.Optional;
-import java.util.Set;
 
 @Service
 @RequiredArgsConstructor
 public class UsuarioService {
 
     private final UsuarioRepository usuarioRepository;
-
     private final ObjectMapper objectMapper;
-
     private final EmailService emailService;
-
     private final CargoRepository cargoRepository;
 
     public UsuarioEntity converterUsuarioEntity(UsuarioCreateDTO usuarioCreateDTO) {
@@ -49,15 +43,13 @@ public class UsuarioService {
         return new Md4PasswordEncoder().encode(password);
     }
 
-    public UsuarioEntity buscarOutroUsuario(Integer idUser)
-            throws PessoaException {
+    public UsuarioEntity buscarOutroUsuario(Integer idUser) throws PessoaException {
         return usuarioRepository
                 .findById(idUser)
                 .orElseThrow(() -> new PessoaException("Usuário não cadastrado"));
     }
 
-    public Integer getIdLoggedUser()
-            throws PessoaException {
+    public Integer getIdLoggedUser() throws PessoaException {
         Integer idUser;
         try {
             idUser =  (Integer) SecurityContextHolder.getContext()
@@ -107,14 +99,12 @@ public class UsuarioService {
     }
 
     public UsuarioDTO create(UsuarioCreateDTO usuario, CargosEnum cargo)  {
-
         UsuarioEntity usuarioEntity = converterUsuarioEntity(usuario);
         usuarioEntity.setCargo(cargoRepository.findByNome(cargo));
         usuarioEntity.setSenha(encodePassword(usuario.getSenha()));
         usuarioEntity.setEnable(true);
         usuarioEntity = usuarioRepository.save(usuarioEntity);
         UsuarioDTO usuarioDTO= converterUsuarioDTO(usuarioEntity);
-
         emailService.sendEmail(usuarioDTO, TipoDeMensagem.CREATE.getTipoDeMensagem());
         return usuarioDTO;
     }
@@ -174,10 +164,10 @@ public class UsuarioService {
         usuarioRepository.delete(usuario);
     }
 
-    public void restrigirUsuario(Integer idUsuario)
+    public void controlarAcessoUsuario (Integer idUsuario, ControllerUserEnable userEnable)
             throws PessoaException {
         UsuarioEntity usuarioEntity = buscarOutroUsuario(idUsuario);
-        usuarioEntity.setEnable(false);
+        usuarioEntity.setEnable(userEnable.getEnable() == 1);
         usuarioRepository.save(usuarioEntity);
     }
 

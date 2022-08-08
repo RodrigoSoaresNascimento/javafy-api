@@ -10,22 +10,8 @@ import lombok.NoArgsConstructor;
 @AllArgsConstructor
 @NoArgsConstructor
 @JsonIgnoreProperties(ignoreUnknown = true)
-public class MusicaDTO {
+public class TracksROOT {
 
-    @JsonProperty("id")
-    private String idMusica;
-
-    @JsonProperty("name")
-    private String nome;
-
-    @JsonProperty("duration_ms")
-    private Integer duracaoMs;
-
-    @JsonProperty("popularity")
-    private Integer popularidade;
-
-    @JsonProperty("preview_url")
-    private String urlMusica;
-
+    @JsonProperty("tracks")
+    private TracksDTO tracks;
 }
-
