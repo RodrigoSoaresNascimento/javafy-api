@@ -93,4 +93,6 @@ public class CustomGlobalExceptionHandler extends ResponseEntityExceptionHandler
     public ResponseEntity<Object> handleException(BadCredentialsException exception){
         return returnError(exception.getMessage());
     }
+
+
 }
