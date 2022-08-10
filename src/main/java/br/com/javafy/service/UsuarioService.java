@@ -1,6 +1,7 @@
 package br.com.javafy.service;
 
 import br.com.javafy.dto.PageDTO;
+import br.com.javafy.dto.email.EmailDTO;
 import br.com.javafy.dto.usuario.*;
 import br.com.javafy.entity.CargoEntity;
 import br.com.javafy.entity.UsuarioEntity;
@@ -11,6 +12,7 @@ import br.com.javafy.enums.TipoDeMensagem;
 import br.com.javafy.exceptions.PessoaException;
 import br.com.javafy.repository.CargoRepository;
 import br.com.javafy.repository.UsuarioRepository;
+import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
@@ -30,6 +32,8 @@ public class UsuarioService {
     private final ObjectMapper objectMapper;
     private final EmailService emailService;
     private final CargoRepository cargoRepository;
+
+    private final ProduceEmailService produceEmailService;
 
     public UsuarioEntity converterUsuarioEntity(UsuarioCreateDTO usuarioCreateDTO) {
         return objectMapper.convertValue(usuarioCreateDTO, UsuarioEntity.class);
@@ -98,19 +102,22 @@ public class UsuarioService {
                 .toList();
     }
 
-    public UsuarioDTO create(UsuarioCreateDTO usuario, CargosEnum cargo)  {
+    public UsuarioDTO create(UsuarioCreateDTO usuario, CargosEnum cargo) throws JsonProcessingException {
         UsuarioEntity usuarioEntity = converterUsuarioEntity(usuario);
         usuarioEntity.setCargo(cargoRepository.findByNome(cargo));
         usuarioEntity.setSenha(encodePassword(usuario.getSenha()));
         usuarioEntity.setEnable(true);
         usuarioEntity = usuarioRepository.save(usuarioEntity);
         UsuarioDTO usuarioDTO= converterUsuarioDTO(usuarioEntity);
-        emailService.sendEmail(usuarioDTO, TipoDeMensagem.CREATE.getTipoDeMensagem());
+        EmailDTO emailDTO = objectMapper.convertValue(usuarioDTO, EmailDTO.class);
+        emailDTO.setTipoDeMensagem(TipoDeMensagem.CREATE);
+        emailDTO.setMensagem("Bem vindo ao javafy sua rede de contatos baseados em musica!");
+        produceEmailService.enviarMensage(emailDTO);
         return usuarioDTO;
     }
 
     public UsuarioDTO update(UsuarioUpdateDTO usuarioUpdate, CargosUser cargo)
-            throws PessoaException {
+            throws PessoaException, JsonProcessingException {
 
         UsuarioEntity usuarioEntity = retornarUsuarioEntityById();
 
@@ -137,7 +144,10 @@ public class UsuarioService {
         }
         System.out.println(usuarioEntity);
         usuarioEntity = usuarioRepository.save(usuarioEntity);
-
+        EmailDTO emailDTO = objectMapper.convertValue(usuarioEntity, EmailDTO.class);
+        emailDTO.setTipoDeMensagem(TipoDeMensagem.UPDATE);
+        emailDTO.setMensagem("Usuario atualizado com sucesso!");
+        produceEmailService.enviarMensage(emailDTO);
         return converterUsuarioDTO(usuarioEntity);
     }
 
@@ -165,9 +175,17 @@ public class UsuarioService {
     }
 
     public void controlarAcessoUsuario (Integer idUsuario, ControllerUserEnable userEnable)
-            throws PessoaException {
+            throws PessoaException, JsonProcessingException {
+        boolean habilitado = userEnable.getEnable() == 1;
         UsuarioEntity usuarioEntity = buscarOutroUsuario(idUsuario);
-        usuarioEntity.setEnable(userEnable.getEnable() == 1);
+        usuarioEntity.setEnable(habilitado);
+        if(!habilitado){
+            EmailDTO emailDTO = objectMapper.convertValue(usuarioEntity, EmailDTO.class);
+            emailDTO.setTipoDeMensagem(TipoDeMensagem.DELETE);
+            emailDTO.setMensagem("Você perdeu acesso a sua conta javafy porfavor entrar em contato" +
+                    " com suporte@javafy");
+            produceEmailService.enviarMensage(emailDTO);
+        }
         usuarioRepository.save(usuarioEntity);
     }
 
