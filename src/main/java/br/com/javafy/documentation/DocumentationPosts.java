@@ -11,7 +11,7 @@ import java.util.List;
 
 public interface DocumentationPosts {
 
-    @Operation(summary = "Exibe todos os posts de um usuario",
+    @Operation(summary = "Exibe todos os posts",
             description = "Exibe uma lista de postagem dos usuarios do aplicativo")
     @MagiaResponse
     ResponseEntity<List<PostsDTO>> getAll();
