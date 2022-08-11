@@ -61,7 +61,7 @@ public class UsuarioEntity implements UserDetails {
     )
     private Set<UsuarioEntity> seguindo = new HashSet<>();
 
-
+    @JsonIgnore
     @OneToMany(fetch = FetchType.LAZY,
                 mappedBy = "usuario",
                 cascade = CascadeType.ALL,
@@ -81,7 +81,7 @@ public class UsuarioEntity implements UserDetails {
     @JoinColumn(name = "id_cargo", referencedColumnName = "id_cargo")
     private CargoEntity cargo; // contato.getPessoa()
 
-
+    @JsonIgnore
     @Override
     public Collection<? extends GrantedAuthority> getAuthorities() {
         return List.of(cargo);

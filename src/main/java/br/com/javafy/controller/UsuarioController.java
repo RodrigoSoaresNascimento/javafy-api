@@ -55,4 +55,9 @@ public class UsuarioController implements DocumentationUsuario {
     public void delete() throws PessoaException {
         usuarioService.delete();
     }
+
+    @GetMapping("/list-birthday")
+    public List<UsuarioDTO> getBirthDay(){
+        return usuarioService.listBirthDay();
+    }
 }

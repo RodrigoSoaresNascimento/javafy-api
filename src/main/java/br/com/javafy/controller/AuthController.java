@@ -72,7 +72,6 @@ public class AuthController implements DocumentationAuth {
         return ResponseEntity.ok(usuarioService.updateLogin(usuarioUpdateLoginDTO));
     }
 
-    // TODO -> TEM QUE CRIAR OUTRO MÉTODO PARA REMOVER OUTROS USUÁRIOS
     @DeleteMapping("/controlar-acesso-usuario/{idUsuario}")
     public void controlarAcessoUsuario (@PathVariable Integer idUsuario, ControllerUserEnable userEnable) throws PessoaException, JsonProcessingException {
         usuarioService.controlarAcessoUsuario(idUsuario, userEnable);
