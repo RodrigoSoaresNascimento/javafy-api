@@ -15,6 +15,7 @@ import br.com.javafy.repository.UsuarioRepository;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.scheduling.annotation.Scheduled;
@@ -27,6 +28,7 @@ import java.util.Optional;
 
 @Service
 @RequiredArgsConstructor
+@Slf4j
 public class UsuarioService {
 
     private final UsuarioRepository usuarioRepository;
@@ -192,7 +194,7 @@ public class UsuarioService {
         return usuarioRepository.relatorioPessoa();
     }
 
-    @Scheduled(cron = "1 0 * * *", zone = "GMT-3")
+    @Scheduled(cron = "0 1 0 * * *")
     public void enviarEmailAniversario() throws JsonProcessingException {
         List<UsuarioDTO> usuarioDTO = usuarioRepository.findByBirthDay().stream()
                 .map(usuarioEntity -> objectMapper.convertValue(usuarioEntity, UsuarioDTO.class))
@@ -202,6 +204,12 @@ public class UsuarioService {
             emailDTO.setTipoDeMensagem(TipoDeMensagem.BIRTHDAY);
             emailDTO.setMensagem("Enviar email de aniversário para o usuário!");
             produceEmailService.enviarMensage(emailDTO);
+            log.info("Mensagem de email enviada");
         }
+    }
+    public List<UsuarioDTO> listBirthDay(){
+        return usuarioRepository.findByBirthDay().stream()
+                .map(usuarioEntity -> objectMapper.convertValue(usuarioEntity, UsuarioDTO.class))
+                .toList();
     }
 }

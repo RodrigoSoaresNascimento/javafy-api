@@ -27,7 +27,7 @@ public class ProduceEmailService {
 
     private final ObjectMapper objectMapper;
 
-    @Value(value = "{kafka.topico.geral}")
+    @Value(value = "${kafka.topico.geral}")
     private String topicoGeral;
 
     public void enviarMensage(EmailDTO emailDTO) throws JsonProcessingException {
