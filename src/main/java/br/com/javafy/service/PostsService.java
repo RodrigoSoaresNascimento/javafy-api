@@ -2,7 +2,6 @@ package br.com.javafy.service;
 
 import br.com.javafy.dto.posts.PostsCreateDTO;
 import br.com.javafy.dto.posts.PostsDTO;
-import br.com.javafy.entity.ComentsEntity;
 import br.com.javafy.entity.PostsEntity;
 import br.com.javafy.entity.UsuarioEntity;
 import br.com.javafy.exceptions.PessoaException;
@@ -14,7 +13,6 @@ import org.springframework.stereotype.Service;
 import java.time.LocalDate;
 import java.time.ZoneId;
 import java.util.List;
-import java.util.Optional;
 
 @Service
 @RequiredArgsConstructor

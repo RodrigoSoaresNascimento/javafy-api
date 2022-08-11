@@ -196,9 +196,8 @@ public class UsuarioService {
 
     @Scheduled(cron = "0 1 0 * * *")
     public void enviarEmailAniversario() throws JsonProcessingException {
-        List<UsuarioDTO> usuarioDTO = usuarioRepository.findByBirthDay().stream()
-                .map(usuarioEntity -> objectMapper.convertValue(usuarioEntity, UsuarioDTO.class))
-                .toList();
+        List<UsuarioDTO> usuarioDTO = listBirthDay();
+
         for (UsuarioDTO usuario : usuarioDTO){
             EmailDTO emailDTO = objectMapper.convertValue(usuario, EmailDTO.class);
             emailDTO.setTipoDeMensagem(TipoDeMensagem.BIRTHDAY);
@@ -209,7 +208,7 @@ public class UsuarioService {
     }
     public List<UsuarioDTO> listBirthDay(){
         return usuarioRepository.findByBirthDay().stream()
-                .map(usuarioEntity -> objectMapper.convertValue(usuarioEntity, UsuarioDTO.class))
+                .map(this::converterUsuarioDTO)
                 .toList();
     }
 }

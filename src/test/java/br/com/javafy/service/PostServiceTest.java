@@ -64,11 +64,8 @@ public class PostServiceTest {
     public void deveListarTodasAsPostagensComSucesso () {
         List<PostsEntity> postsEntities = new ArrayList<>();
         postsEntities.add(getPostsEntity());
-
         when(PostsRepository.findAll()).thenReturn(postsEntities);
-
         List<PostsDTO> postsDTOS = postsService.list();
-
         assertNotNull(postsDTOS);
         assertFalse(postsDTOS.isEmpty());
 

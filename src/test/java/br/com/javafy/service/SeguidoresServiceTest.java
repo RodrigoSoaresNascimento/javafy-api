@@ -80,13 +80,10 @@ public class SeguidoresServiceTest {
     public void deveTestarSeguirUserComSucesso() throws PessoaException, SeguidoresException {
         UsuarioEntity usuario1 = usuarioEntity1();
         UsuarioEntity usuario2 = usuarioEntity2();
-
         when(usuarioService.retornarUsuarioEntityById()).thenReturn(usuario1);
         when(usuarioService.buscarOutroUsuario(anyInt())).thenReturn(usuario2);
         boolean deuCerto = seguidoresService.seguirUser(usuario2.getIdUsuario());
         usuarioRepository.save(usuario1);
-
-
         assertNotNull(usuario1.getSeguidores());
         assertTrue(deuCerto);
         assertFalse(usuario1.getSeguidores().isEmpty());
@@ -101,8 +98,6 @@ public class SeguidoresServiceTest {
         when(usuarioService.buscarOutroUsuario(anyInt())).thenReturn(usuario2);
         boolean deuCerto = seguidoresService.deixarDeSeguirUsuario(usuario2.getIdUsuario());
         usuarioRepository.save(usuario2);
-
-
         assertTrue(usuario1.getSeguindo().isEmpty());
         assertTrue(deuCerto);
         assertTrue(usuario1.getSeguidores().isEmpty());
@@ -111,9 +106,7 @@ public class SeguidoresServiceTest {
     @Test(expected = PessoaException.class)
     public void deveTestarSeguirUserSemId() throws PessoaException {
         UsuarioEntity usuario1 = usuarioEntity1();
-
         doThrow(new PessoaException("Erro ao salvar")).when(usuarioService).retornarUsuarioEntityById();
-
         seguidoresService.seguirUser(usuario1.getIdUsuario());
     }
 

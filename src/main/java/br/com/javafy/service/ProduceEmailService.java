@@ -31,7 +31,6 @@ public class ProduceEmailService {
     private String topicoGeral;
 
     public void enviarMensage(EmailDTO emailDTO) throws JsonProcessingException {
-
         emailDTO.setLocalDateTime(LocalDateTime.now());
         String mensagemString = objectMapper.writeValueAsString(emailDTO);
         enviarMensagem(mensagemString);

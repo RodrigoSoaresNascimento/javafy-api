@@ -6,9 +6,7 @@ import br.com.javafy.dto.spotify.TokenDTO;
 import br.com.javafy.dto.spotify.artista.ArtistaDTO;
 import br.com.javafy.dto.spotify.artista.RootArtista;
 import br.com.javafy.dto.spotify.artista.TrackArtista;
-import br.com.javafy.dto.spotify.musica.MusicaFullDTO;
 import br.com.javafy.entity.Headers;
-import br.com.javafy.exceptions.PlaylistException;
 import br.com.javafy.exceptions.SpotifyException;
 import org.junit.Before;
 import org.junit.Test;
@@ -21,10 +19,11 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertNotNull;
 import static org.mockito.ArgumentMatchers.anyMap;
 import static org.mockito.ArgumentMatchers.anyString;
-import static org.mockito.Mockito.*;
-import static org.junit.Assert.*;
+import static org.mockito.Mockito.when;
 
 @RunWith(MockitoJUnitRunner.class)
 public class ArtistaServiceTest {

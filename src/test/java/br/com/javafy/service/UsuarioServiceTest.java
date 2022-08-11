@@ -8,9 +8,7 @@ import br.com.javafy.enums.CargosEnum;
 import br.com.javafy.enums.CargosUser;
 import br.com.javafy.enums.ControllerUserEnable;
 import br.com.javafy.enums.Roles;
-import br.com.javafy.exceptions.ComentarioNaoCadastradoException;
 import br.com.javafy.exceptions.PessoaException;
-import br.com.javafy.exceptions.PlaylistException;
 import br.com.javafy.repository.CargoRepository;
 import br.com.javafy.repository.UsuarioRepository;
 import com.fasterxml.jackson.core.JsonProcessingException;
@@ -40,7 +38,6 @@ import java.util.Set;
 import static org.junit.Assert.*;
 import static org.mockito.ArgumentMatchers.*;
 import static org.mockito.Mockito.*;
-import static org.mockito.Mockito.times;
 
 @RunWith(MockitoJUnitRunner.class)
 public class UsuarioServiceTest {
@@ -56,10 +53,6 @@ public class UsuarioServiceTest {
     @Mock
     private CargoRepository cargoRepository;
 
-    @Mock
-    private EmailService emailService;
-
-
     @Before
     public void init() {
         objectMapper.registerModule(new JavaTimeModule());
@@ -72,14 +65,9 @@ public class UsuarioServiceTest {
     @Test
     public void deveTestarBuscarPessoaPeloId() throws PessoaException {
         UsuarioEntity usuario = getUsuarioEntity();
-
         criarUsuarioLogado();
-
-
         when(usuarioRepository.findById(anyInt())).thenReturn(Optional.of(usuario));
-
         UsuarioDTO usuarioDTO = usuarioService.findById();
-
         assertNotNull(usuarioDTO);
     }
 
@@ -89,18 +77,13 @@ public class UsuarioServiceTest {
                         123,
                         null
                 );
-
         SecurityContextHolder.getContext().setAuthentication(usernamePasswordAuthenticationToken);
     }
 
 
     @Test(expected = PessoaException.class)
     public void deveGetIdLoggedUser() throws PessoaException {
-
         criarUsuarioNãoLogado();
-
-
-
         usuarioService.getIdLoggedUser();
     }
 
@@ -110,24 +93,18 @@ public class UsuarioServiceTest {
                         "123",
                         null
                 );
-
         SecurityContextHolder.getContext().setAuthentication(usernamePasswordAuthenticationToken);
     }
 
     @Test
     public void deveTestarListComSucesso() {
-
         // setup
-
         List<UsuarioEntity> usuarios = new ArrayList<>();
         usuarios.add(getUsuarioEntity());
-
         // act
         when(usuarioRepository.findAll()).thenReturn(usuarios);
-
         // assert
         List<UsuarioDTO> usuarioDTOS = usuarioService.list();
-
         assertNotNull(usuarioDTOS);
         assertFalse(usuarioDTOS.isEmpty());
 
@@ -138,20 +115,16 @@ public class UsuarioServiceTest {
 
         // setup
         UsuarioEntity usuario = getUsuarioEntity();
-
         // act
         when(usuarioRepository.save(any(UsuarioEntity.class))).thenReturn(usuario);
-
         UsuarioDTO usuarioDTO = usuarioService.create(getUsuarioCreateDto(), CargosEnum.ROLE_ADMIN);
         // assert
-
         assertNotNull(usuarioDTO);
         assertEquals(usuarioDTO.getNome(), usuario.getNome());
         assertEquals(usuarioDTO.getDataNascimento(), usuario.getDataNascimento());
         assertEquals(usuarioDTO.getEmail(), usuario.getEmail());
         assertEquals(usuarioDTO.getLogin(), usuario.getLogin());
         assertEquals(usuarioDTO.getGenero(), usuario.getGenero());
-
     }
 
     @Test
@@ -168,16 +141,13 @@ public class UsuarioServiceTest {
         when(cargoRepository.findByNome(any())).thenReturn(cargoEntity);
 
         // assert
-
         UsuarioDTO usuarioDTO = usuarioService.update(getUsuarioUpdateDto(), cargosEnum);
-
         assertNotNull(usuarioDTO);
         assertEquals(usuarioDTO.getIdUsuario(), usuario.getIdUsuario());
         assertEquals(usuarioDTO.getNome(), usuario.getNome());
         assertEquals(usuarioDTO.getGenero(), usuario.getGenero());
         assertEquals(usuarioDTO.getLogin(), usuario.getLogin());
         assertEquals(usuarioDTO.getDataNascimento(), usuario.getDataNascimento());
-
     }
 
     @Test
@@ -185,14 +155,11 @@ public class UsuarioServiceTest {
         // setup
         List<UsuarioEntity> usuarios = List.of(getUsuarioEntity());
         Page<UsuarioEntity> pageUsuarios = new PageImpl<>(usuarios);
-
         when(usuarioRepository.findAll(any(Pageable.class)))
                 .thenReturn(pageUsuarios);
-
         // act
         PageDTO<UsuarioDTO> paginaDeUsuarios = usuarioService
                 .listarUsuariosPorNomePaginado(1000, 3);
-
         // assert
         assertNotNull(paginaDeUsuarios);
         assertEquals(1, pageUsuarios.getTotalPages());
@@ -202,26 +169,19 @@ public class UsuarioServiceTest {
     @Test
     public void deveTestarGetLoggedComSucesso() throws PessoaException {
         UsuarioEntity usuario = getUsuarioEntity();
-
         criarUsuarioLogado();
         when(usuarioRepository.findById(anyInt())).thenReturn(Optional.of(usuario));
-
         UsuarioLoginDTO usuarioDTO = usuarioService.getLoggedUser();
-
         assertNotNull(usuarioDTO);
         assertEquals(usuarioDTO.getEmail(), usuario.getEmail());
         assertEquals(usuarioDTO.getLogin(), usuario.getLogin());
-
     }
 
     @Test(expected = PessoaException.class)
     public void deveTestarGetLoggedSemSucesso() throws PessoaException {
         UsuarioEntity usuario = getUsuarioEntity();
-
         criarUsuarioNãoLogado();
-
         UsuarioLoginDTO usuarioDTO = usuarioService.getLoggedUser();
-
     }
 
     @Test(expected = PessoaException.class )
@@ -229,7 +189,6 @@ public class UsuarioServiceTest {
         when(usuarioRepository.findById(anyInt())).thenReturn(Optional.empty());
         ControllerUserEnable controller = ControllerUserEnable.DESATIVAR;
         usuarioService.controlarAcessoUsuario(anyInt(), controller);
-
     }
 
 
@@ -238,7 +197,6 @@ public class UsuarioServiceTest {
         UsuarioEntity usuario = getUsuarioAdmin();
         when(usuarioRepository.findById(anyInt())).thenReturn(Optional.of(usuario));
         ControllerUserEnable controller = ControllerUserEnable.DESATIVAR;
-
         usuarioService.controlarAcessoUsuario( 1,controller);
         verify(usuarioRepository, times(1))
                 .save(any(UsuarioEntity.class));
@@ -251,7 +209,6 @@ public class UsuarioServiceTest {
         usuario.setEnable(false);
         when(usuarioRepository.findById(anyInt())).thenReturn(Optional.of(usuario));
         ControllerUserEnable controller = ControllerUserEnable.ATIVAR;
-
         usuarioService.controlarAcessoUsuario( 1,controller);
         verify(usuarioRepository, times(1))
                 .save(any(UsuarioEntity.class));
@@ -260,32 +217,24 @@ public class UsuarioServiceTest {
 
     @Test
     public void deveAtualizarAsCredenciasDoUsuario () throws PessoaException {
-
         UsuarioEntity usuario = getUsuarioEntity();
-
         criarUsuarioLogado();
-
         when(usuarioRepository.save(any(UsuarioEntity.class))).thenReturn(usuario);
         when(usuarioRepository.findById(anyInt())).thenReturn(Optional.of(usuario));
         UsuarioUpdateLoginDTO usuarioLoginDTO = usuarioService.updateLogin(getUsuarioUpdateLogin());
-
         assertNotNull(usuarioLoginDTO);
         assertEquals(usuarioLoginDTO.getLogin(), usuario.getLogin());
         assertEquals(usuarioLoginDTO.getSenha(), usuario.getSenha());
-
     }
 
     @Test
     public void deveDeletarAContaDoUsuarioLogado () throws PessoaException {
 
         UsuarioEntity usuario = getUsuarioEntity();
-
         criarUsuarioLogado();
-
         when(usuarioRepository.findById(anyInt())).thenReturn(Optional.of(usuario));
         doNothing().when(usuarioRepository).delete(any(UsuarioEntity.class));
         usuarioService.delete();
-
         verify(usuarioRepository, times(1)).delete(any(UsuarioEntity.class));
 
     }
@@ -297,34 +246,22 @@ public class UsuarioServiceTest {
         usuarioRelatorioDTO.setEmail(getUsuarioEntity().getEmail());
         usuarioRelatorioDTO.setNome(getUsuarioEntity().getNome());
         usuarioRelatorioDTO.setNomePlaylist("Minhas musicas");
-
         List<UsuarioRelatorioDTO> relatorio = List.of(usuarioRelatorioDTO);
-
         when(usuarioRepository.relatorioPessoa()).thenReturn(relatorio);
-
         List<UsuarioRelatorioDTO> relatorioPessoa = usuarioService.relatorio();
-
         assertNotNull(relatorioPessoa);
         assertFalse(relatorioPessoa.isEmpty());
-
-
     }
 
     @Test
     public void deveTestarFindByLoginComSucesso () {
 
         UsuarioEntity usuario = getUsuarioEntity();
-
         criarUsuarioLogado();
-
         when(usuarioRepository.findByLogin(anyString())).thenReturn(Optional.of(usuario));
-
         Optional<UsuarioEntity> usuarioEntity = usuarioService.findByLogin(usuario.getLogin());
-
         assertNotNull(usuarioEntity);
         assertEquals(usuarioEntity.get().getLogin(), usuario.getLogin());
-
-
     }
 
     private static UsuarioDTO getUsuarioDTO() {
