@@ -13,6 +13,7 @@ import br.com.javafy.exceptions.PessoaException;
 import br.com.javafy.exceptions.PlaylistException;
 import br.com.javafy.repository.CargoRepository;
 import br.com.javafy.repository.UsuarioRepository;
+import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.DeserializationFeature;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.SerializationFeature;
@@ -133,7 +134,7 @@ public class UsuarioServiceTest {
     }
 
     @Test
-    public void deveTestarCriarUsuarioComSucesso() throws ComentarioNaoCadastradoException, PessoaException, PlaylistException {
+    public void deveTestarCriarUsuarioComSucesso() throws JsonProcessingException {
 
         // setup
         UsuarioEntity usuario = getUsuarioEntity();
@@ -154,7 +155,7 @@ public class UsuarioServiceTest {
     }
 
     @Test
-    public void deveTestarUpdateUsuarioComSucesso() throws PessoaException {
+    public void deveTestarUpdateUsuarioComSucesso() throws PessoaException, JsonProcessingException {
 
         // setup
         UsuarioEntity usuario = getUsuarioEntity();
@@ -224,7 +225,7 @@ public class UsuarioServiceTest {
     }
 
     @Test(expected = PessoaException.class )
-    public void deveLancarExceptionUsuarioException() throws PessoaException {
+    public void deveLancarExceptionUsuarioException() throws PessoaException, JsonProcessingException {
         when(usuarioRepository.findById(anyInt())).thenReturn(Optional.empty());
         ControllerUserEnable controller = ControllerUserEnable.DESATIVAR;
         usuarioService.controlarAcessoUsuario(anyInt(), controller);
@@ -233,7 +234,7 @@ public class UsuarioServiceTest {
 
 
     @Test
-    public void deveRestringirUsuario() throws PessoaException {
+    public void deveRestringirUsuario() throws PessoaException, JsonProcessingException {
         UsuarioEntity usuario = getUsuarioAdmin();
         when(usuarioRepository.findById(anyInt())).thenReturn(Optional.of(usuario));
         ControllerUserEnable controller = ControllerUserEnable.DESATIVAR;
@@ -245,7 +246,7 @@ public class UsuarioServiceTest {
     }
 
     @Test
-    public void deveAtivarUsuario() throws PessoaException {
+    public void deveAtivarUsuario() throws PessoaException, JsonProcessingException {
         UsuarioEntity usuario = getUsuarioAdmin();
         usuario.setEnable(false);
         when(usuarioRepository.findById(anyInt())).thenReturn(Optional.of(usuario));

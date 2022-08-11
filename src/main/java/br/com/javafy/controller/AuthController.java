@@ -12,6 +12,7 @@ import br.com.javafy.enums.ControllerUserEnable;
 import br.com.javafy.exceptions.PessoaException;
 import br.com.javafy.security.TokenService;
 import br.com.javafy.service.UsuarioService;
+import com.fasterxml.jackson.core.JsonProcessingException;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.authentication.AuthenticationManager;
@@ -60,7 +61,7 @@ public class AuthController implements DocumentationAuth {
     @PostMapping("/create-user")
     public ResponseEntity<UsuarioDTO> create(
             @RequestBody UsuarioCreateDTO usuarioCreateDTO,
-            CargosEnum cargos){
+            CargosEnum cargos) throws JsonProcessingException {
         return ResponseEntity.ok(usuarioService.create(usuarioCreateDTO, cargos));
     }
 
@@ -73,7 +74,7 @@ public class AuthController implements DocumentationAuth {
 
     // TODO -> TEM QUE CRIAR OUTRO MÉTODO PARA REMOVER OUTROS USUÁRIOS
     @DeleteMapping("/controlar-acesso-usuario/{idUsuario}")
-    public void controlarAcessoUsuario (@PathVariable Integer idUsuario, ControllerUserEnable userEnable) throws PessoaException {
+    public void controlarAcessoUsuario (@PathVariable Integer idUsuario, ControllerUserEnable userEnable) throws PessoaException, JsonProcessingException {
         usuarioService.controlarAcessoUsuario(idUsuario, userEnable);
     }
 
