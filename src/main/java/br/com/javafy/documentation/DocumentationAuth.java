@@ -6,6 +6,7 @@ import br.com.javafy.dto.usuario.*;
 import br.com.javafy.enums.CargosEnum;
 import br.com.javafy.enums.ControllerUserEnable;
 import br.com.javafy.exceptions.PessoaException;
+import com.fasterxml.jackson.core.JsonProcessingException;
 import io.swagger.v3.oas.annotations.Operation;
 import org.springframework.http.ResponseEntity;
 
@@ -19,7 +20,7 @@ public interface DocumentationAuth {
     @Operation(summary = "Cria um novo usuario",
             description = "Cria um usuario com login e senha")
     @MagiaResponse
-    ResponseEntity<UsuarioDTO> create (UsuarioCreateDTO usuarioCreateDTO, CargosEnum cargosEnum);
+    ResponseEntity<UsuarioDTO> create (UsuarioCreateDTO usuarioCreateDTO, CargosEnum cargosEnum) throws JsonProcessingException;
 
     @Operation(summary = "Atualiza as credenciais",
             description = "Atualiza as credenciais de acesso a aplicação como senha e login")
@@ -35,5 +36,5 @@ public interface DocumentationAuth {
     @Operation(summary = "deleta o usuario",
             description = "Deleta uma conta de usuario atraves do cargo de admin")
     @MagiaResponse
-    void controlarAcessoUsuario (Integer login, ControllerUserEnable userEnable) throws PessoaException;
+    void controlarAcessoUsuario (Integer login, ControllerUserEnable userEnable) throws PessoaException, JsonProcessingException;
 }

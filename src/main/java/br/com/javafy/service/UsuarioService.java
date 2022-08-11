@@ -17,6 +17,7 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
+import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.crypto.password.Md4PasswordEncoder;
 import org.springframework.stereotype.Service;
@@ -30,9 +31,7 @@ public class UsuarioService {
 
     private final UsuarioRepository usuarioRepository;
     private final ObjectMapper objectMapper;
-    private final EmailService emailService;
     private final CargoRepository cargoRepository;
-
     private final ProduceEmailService produceEmailService;
 
     public UsuarioEntity converterUsuarioEntity(UsuarioCreateDTO usuarioCreateDTO) {
@@ -111,7 +110,7 @@ public class UsuarioService {
         UsuarioDTO usuarioDTO= converterUsuarioDTO(usuarioEntity);
         EmailDTO emailDTO = objectMapper.convertValue(usuarioDTO, EmailDTO.class);
         emailDTO.setTipoDeMensagem(TipoDeMensagem.CREATE);
-        emailDTO.setMensagem("Bem vindo ao javafy sua rede de contatos baseados em musica!");
+        emailDTO.setMensagem("Bem vindo ao javafy, sua rede de contatos baseados em musica!");
         produceEmailService.enviarMensage(emailDTO);
         return usuarioDTO;
     }
@@ -182,8 +181,8 @@ public class UsuarioService {
         if(!habilitado){
             EmailDTO emailDTO = objectMapper.convertValue(usuarioEntity, EmailDTO.class);
             emailDTO.setTipoDeMensagem(TipoDeMensagem.DELETE);
-            emailDTO.setMensagem("Você perdeu acesso a sua conta javafy porfavor entrar em contato" +
-                    " com suporte@javafy");
+            emailDTO.setMensagem("Você perdeu acesso a sua conta javafy, por favor entrar em contato" +
+                    " com o suporte@javafy");
             produceEmailService.enviarMensage(emailDTO);
         }
         usuarioRepository.save(usuarioEntity);
@@ -193,4 +192,16 @@ public class UsuarioService {
         return usuarioRepository.relatorioPessoa();
     }
 
+    @Scheduled(cron = "1 0 * * *", zone = "GMT-3")
+    public void enviarEmailAniversario() throws JsonProcessingException {
+        List<UsuarioDTO> usuarioDTO = usuarioRepository.findByBirthDay().stream()
+                .map(usuarioEntity -> objectMapper.convertValue(usuarioEntity, UsuarioDTO.class))
+                .toList();
+        for (UsuarioDTO usuario : usuarioDTO){
+            EmailDTO emailDTO = objectMapper.convertValue(usuario, EmailDTO.class);
+            emailDTO.setTipoDeMensagem(TipoDeMensagem.BIRTHDAY);
+            emailDTO.setMensagem("Enviar email de aniversário para o usuário!");
+            produceEmailService.enviarMensage(emailDTO);
+        }
+    }
 }

@@ -6,8 +6,11 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
+import org.springframework.data.repository.query.Param;
 import org.springframework.stereotype.Repository;
 
+import java.time.LocalDate;
+import java.util.Date;
 import java.util.List;
 import java.util.Optional;
 
@@ -27,4 +30,9 @@ public interface UsuarioRepository extends JpaRepository<UsuarioEntity, Integer>
 
     Optional<UsuarioEntity> findByLogin(String login);
 
+    @Query("select u " +
+            " from usuario u " +
+            "where day(u.dataNascimento)= day(current_date()) " +
+            "and month(u.dataNascimento)=month(current_date())")
+    List<UsuarioEntity> findByBirthDay();
 }

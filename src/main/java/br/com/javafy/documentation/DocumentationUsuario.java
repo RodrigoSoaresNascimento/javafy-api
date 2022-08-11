@@ -6,6 +6,7 @@ import br.com.javafy.dto.usuario.UsuarioDTO;
 import br.com.javafy.dto.usuario.UsuarioUpdateDTO;
 import br.com.javafy.enums.CargosUser;
 import br.com.javafy.exceptions.PessoaException;
+import com.fasterxml.jackson.core.JsonProcessingException;
 import io.swagger.v3.oas.annotations.Operation;
 import org.springframework.http.ResponseEntity;
 import org.springframework.validation.annotation.Validated;
@@ -30,7 +31,7 @@ public interface DocumentationUsuario {
     public ResponseEntity<UsuarioDTO> update(
             CargosUser cargos,
             @Valid @RequestBody UsuarioUpdateDTO usuario)
-            throws PessoaException;
+            throws PessoaException, JsonProcessingException;
 
     @Operation(summary = "Apaga um perfil de usuario pelo seu ID")
     @MagiaResponse

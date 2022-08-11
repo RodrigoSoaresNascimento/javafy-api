@@ -5,7 +5,8 @@ import java.util.Arrays;
 public enum TipoDeMensagem {
     CREATE("create"),
     UPDATE("update"),
-    DELETE("delete");
+    DELETE("delete"),
+    BIRTHDAY("birthday");
 
     private String tipoDeMensagem;
 

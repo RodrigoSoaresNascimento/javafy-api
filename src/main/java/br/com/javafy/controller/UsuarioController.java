@@ -2,11 +2,14 @@ package br.com.javafy.controller;
 
 import br.com.javafy.documentation.DocumentationUsuario;
 import br.com.javafy.dto.PageDTO;
+import br.com.javafy.dto.usuario.UsuarioRelatorioDTO;
 import br.com.javafy.dto.usuario.UsuarioUpdateDTO;
+import br.com.javafy.entity.UsuarioEntity;
 import br.com.javafy.enums.CargosUser;
 import br.com.javafy.service.UsuarioService;
 import br.com.javafy.dto.usuario.UsuarioDTO;
 import br.com.javafy.exceptions.PessoaException;
+import com.fasterxml.jackson.core.JsonProcessingException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.validation.annotation.Validated;
@@ -44,7 +47,7 @@ public class UsuarioController implements DocumentationUsuario {
             @RequestParam(required = false) CargosUser cargos,
             @Valid @RequestBody UsuarioUpdateDTO usuario
     )
-            throws PessoaException {
+            throws PessoaException, JsonProcessingException {
         return ResponseEntity.ok(usuarioService.update(usuario, cargos));
     }
 
@@ -52,5 +55,4 @@ public class UsuarioController implements DocumentationUsuario {
     public void delete() throws PessoaException {
         usuarioService.delete();
     }
-
 }
